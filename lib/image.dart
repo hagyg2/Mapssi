@@ -1,3 +1,6 @@
+// 날씨, 미세먼지 등등 날씨 값에 대응되는 이미지 값을 리턴해주는
+// 다트 파일입니당
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
