@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapssi/screens/character_screen.dart';
+import 'package:mapssi/screens/loading.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,15 +25,12 @@ class MyApp extends StatelessWidget {
 }
 
 // 날씨 페이지 - 지원
-class WeatherPage extends StatelessWidget {
-  const WeatherPage({Key? key}) : super(key: key);
+class WeatherScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("1"),
-      ),
+    return MaterialApp(
+      home: Loading(),
     );
   }
 }
@@ -47,7 +45,7 @@ class MyPageView extends StatelessWidget {
       body: PageView.builder(
         itemBuilder: (BuildContext context, int index) {
           if (index==0) { // 날씨 관련 페이지 출력
-            return const WeatherPage();
+            return WeatherScreen();
           }
           else { //캐릭터 관련 페이지 출력
             return const CharacterPage();

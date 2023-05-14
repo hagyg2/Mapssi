@@ -31,7 +31,10 @@ class _VerticalSliderState extends State<VerticalSlider> {
 
 //체형 조절
 class SliderAndChkBox extends StatefulWidget {
-  const SliderAndChkBox({super.key});
+  const SliderAndChkBox({super.key,required this.currentTemperature});
+  final double currentTemperature;
+
+
 
   @override
   _SliderAndChkBoxState createState() => _SliderAndChkBoxState();
@@ -41,7 +44,9 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
   bool _isVisible = true;
   var height=160.0;
   var weight=80.0;
-  var temperature=15;
+  // var temperature=15;
+
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -72,7 +77,7 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
                 child: Container(
                     padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.03),
                     child: Text(
-                      "$temperature°C",
+                      "${currentTempera}",
                       style: TextStyle(fontSize: 35),
                     )
                 ),
