@@ -36,6 +36,23 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+
+  #추가
+  flutter_svg: ^1.0.0
+
+  geolocator: ^9.0.2
+  permission_handler: ^10.2.0
+  http: ^0.13.6
+
+  url_launcher: ^6.0.17
+  intl: ^0.17.0 #날짜/숫자 형식 지정 라이브러리
+  timer_builder: ^2.0.0 #주기적/동적으로 시간 이벤트를 처리하는 라이브러리
+  convert: ^3.0.1
+  flutter_spinkit: ^5.1.0
+  flutter_config: ^2.0.0
+  flutter_dialogs: ^2.1.1
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -54,6 +71,9 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
+    - assets/icons/
+    - assets/image/
+
   fonts:
     - family: CoordiIcons
       fonts:
