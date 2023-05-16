@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.mapssi.app-mergeDebugResources-5:/values-lt/values-lt.xml",
+            "outputFile": "com.example.mapssi.app-mergeDebugResources-25:/values-lt/values-lt.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\kweou\\.gradle\\caches\\transforms-3\\3794f8805813d716e1232c1d56f0ad65\\transformed\\jetified-play-services-basement-18.1.0\\res\\values-lt\\values.xml",
+                    "source": "C:\\Users\\LIM SE JUN\\.gradle\\caches\\transforms-3\\3794f8805813d716e1232c1d56f0ad65\\transformed\\jetified-play-services-basement-18.1.0\\res\\values-lt\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -21,7 +21,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\kweou\\.gradle\\caches\\transforms-3\\4cd58650d1c2e37b9e3d0f9ec8dcdc3a\\transformed\\appcompat-1.6.1\\res\\values-lt\\values-lt.xml",
+                    "source": "C:\\Users\\LIM SE JUN\\.gradle\\caches\\transforms-3\\7001a38355e8d7c4e616e2867b2af33b\\transformed\\core-1.9.0\\res\\values-lt\\values-lt.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "48",
+                        "startColumns": "4",
+                        "startOffsets": "5224",
+                        "endColumns": "100",
+                        "endOffsets": "5320"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\LIM SE JUN\\.gradle\\caches\\transforms-3\\4cd58650d1c2e37b9e3d0f9ec8dcdc3a\\transformed\\appcompat-1.6.1\\res\\values-lt\\values-lt.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -38,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\kweou\\.gradle\\caches\\transforms-3\\ae6b97e1eb03f745e78221f3ec7b73ff\\transformed\\jetified-play-services-base-18.1.0\\res\\values-lt\\values.xml",
+                    "source": "C:\\Users\\LIM SE JUN\\.gradle\\caches\\transforms-3\\ae6b97e1eb03f745e78221f3ec7b73ff\\transformed\\jetified-play-services-base-18.1.0\\res\\values-lt\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -52,23 +69,6 @@
                         "startOffsets": "2874,2981,3133,3265,3372,3525,3655,3774,4039,4205,4314,4479,4613,4766,4916,4984,5050",
                         "endColumns": "106,151,131,106,152,129,118,105,165,108,164,133,152,149,67,65,89",
                         "endOffsets": "2976,3128,3260,3367,3520,3650,3769,3875,4200,4309,4474,4608,4761,4911,4979,5045,5135"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\kweou\\.gradle\\caches\\transforms-3\\7001a38355e8d7c4e616e2867b2af33b\\transformed\\core-1.9.0\\res\\values-lt\\values-lt.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "48",
-                        "startColumns": "4",
-                        "startOffsets": "5224",
-                        "endColumns": "100",
-                        "endOffsets": "5320"
                     }
                 }
             ]

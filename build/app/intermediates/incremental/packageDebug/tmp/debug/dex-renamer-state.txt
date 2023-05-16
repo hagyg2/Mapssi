@@ -1,4 +1,4 @@
-#Sun May 14 06:48:32 KST 2023
-base.0=C\:\\32190250\\mapssi\\Mapssi\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+#Mon May 15 16:19:50 KST 2023
+base.0=C\:\\Users\\LIM SE JUN\\StudioProjects\\mapssi\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
