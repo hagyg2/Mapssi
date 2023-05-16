@@ -1,6 +1,5 @@
 //weater_screen에 넣으면 너무 복잡할 것 같아서
 //햄버거 바 화면은 일단 여기서 만들어서 weather_screen으로 넘길겁니당
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
