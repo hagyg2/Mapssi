@@ -19,9 +19,11 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen> {
 
-
   String? cityName;
-  int? temp;
+  int? currentTemp; //현재 온도
+  int? tempTMN; //일 최저기온
+  int? tempTMX; //일 최고기온
+
   var date = DateTime.now(); //오전오후/요일 표기
 
 
@@ -37,29 +39,34 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 
   void updateData(dynamic weatherData) {
-    double temp2 = weatherData['main']['temp'];
-    temp = temp2.round();
+    double currentTemp2 = weatherData['main']['temp'];
+    currentTemp = currentTemp2.round();
     cityName = weatherData['name'];
-    print(temp);
+    print(currentTemp);
     print(cityName);
 
-    // Navigator.push(context, MaterialPageRoute(builder: (context){
-    //   return SliderAndChkBox(currentTemp: temp,);
-    // }));
-    //Navigator.push(context,MaterialPageRoute(builder: (context) => SliderAndChkBox(currentTemperature: currentTemperature),),);
 
+    double tempMin2 = weatherData['main']['temp_min'];
+    double tempMax2 = weatherData['main']['temp_max'];
+
+    tempTMN = tempMin2.round();
+    tempTMX = tempMax2.round();
+    print(tempTMN);
+    print(tempTMX);
 
   }
 
-    String getCurrentTime() {
-      var now = DateTime.now();
-      return DateFormat("h:m a").format(now);
-    }
+  String getCurrentTime() {
+    var now = DateTime.now();
+    return DateFormat("h:m a").format(now);
+  }
 
 
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
         extendBodyBehindAppBar: true, //appBar 꽉 차게
         appBar: AppBar(
           backgroundColor: Colors.pink,
@@ -70,12 +77,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
           // 앱바 가운데 정렬
           actions: [
             IconButton(icon: SvgPicture.asset("assets/icons/search.svg"),
-              onPressed: () {
-                print("search button is clicked");
-              },
+              onPressed: () {print("search button is clicked");},
             ),
           ],
         ),
+
         drawer: const Drawer( //햄버거 바
           child: MenuBarDraw(),
         ),
@@ -83,69 +89,65 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
         body: Container(
           child: Stack(
-            children: [
-              Image.asset(
-                'assets/image/background.jpg',
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
-              Container(
-                padding: EdgeInsets.all(70.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
+              children: [
+                Image.asset('assets/image/background.jpg', fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
+
+                Container(
+                    padding: EdgeInsets.all(70.0),
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 150.0,),
-                              Text('$cityName',style: TextStyle(fontSize: 35.9, color: Colors.white)),
-                              Row(
+                          Expanded(
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  TimerBuilder.periodic(Duration(minutes: 1),
-                                    builder:  (context) {
-                                      print('${getCurrentTime()}');
-                                      return Text('${getCurrentTime()}', style: TextStyle(fontSize: 16.0, color: Colors.white),);
-                                    },
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 150.0,),
+                                      Text('$cityName',style: TextStyle(fontSize: 35.9, color: Colors.white)),
+                                      Row(
+                                        children: [
+                                          TimerBuilder.periodic(Duration(minutes: 1),
+                                            builder:  (context) {
+                                              print('${getCurrentTime()}');
+                                              return Text('${getCurrentTime()}', style: TextStyle(fontSize: 16.0, color: Colors.white),);
+                                            },
+                                          ),
+                                          Text( //오전/오후 + 요일 표기
+                                              DateFormat(' d MMM (EEEE)').format(date), style: TextStyle(fontSize: 16.0, color: Colors.white)
+                                          ),
+                                        ],
+                                      )
+                                    ],
                                   ),
-                                  Text( //오전/오후 + 요일 표기
-                                      DateFormat(' d MMM (EEEE)').format(date), style: TextStyle(fontSize: 16.0, color: Colors.white)
-                                  ),
-                                ],
-                              )
-                            ],
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 15.0,),
+                                      Text('$currentTemp°C', style: TextStyle(fontSize: 45.0, color: Colors.white),
+                                      ),
+                                      SizedBox(height: 10.0,),
+                                      Text('$tempTMN°C / $tempTMX°C',
+                                        style: TextStyle(fontSize: 20.0, color: Colors.white),
+                                      ),
+                                    ],
+                                  )
+                                ]
+                            ),
+
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '$temp\u2103',
-                                style: TextStyle(
-                                    fontSize: 85.0,
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.white),
-                              ),
 
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                        ]
+                    )
+
                 ),
-
-
-              ),
-            ],
+              ]
           ),
-        ),
 
-      );
+        )
+    );
 
-    }
+  }
 }

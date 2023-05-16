@@ -94,6 +94,10 @@ geolocator_windows
 2.15
 file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/geolocator_windows-0.1.1/
 file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/geolocator_windows-0.1.1/lib/
+get
+2.15
+file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/get-4.6.5/
+file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/get-4.6.5/lib/
 http
 2.19
 file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/http-0.13.6/
@@ -126,6 +130,10 @@ meta
 2.12
 file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.8.0/
 file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.8.0/lib/
+nested
+2.12
+file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0/
+file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0/lib/
 path
 2.12
 file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.8.2/
@@ -166,6 +174,10 @@ plugin_platform_interface
 2.17
 file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.4/
 file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.4/lib/
+provider
+2.12
+file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.0.5/
+file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.0.5/lib/
 source_span
 2.14
 file:///C:/Users/kweou/AppData/Local/Pub/Cache/hosted/pub.dev/source_span-1.9.1/
