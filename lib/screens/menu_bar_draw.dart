@@ -8,7 +8,6 @@ class MenuBarDraw extends StatelessWidget {
   @override
   const MenuBarDraw({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     //햄버거 바 메뉴
