@@ -2,12 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:mapssi/main.dart';
 
+//구글 로그인
 class SignInWithGoogle {
   static final _googleSignIn = GoogleSignIn();
   static Future<GoogleSignInAccount?> login() => _googleSignIn.signIn();
+  static Future signOut() => _googleSignIn.signOut();
 }
 
+//로그인 화면
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -40,24 +44,6 @@ class LoginScreen extends StatelessWidget {
     }
   }
 
-/*
-  //구글로그인 처리 함수
-  Future signInWithGoogle() async {
-    final user = await GoogleSignInApi.login();
-
-    //로그인 실패
-    if(user == null){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sign in Failed')));
-    }
-    //로그인 성공
-    else {
-      print('name = ${user.displayName}');
-      print('email = ${user.email}');
-      print('id = ${user.id}');
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PersonalGender()));
-    }
-  }
-*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,11 +52,12 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('Mapssi', style: TextStyle(fontSize: 25)),
+            SizedBox(height: 40),
             //카카오 로그인 버튼
             ElevatedButton(
               onPressed: signInWithKakao,
               child: Row(
-                //spaceEvenly: 요소들을 균등하게 배치하는 속성
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Icon(Icons.chat_bubble, color: Colors.black,),
@@ -83,7 +70,7 @@ class LoginScreen extends StatelessWidget {
               ),
               style: ElevatedButton.styleFrom(
                 primary: Colors.yellow,
-                minimumSize: Size.fromHeight(50), // 높이만 50으로 설정
+                minimumSize: Size.fromHeight(50),
                 elevation: 1.0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0)),
@@ -95,12 +82,10 @@ class LoginScreen extends StatelessWidget {
               onPressed: () async {
                 var user = await SignInWithGoogle.login();
                 if(user != null){
-                  print(user.displayName);
-                  print(user.email);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyPageView()));
                 }
               },
               child: Row(
-                //spaceEvenly: 요소들을 균등하게 배치하는 속성
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Image.asset('assets/google_login.jpg'),
@@ -124,7 +109,6 @@ class LoginScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: (){},
               child: Row(
-                //spaceEvenly: 요소들을 균등하게 배치하는 속성
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Icon(Icons.mail, color: Colors.white),
