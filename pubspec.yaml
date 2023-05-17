@@ -53,6 +53,7 @@ dependencies:
   flutter_dialogs: ^2.1.1
   google_sign_in: ^6.1.0
   kakao_flutter_sdk_user: ^1.4.2
+  shared_preferences: ^2.1.1 #로그인 여부 전역에서 체크
 
 
 dev_dependencies:

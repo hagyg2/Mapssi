@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapssi/screens/character_screen.dart';
 import 'package:mapssi/screens/loading.dart';
+import 'package:mapssi/screens/slpash_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +21,12 @@ class MyApp extends StatelessWidget {
             thumbColor: Colors.white,
           )
       ),
-      home: const MyPageView(),
+      routes: {
+        '/index': (context) => MyPageView(),
+        '/login': (context) => LoginScreen(),
+        '/splash': (context) => SplashScreen(),
+      },
+      initialRoute: '/splash',
     );
   }
 }

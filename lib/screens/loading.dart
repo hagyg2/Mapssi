@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mapssi/network.dart';
 import 'package:mapssi/screens/weather_screen.dart';
+import 'login_screen.dart';
 import '../my_location.dart';
 const apiKey = "122328b0a95baa0ce0c0a7697d3a30c7";
 
@@ -50,6 +51,12 @@ class _LoadingState extends State<Loading>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [IconButton(onPressed: (){
+          SignInWithGoogle.signOut();
+          Navigator.pop(context);
+        }, icon: Icon(Icons.login))],
+      ),
       body: Center(
         child: ElevatedButton(
           onPressed: () {
