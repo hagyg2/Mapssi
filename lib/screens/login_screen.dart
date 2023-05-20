@@ -69,7 +69,7 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.yellow,
+                backgroundColor: Colors.yellow,
                 minimumSize: Size.fromHeight(50),
                 elevation: 1.0,
                 shape: RoundedRectangleBorder(
@@ -97,7 +97,7 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.white,
+                backgroundColor: Colors.white,
                 minimumSize: Size.fromHeight(50), // 높이만 50으로 설정
                 elevation: 1.0,
                 shape: RoundedRectangleBorder(
@@ -118,7 +118,7 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
+                  backgroundColor: Colors.green,
                   minimumSize: Size.fromHeight(50),
                   elevation: 1.0,
                   shape: RoundedRectangleBorder(

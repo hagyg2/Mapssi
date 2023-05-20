@@ -21,7 +21,7 @@ class _LoadingState extends State<Loading>{
   double? longtitude3;
 
   @override
-  void initStae() {
+  void initState() {
     super.initState();
     getLocation();
   }
