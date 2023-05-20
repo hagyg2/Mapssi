@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 application
-INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:8:5-38:19
+INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:8:5-52:19
 MERGED from [:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-17:19
 MERGED from [:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-17:19
 MERGED from [:url_launcher_android] C:\Users\hagyg\StudioProjects\Mapssi\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-14:19
@@ -38,11 +38,11 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ha
 	android:name
 		INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml
 manifest
-ADDED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-39:12
-INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-39:12
-INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-39:12
-INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-39:12
-MERGED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-39:12
+ADDED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-53:12
+INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-53:12
+INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-53:12
+INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-53:12
+MERGED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-53:12
 MERGED from [:shared_preferences_android] C:\Users\hagyg\StudioProjects\Mapssi\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:permission_handler_android] C:\Users\hagyg\StudioProjects\Mapssi\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-19:12
@@ -108,11 +108,11 @@ INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\debug\Android
 		INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\debug\AndroidManifest.xml
 	android:versionName
 		INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-39:12
+		ADDED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-53:12
 		INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\debug\AndroidManifest.xml
 	android:versionCode
 		INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-39:12
+		ADDED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:1-53:12
 		INJECTED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\debug\AndroidManifest.xml
 	xmlns:android
 		ADDED from C:\Users\hagyg\StudioProjects\Mapssi\android\app\src\main\AndroidManifest.xml:1:11-69
@@ -331,15 +331,12 @@ ADDED from [:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\buil
 	android:name
 		ADDED from [:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-70
 activity#com.kakao.sdk.flutter.AuthCodeCustomTabsActivity
-ADDED from [:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:33:9-37:56
+MERGED from [:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:33:9-37:56
+MERGED from [:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:33:9-37:56
 	android:launchMode
 		ADDED from [:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:36:13-44
-	android:exported
-		ADDED from [:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:35:13-36
 	android:theme
 		ADDED from [:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:37:13-53
-	android:name
-		ADDED from [:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:34:13-76
 activity#com.google.android.gms.auth.api.signin.internal.SignInHubActivity
 ADDED from [com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:23:9-27:75
 	android:excludeFromRecents

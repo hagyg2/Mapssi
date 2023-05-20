@@ -80,155 +80,173 @@
 46        android:debuggable="true"
 47        android:icon="@mipmap/ic_launcher"
 48        android:label="mapssi" >
-49        <activity
-50            android:name="com.example.mapssi.MainActivity"
-51            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-52            android:exported="true"
-53            android:hardwareAccelerated="true"
-54            android:launchMode="singleTop"
-55            android:theme="@style/LaunchTheme"
-56            android:windowSoftInputMode="adjustResize" >
-57
-58            <!--
-59                 Specifies an Android theme to apply to this Activity as soon as
-60                 the Android process has started. This theme is visible to the user
-61                 while the Flutter UI initializes. After that, this theme continues
-62                 to determine the Window background behind the Flutter UI.
-63            -->
-64            <meta-data
-65                android:name="io.flutter.embedding.android.NormalTheme"
-66                android:resource="@style/NormalTheme" />
-67
-68            <intent-filter>
-69                <action android:name="android.intent.action.MAIN" />
-70
-71                <category android:name="android.intent.category.LAUNCHER" />
-72            </intent-filter>
-73        </activity>
-74        <!--
-75             Don't delete the meta-data below.
-76             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
-77        -->
-78        <meta-data
-79            android:name="flutterEmbedding"
-80            android:value="2" />
-81
-82        <service
-82-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:9-16:56
-83            android:name="com.baseflow.geolocator.GeolocatorLocationService"
-83-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-77
-84            android:enabled="true"
-84-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-35
-85            android:exported="false"
-85-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-37
-86            android:foregroundServiceType="location" />
-86-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-53
+49
+50        <!-- 카카오 로그인 커스텀 URL 스킴 설정 -->
+51        <activity
+52            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+53            android:exported="true"
+54            android:launchMode="singleTask"
+54-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:36:13-44
+55            android:theme="@style/TransparentCompat" >
+55-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:37:13-53
+56            <intent-filter android:label="flutter_web_auth" >
+57                <action android:name="android.intent.action.VIEW" />
+57-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-65
+57-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:18:21-62
+58
+59                <category android:name="android.intent.category.DEFAULT" />
+60                <category android:name="android.intent.category.BROWSABLE" />
+60-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-74
+60-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:20:23-71
+61
+62                <!-- "kakao${YOUR_NATIVE_APP_KEY}://oauth" 형식의 앱 실행 스킴 설정 -->
+63                <!-- 카카오 로그인 Redirect URI -->
+64                <data
+64-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:22:13-44
+65                    android:host="oauth"
+66                    android:scheme="kakaob6a83e342196f95f61957acfbefd9974" />
+66-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:22:19-41
+67            </intent-filter>
+68        </activity>
+69        <activity
+70            android:name="com.example.mapssi.MainActivity"
+71            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+72            android:exported="true"
+73            android:hardwareAccelerated="true"
+74            android:launchMode="singleTop"
+75            android:theme="@style/LaunchTheme"
+76            android:windowSoftInputMode="adjustResize" >
+77
+78            <!--
+79                 Specifies an Android theme to apply to this Activity as soon as
+80                 the Android process has started. This theme is visible to the user
+81                 while the Flutter UI initializes. After that, this theme continues
+82                 to determine the Window background behind the Flutter UI.
+83            -->
+84            <meta-data
+85                android:name="io.flutter.embedding.android.NormalTheme"
+86                android:resource="@style/NormalTheme" />
 87
-88        <activity
-88-->[:url_launcher_android] C:\Users\hagyg\StudioProjects\Mapssi\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-13:74
-89            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-89-->[:url_launcher_android] C:\Users\hagyg\StudioProjects\Mapssi\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-74
-90            android:exported="false"
-90-->[:url_launcher_android] C:\Users\hagyg\StudioProjects\Mapssi\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-37
-91            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-91-->[:url_launcher_android] C:\Users\hagyg\StudioProjects\Mapssi\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-71
-92        <activity
-92-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:27:9-32:56
-93            android:name="com.kakao.sdk.flutter.TalkAuthCodeActivity"
-93-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-70
-94            android:configChanges="orientation|screenSize|keyboardHidden|uiMode"
-94-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:29:13-81
-95            android:exported="false"
-95-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:30:13-37
-96            android:launchMode="singleTask"
-96-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:31:13-44
-97            android:theme="@style/TransparentCompat" />
-97-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:32:13-53
-98        <activity
-98-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:33:9-37:56
-99            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
-99-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:34:13-76
-100            android:exported="true"
-100-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:35:13-36
-101            android:launchMode="singleTask"
-101-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:36:13-44
-102            android:theme="@style/TransparentCompat" />
-102-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:37:13-53
-103        <activity
-103-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:23:9-27:75
-104            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
-104-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:24:13-93
-105            android:excludeFromRecents="true"
-105-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:25:13-46
-106            android:exported="false"
-106-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:26:13-37
-107            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-107-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:27:13-72
-108        <!--
-109            Service handling Google Sign-In user revocation. For apps that do not integrate with
-110            Google Sign-In, this service will never be started.
-111        -->
-112        <service
-112-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:33:9-37:51
-113            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
-113-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:34:13-89
-114            android:exported="true"
-114-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:35:13-36
-115            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
-115-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:36:13-107
-116            android:visibleToInstantApps="true" />
-116-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:37:13-48
-117
+88            <intent-filter>
+89                <action android:name="android.intent.action.MAIN" />
+90
+91                <category android:name="android.intent.category.LAUNCHER" />
+92            </intent-filter>
+93        </activity>
+94        <!--
+95             Don't delete the meta-data below.
+96             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+97        -->
+98        <meta-data
+99            android:name="flutterEmbedding"
+100            android:value="2" />
+101
+102        <service
+102-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:9-16:56
+103            android:name="com.baseflow.geolocator.GeolocatorLocationService"
+103-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-77
+104            android:enabled="true"
+104-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-35
+105            android:exported="false"
+105-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-37
+106            android:foregroundServiceType="location" />
+106-->[:geolocator_android] C:\Users\hagyg\StudioProjects\Mapssi\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-53
+107
+108        <activity
+108-->[:url_launcher_android] C:\Users\hagyg\StudioProjects\Mapssi\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-13:74
+109            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+109-->[:url_launcher_android] C:\Users\hagyg\StudioProjects\Mapssi\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-74
+110            android:exported="false"
+110-->[:url_launcher_android] C:\Users\hagyg\StudioProjects\Mapssi\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-37
+111            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+111-->[:url_launcher_android] C:\Users\hagyg\StudioProjects\Mapssi\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-71
+112        <activity
+112-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:27:9-32:56
+113            android:name="com.kakao.sdk.flutter.TalkAuthCodeActivity"
+113-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-70
+114            android:configChanges="orientation|screenSize|keyboardHidden|uiMode"
+114-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:29:13-81
+115            android:exported="false"
+115-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:30:13-37
+116            android:launchMode="singleTask"
+116-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:31:13-44
+117            android:theme="@style/TransparentCompat" />
+117-->[:kakao_flutter_sdk_common] C:\Users\hagyg\StudioProjects\Mapssi\build\kakao_flutter_sdk_common\intermediates\merged_manifest\debug\AndroidManifest.xml:32:13-53
 118        <activity
-118-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\hagyg\.gradle\caches\transforms-3\ae6b97e1eb03f745e78221f3ec7b73ff\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:9-22:45
-119            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-119-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\hagyg\.gradle\caches\transforms-3\ae6b97e1eb03f745e78221f3ec7b73ff\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:19-85
-120            android:exported="false"
-120-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\hagyg\.gradle\caches\transforms-3\ae6b97e1eb03f745e78221f3ec7b73ff\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:22:19-43
-121            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-121-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\hagyg\.gradle\caches\transforms-3\ae6b97e1eb03f745e78221f3ec7b73ff\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:21:19-78
-122
-123        <meta-data
-123-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\7e0c38c40a1f7ebe6b5ad9f106910844\transformed\jetified-play-services-basement-18.2.0\AndroidManifest.xml:21:9-23:69
-124            android:name="com.google.android.gms.version"
-124-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\7e0c38c40a1f7ebe6b5ad9f106910844\transformed\jetified-play-services-basement-18.2.0\AndroidManifest.xml:22:13-58
-125            android:value="@integer/google_play_services_version" />
-125-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\7e0c38c40a1f7ebe6b5ad9f106910844\transformed\jetified-play-services-basement-18.2.0\AndroidManifest.xml:23:13-66
-126
-127        <uses-library
-127-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
-128            android:name="androidx.window.extensions"
-128-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
-129            android:required="false" />
-129-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
-130        <uses-library
-130-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
-131            android:name="androidx.window.sidecar"
-131-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
-132            android:required="false" />
-132-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
-133
-134        <provider
-134-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-135            android:name="androidx.startup.InitializationProvider"
-135-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
-136            android:authorities="com.example.mapssi.androidx-startup"
-136-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
-137            android:exported="false" >
-137-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
-138            <meta-data
-138-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
-139                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-139-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
-140                android:value="androidx.startup" />
-140-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
-141            <meta-data
-141-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\hagyg\.gradle\caches\transforms-3\f59971b1badb9e0b2faf85469f388289\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
-142                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-142-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\hagyg\.gradle\caches\transforms-3\f59971b1badb9e0b2faf85469f388289\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
-143                android:value="androidx.startup" />
-143-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\hagyg\.gradle\caches\transforms-3\f59971b1badb9e0b2faf85469f388289\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
-144        </provider>
-145    </application>
-146
-147</manifest>
+118-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:23:9-27:75
+119            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+119-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:24:13-93
+120            android:excludeFromRecents="true"
+120-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:25:13-46
+121            android:exported="false"
+121-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:26:13-37
+122            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+122-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:27:13-72
+123        <!--
+124            Service handling Google Sign-In user revocation. For apps that do not integrate with
+125            Google Sign-In, this service will never be started.
+126        -->
+127        <service
+127-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:33:9-37:51
+128            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+128-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:34:13-89
+129            android:exported="true"
+129-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:35:13-36
+130            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+130-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:36:13-107
+131            android:visibleToInstantApps="true" />
+131-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\hagyg\.gradle\caches\transforms-3\e2f48d6de16e8dd19fe314ad1b7be3c3\transformed\jetified-play-services-auth-20.5.0\AndroidManifest.xml:37:13-48
+132
+133        <activity
+133-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\hagyg\.gradle\caches\transforms-3\ae6b97e1eb03f745e78221f3ec7b73ff\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:9-22:45
+134            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+134-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\hagyg\.gradle\caches\transforms-3\ae6b97e1eb03f745e78221f3ec7b73ff\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:19-85
+135            android:exported="false"
+135-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\hagyg\.gradle\caches\transforms-3\ae6b97e1eb03f745e78221f3ec7b73ff\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:22:19-43
+136            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+136-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\hagyg\.gradle\caches\transforms-3\ae6b97e1eb03f745e78221f3ec7b73ff\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:21:19-78
+137
+138        <meta-data
+138-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\7e0c38c40a1f7ebe6b5ad9f106910844\transformed\jetified-play-services-basement-18.2.0\AndroidManifest.xml:21:9-23:69
+139            android:name="com.google.android.gms.version"
+139-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\7e0c38c40a1f7ebe6b5ad9f106910844\transformed\jetified-play-services-basement-18.2.0\AndroidManifest.xml:22:13-58
+140            android:value="@integer/google_play_services_version" />
+140-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\7e0c38c40a1f7ebe6b5ad9f106910844\transformed\jetified-play-services-basement-18.2.0\AndroidManifest.xml:23:13-66
+141
+142        <uses-library
+142-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
+143            android:name="androidx.window.extensions"
+143-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
+144            android:required="false" />
+144-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
+145        <uses-library
+145-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
+146            android:name="androidx.window.sidecar"
+146-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
+147            android:required="false" />
+147-->[androidx.window:window:1.0.0-beta04] C:\Users\hagyg\.gradle\caches\transforms-3\30c9f9e36f76ec2d5a473df3d33e33ff\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
+148
+149        <provider
+149-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+150            android:name="androidx.startup.InitializationProvider"
+150-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+151            android:authorities="com.example.mapssi.androidx-startup"
+151-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+152            android:exported="false" >
+152-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+153            <meta-data
+153-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+154                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+154-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+155                android:value="androidx.startup" />
+155-->[androidx.emoji2:emoji2:1.2.0] C:\Users\hagyg\.gradle\caches\transforms-3\1e29dc7abd57675fb35c82fa62517806\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+156            <meta-data
+156-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\hagyg\.gradle\caches\transforms-3\f59971b1badb9e0b2faf85469f388289\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+157                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+157-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\hagyg\.gradle\caches\transforms-3\f59971b1badb9e0b2faf85469f388289\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+158                android:value="androidx.startup" />
+158-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\hagyg\.gradle\caches\transforms-3\f59971b1badb9e0b2faf85469f388289\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+159        </provider>
+160    </application>
+161
+162</manifest>

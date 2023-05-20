@@ -46,6 +46,26 @@
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
         android:label="mapssi" >
+
+        <!-- 카카오 로그인 커스텀 URL 스킴 설정 -->
+        <activity
+            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/TransparentCompat" >
+            <intent-filter android:label="flutter_web_auth" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- "kakao${YOUR_NATIVE_APP_KEY}://oauth" 형식의 앱 실행 스킴 설정 -->
+                <!-- 카카오 로그인 Redirect URI -->
+                <data
+                    android:host="oauth"
+                    android:scheme="kakaob6a83e342196f95f61957acfbefd9974" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.example.mapssi.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -93,11 +113,6 @@
             android:name="com.kakao.sdk.flutter.TalkAuthCodeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|uiMode"
             android:exported="false"
-            android:launchMode="singleTask"
-            android:theme="@style/TransparentCompat" />
-        <activity
-            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
-            android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/TransparentCompat" />
         <activity

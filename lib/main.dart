@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/screens/character_screen.dart';
 import 'package:mapssi/screens/loading.dart';
 import 'package:mapssi/screens/slpash_screen.dart';
 import 'screens/login_screen.dart';
 
 void main() {
+  KakaoSdk.init(nativeAppKey: 'b6a83e342196f95f61957acfbefd9974');
   runApp(const MyApp());
 }
 
