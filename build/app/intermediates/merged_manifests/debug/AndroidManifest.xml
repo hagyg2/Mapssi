@@ -5,7 +5,7 @@
     android:versionName="1.0.0" >
 
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="21"
         android:targetSdkVersion="33" />
     <!--
          The INTERNET permission is required for development. Specifically,
@@ -16,6 +16,23 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <queries>
+        <package android:name="com.kakao.talk" />
+        <package android:name="com.kakao.talk.alpha" />
+        <package android:name="com.kakao.talk.sandbox" />
+        <package android:name="com.kakao.onetalk" />
+        <package android:name="com.locnall.KimGiSa" />
+        <package android:name="com.lguplus.navi" />
+
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="https" />
+        </intent>
+    </queries>
 
     <permission
         android:name="com.example.mapssi.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -72,6 +89,32 @@
             android:name="io.flutter.plugins.urllauncher.WebViewActivity"
             android:exported="false"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.kakao.sdk.flutter.TalkAuthCodeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|uiMode"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:theme="@style/TransparentCompat" />
+        <activity
+            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/TransparentCompat" />
+        <activity
+            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--
+            Service handling Google Sign-In user revocation. For apps that do not integrate with
+            Google Sign-In, this service will never be started.
+        -->
+        <service
+            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+            android:visibleToInstantApps="true" />
+
         <activity
             android:name="com.google.android.gms.common.api.GoogleApiActivity"
             android:exported="false"

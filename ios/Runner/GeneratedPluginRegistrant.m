@@ -18,10 +18,28 @@
 @import geolocator_apple;
 #endif
 
+#if __has_include(<google_sign_in_ios/FLTGoogleSignInPlugin.h>)
+#import <google_sign_in_ios/FLTGoogleSignInPlugin.h>
+#else
+@import google_sign_in_ios;
+#endif
+
+#if __has_include(<kakao_flutter_sdk_common/KakaoFlutterSdkPlugin.h>)
+#import <kakao_flutter_sdk_common/KakaoFlutterSdkPlugin.h>
+#else
+@import kakao_flutter_sdk_common;
+#endif
+
 #if __has_include(<permission_handler_apple/PermissionHandlerPlugin.h>)
 #import <permission_handler_apple/PermissionHandlerPlugin.h>
 #else
 @import permission_handler_apple;
+#endif
+
+#if __has_include(<shared_preferences_foundation/SharedPreferencesPlugin.h>)
+#import <shared_preferences_foundation/SharedPreferencesPlugin.h>
+#else
+@import shared_preferences_foundation;
 #endif
 
 #if __has_include(<url_launcher_ios/FLTURLLauncherPlugin.h>)
@@ -35,7 +53,10 @@
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [FlutterConfigPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterConfigPlugin"]];
   [GeolocatorPlugin registerWithRegistrar:[registry registrarForPlugin:@"GeolocatorPlugin"]];
+  [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
+  [KakaoFlutterSdkPlugin registerWithRegistrar:[registry registrarForPlugin:@"KakaoFlutterSdkPlugin"]];
   [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
+  [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
   [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
 }
 

@@ -41,7 +41,14 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
   bool _isVisible = true;
   var height=160.0;
   var weight=80.0;
+<<<<<<< HEAD
   var temperature=15;
+=======
+
+  var temperature=15;
+
+
+>>>>>>> 26487b6ff89beaaf40c3c61f4eec414a59467be2
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -72,10 +79,15 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
                 child: Container(
                     padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.03),
                     child: Text(
+<<<<<<< HEAD
                       "$temperature°C",
                       style: TextStyle(fontSize: 35),
                     )
+=======
+                      "$temperature",
+>>>>>>> 26487b6ff89beaaf40c3c61f4eec414a59467be2
                 ),
+              ),
               ),
               Expanded(
                 flex: 7,
@@ -100,7 +112,7 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
                   label: '$weight',
                 ),
               )
-            ],
+              ],
           ),
         ),
         // 오른쪽 키 슬라이더

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.mapssi.app-mergeDebugResources-5:/values-port/values-port.xml",
+            "outputFile": "com.example.mapssi.app-mergeDebugResources-29:/values-port/values-port.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\kweou\\.gradle\\caches\\transforms-3\\4cd58650d1c2e37b9e3d0f9ec8dcdc3a\\transformed\\appcompat-1.6.1\\res\\values-port\\values-port.xml",
+                    "source": "C:\\Users\\hagyg\\.gradle\\caches\\transforms-3\\4cd58650d1c2e37b9e3d0f9ec8dcdc3a\\transformed\\appcompat-1.6.1\\res\\values-port\\values-port.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
