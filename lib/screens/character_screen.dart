@@ -76,9 +76,8 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
                     padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.03),
                     child: Text(
                       "$temperature",
-                      style: const TextStyle(fontSize: 35),
-                    )
                 ),
+              ),
               ),
               Expanded(
                 flex: 7,
@@ -103,7 +102,7 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
                   label: '$weight',
                 ),
               )
-            ],
+              ],
           ),
         ),
         // 오른쪽 키 슬라이더

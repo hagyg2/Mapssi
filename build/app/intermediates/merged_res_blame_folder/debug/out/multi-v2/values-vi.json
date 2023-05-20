@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.mapssi.app-mergeDebugResources-25:/values-vi/values-vi.xml",
+            "outputFile": "com.example.mapssi.app-mergeDebugResources-29:/values-vi/values-vi.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\LIM SE JUN\\.gradle\\caches\\transforms-3\\ae6b97e1eb03f745e78221f3ec7b73ff\\transformed\\jetified-play-services-base-18.1.0\\res\\values-vi\\values.xml",
+                    "source": "C:\\Users\\hagyg\\.gradle\\caches\\transforms-3\\ae6b97e1eb03f745e78221f3ec7b73ff\\transformed\\jetified-play-services-base-18.1.0\\res\\values-vi\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\LIM SE JUN\\.gradle\\caches\\transforms-3\\7001a38355e8d7c4e616e2867b2af33b\\transformed\\core-1.9.0\\res\\values-vi\\values-vi.xml",
+                    "source": "C:\\Users\\hagyg\\.gradle\\caches\\transforms-3\\7001a38355e8d7c4e616e2867b2af33b\\transformed\\core-1.9.0\\res\\values-vi\\values-vi.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\LIM SE JUN\\.gradle\\caches\\transforms-3\\3794f8805813d716e1232c1d56f0ad65\\transformed\\jetified-play-services-basement-18.1.0\\res\\values-vi\\values.xml",
+                    "source": "C:\\Users\\hagyg\\.gradle\\caches\\transforms-3\\7e0c38c40a1f7ebe6b5ad9f106910844\\transformed\\jetified-play-services-basement-18.2.0\\res\\values-vi\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -55,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\LIM SE JUN\\.gradle\\caches\\transforms-3\\4cd58650d1c2e37b9e3d0f9ec8dcdc3a\\transformed\\appcompat-1.6.1\\res\\values-vi\\values-vi.xml",
+                    "source": "C:\\Users\\hagyg\\.gradle\\caches\\transforms-3\\4cd58650d1c2e37b9e3d0f9ec8dcdc3a\\transformed\\appcompat-1.6.1\\res\\values-vi\\values-vi.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
