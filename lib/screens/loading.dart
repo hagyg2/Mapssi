@@ -9,6 +9,9 @@ import 'package:mapssi/screens/weather_screen.dart';
 import '../my_location.dart';
 const apiKey = "122328b0a95baa0ce0c0a7697d3a30c7";
 
+//   const apiKey = "TKPlhIHeHlFWyt%2B%2F1ghOEDHuZF3F8WxzyLC7rgIQeFfH6w1IBpgssS9%2B7ft16xHXJFCM5CbCWhaYsgrqtbpGUA%3D%3D";
+//     Network network = Network('http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0 /weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric');
+
 class Loading extends StatefulWidget{
   @override
   _LoadingState createState() => _LoadingState();
