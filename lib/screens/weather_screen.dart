@@ -1,8 +1,6 @@
 //날씨 화면입니다
 
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -64,9 +62,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
     setState(() { // 불러온 정보를 기반으로 화면 다시 빌드
       cityName = weatherData['name'];
-      currentTemperature=currentTemperature2.round();
-      maxTemperature=maxTemperature2.round();
-      minTemperature=minTemperature2.round();
+      currentTemperature = currentTemperature2.round();
+      maxTemperature = maxTemperature2.round();
+      minTemperature = minTemperature2.round();
     });
 
     //생성된 위치 기반 날씨 정보를 character_page으로 넘김
