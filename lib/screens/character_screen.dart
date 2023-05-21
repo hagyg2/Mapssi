@@ -41,14 +41,11 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
   bool _isVisible = true;
   var height=160.0;
   var weight=80.0;
-<<<<<<< HEAD
-  var temperature=15;
-=======
 
   var temperature=15;
 
 
->>>>>>> 26487b6ff89beaaf40c3c61f4eec414a59467be2
+
   @override
   Widget build(BuildContext context) {
     return Row(

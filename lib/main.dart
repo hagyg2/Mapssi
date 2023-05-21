@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mapssi/screens/character_screen.dart';
 import 'package:mapssi/screens/loading.dart';
-<<<<<<< HEAD
-import 'package:mapssi/screens/weather_screen.dart';
-import 'package:provider/provider.dart';
-=======
+
 import 'package:mapssi/screens/slpash_screen.dart';
 import 'screens/login_screen.dart';
->>>>>>> 26487b6ff89beaaf40c3c61f4eec414a59467be2
 
 void main() {
   runApp(const MyApp());

@@ -86,68 +86,80 @@ class _WeatherScreenState extends State<WeatherScreen> {
           child: MenuBarDraw(),
         ),
 
-
         body: Container(
-          child: Stack(
+            child: Stack(
               children: [
-                Image.asset('assets/image/background.jpg', fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
-
-                Container(
-                    padding: EdgeInsets.all(70.0),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 150.0,),
-                                      Text('$cityName',style: TextStyle(fontSize: 35.9, color: Colors.white)),
-                                      Row(
-                                        children: [
-                                          TimerBuilder.periodic(Duration(minutes: 1),
-                                            builder:  (context) {
-                                              print('${getCurrentTime()}');
-                                              return Text('${getCurrentTime()}', style: TextStyle(fontSize: 16.0, color: Colors.white),);
-                                            },
-                                          ),
-                                          Text( //오전/오후 + 요일 표기
-                                              DateFormat(' d MMM (EEEE)').format(date), style: TextStyle(fontSize: 16.0, color: Colors.white)
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 15.0,),
-                                      Text('$currentTemp°C', style: TextStyle(fontSize: 45.0, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 10.0,),
-                                      Text('$tempTMN°C / $tempTMX°C',
-                                        style: TextStyle(fontSize: 20.0, color: Colors.white),
-                                      ),
-                                    ],
-                                  )
-                                ]
+              Image.asset('assets/image/background.jpg', fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,),
+            SingleChildScrollView(
+            child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+            children: [
+            Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 100.0,),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .center,
+                          children: [
+                            Text(
+                              DateFormat(' d MMM (EEEE)').format(
+                                  date), style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.white),
                             ),
-
-                          ),
-
-                        ]
-                    )
-
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 5,),
+                      TimerBuilder.periodic(Duration(minutes: 1),
+                        builder: (context) {
+                          print('${getCurrentTime()}');
+                          return Text('${getCurrentTime()}',
+                            style: TextStyle(fontSize: 16.0,
+                                color: Colors.white),);
+                        },
+                      ),
+                      SizedBox(height: 5,),
+                      Text(('$cityName'), style: TextStyle(
+                          fontSize: 35.9, color: Colors.white),),
+                      SizedBox(height: 15.0,),
+                      Text('$currentTemp°C', style: TextStyle(
+                          fontSize: 45.0, color: Colors.white),),
+                      SizedBox(height: 10.0,),
+                      Text('$tempTMN°C / $tempTMX°C',
+                        style: TextStyle(
+                            fontSize: 20.0, color: Colors.white),)
+                    ],
+                  ),
                 ),
-              ]
-          ),
+              ),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 80.0,),
+                    SizedBox(height: 10.0,),
+                    Text(('습도(%) $cityName'), style: TextStyle(
+                        fontSize: 10.0, color: Colors.white),),
+                    SizedBox(height: 5.0,),
+                    Text(('1시간 강수량(mm) $cityName'),
+                      style: TextStyle(
+                          fontSize: 10.0, color: Colors.white),)
+                  ],
+                ),
+              ),
+            ]
+        ),
 
-        )
-    );
 
-  }
-}
+
