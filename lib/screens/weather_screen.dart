@@ -4,56 +4,83 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:timer_builder/timer_builder.dart';
-import 'character_screen.dart';
 import 'menu_bar_draw.dart';
+import 'package:mapssi/network.dart';
+import 'package:mapssi/main.dart';
+import '../my_location.dart';
+const apiKey = "122328b0a95baa0ce0c0a7697d3a30c7";
 
 class WeatherScreen extends StatefulWidget {
-  WeatherScreen({this.parseWeatherData});
-  final dynamic parseWeatherData;
-
   @override
   _WeatherScreenState createState() => _WeatherScreenState();
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
 
+  double? latitude3;
+  double? longtitude3;
+
+  int? currentTemperature;
+  int? maxTemperature;
+  int? minTemperature;
   String? cityName;
-  int? currentTemp; //현재 온도
-  int? tempTMN; //일 최저기온
-  int? tempTMX; //일 최고기온
 
   var date = DateTime.now(); //오전오후/요일 표기
 
 
-  //weatherScreen이 생성되는 순간, loading에서 추출한 정보를 바로 출력
+  //weatherScreen이 생성되는 순간 위치 정보 불러와서 날씨 정보 출력
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-    updateData(widget.parseWeatherData);
+    // 최대 기온이 100도인 경우에만 initState실행 (처음 실행해서 위치 정보 불러온적 없을 때)
+    if (Get.find<WeatherJasonData>().getData()[1]==100){
+      super.initState();
+      getLocation();
+      updateData();
+    }
+  }
 
-    // updateData(widget.parseWeatherData);
+  //사용자 위치 불러오기 -위경도 값
+  void getLocation() async{
+    MyLocation myLocation = MyLocation();
+    await myLocation.getMyCurrentLocation();
+    latitude3 = myLocation.latitude2;
+    longtitude3 = myLocation.longtitude2;
+    print(latitude3);
+    print(longtitude3);
+
+    // network.dart 에서 getJsonData()불러오기 위해 network인스턴스 생성
+    Network network = Network('https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric');
+
+    // network.dart에서 파싱된 json data를 출력해주기 위해 weatherData 변수에 getJsonData()의 값을 할당
+    var weatherData = await network.getJsonData();
+    print(weatherData);
+
+    double currentTemperature2 = weatherData['main']['temp'];
+    double maxTemperature2 = weatherData['main']['temp_max'];
+    double minTemperature2 = weatherData['main']['temp_min'];
+
+    setState(() { // 불러온 정보를 기반으로 화면 다시 빌드
+      cityName = weatherData['name'];
+      currentTemperature=currentTemperature2.round();
+      maxTemperature=maxTemperature2.round();
+      minTemperature=minTemperature2.round();
+    });
+
+    //생성된 위치 기반 날씨 정보를 character_page으로 넘김
+    WeatherJasonData dataController = Get.find<WeatherJasonData>();
+    dataController.updateData(currentTemperature, maxTemperature, minTemperature, cityName);
   }
 
 
-  void updateData(dynamic weatherData) {
-    double currentTemp2 = weatherData['main']['temp'];
-    currentTemp = currentTemp2.round();
-    cityName = weatherData['name'];
-    print(currentTemp);
+  // 날씨 정보 업데이트
+  void updateData() {
+    print(currentTemperature);
     print(cityName);
-
-
-    double tempMin2 = weatherData['main']['temp_min'];
-    double tempMax2 = weatherData['main']['temp_max'];
-
-    tempTMN = tempMin2.round();
-    tempTMX = tempMax2.round();
-    print(tempTMN);
-    print(tempTMX);
-
+    print(minTemperature);
+    print(maxTemperature);
   }
 
   String getCurrentTime() {
@@ -63,9 +90,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 
 
-
   @override
   Widget build(BuildContext context) {
+    // 각 변수들 Get.find 써서 초기화
+    currentTemperature = Get.find<WeatherJasonData>().getData()[0];
+    maxTemperature = Get.find<WeatherJasonData>().getData()[1];
+    minTemperature = Get.find<WeatherJasonData>().getData()[2];
+    cityName = Get.find<WeatherJasonData>().getData()[3];
     return Scaffold(
         extendBodyBehindAppBar: true, //appBar 꽉 차게
         appBar: AppBar(
@@ -135,10 +166,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                     Text(('$cityName'), style: TextStyle(
                                         fontSize: 35.9, color: Colors.white),),
                                     SizedBox(height: 15.0,),
-                                    Text('$currentTemp°C', style: TextStyle(
+                                    Text('$currentTemperature°C', style: TextStyle(
                                         fontSize: 45.0, color: Colors.white),),
                                     SizedBox(height: 10.0,),
-                                    Text('$tempTMN°C / $tempTMX°C',
+                                    Text('$minTemperature°C / $maxTemperature°C',
                                       style: TextStyle(
                                           fontSize: 20.0, color: Colors.white),)
                                   ],
@@ -211,7 +242,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                                         'assets/weather_icon/humidity.svg',
                                                         width: 30.0,
                                                         height: 30.0,),
-                                                      Text('$currentTemp°C',
+                                                      Text('$currentTemperature°C',
                                                         style: TextStyle(
                                                             fontSize: 15.0,
                                                             color: Colors
@@ -219,7 +250,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                                     ],
                                                   ),
                                                   SizedBox(height: 10.0,),
-                                                  Text('$currentTemp°C',
+                                                  Text('$currentTemperature°C',
                                                     style: TextStyle(
                                                         fontSize: 15.0,
                                                         color: Colors.black),),
@@ -245,7 +276,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                                   SvgPicture.asset(
                                                     'assets/weather_icon/humidity.svg',),
                                                   SizedBox(height: 10.0,),
-                                                  Text('$currentTemp°C',
+                                                  Text('$currentTemperature°C',
                                                     style: TextStyle(
                                                         fontSize: 15.0,
                                                         color: Colors.white),),
@@ -256,7 +287,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                                         'assets/weather_icon/humidity.svg',
                                                         width: 30.0,
                                                         height: 30.0,),
-                                                      Text('$currentTemp°C',
+                                                      Text('$currentTemperature°C',
                                                         style: TextStyle(
                                                             fontSize: 14.0,
                                                             color: Colors
@@ -264,7 +295,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                                     ],
                                                   ),
                                                   SizedBox(height: 10.0,),
-                                                  Text('$currentTemp°C',
+                                                  Text('$currentTemperature°C',
                                                     style: TextStyle(
                                                         fontSize: 15.0,
                                                         color: Colors.white),),
@@ -311,6 +342,3 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
   }
 }
-
-
-"Dfsfd"
