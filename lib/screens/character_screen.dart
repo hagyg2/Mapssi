@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:mapssi/coordi_icons.dart';
+import 'package:mapssi/customIconSets/coordi_icons.dart';
 
 class VerticalSlider extends StatefulWidget {
   const VerticalSlider({Key? key}) : super(key: key);
