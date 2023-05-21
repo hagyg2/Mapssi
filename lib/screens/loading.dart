@@ -2,10 +2,13 @@
 //로그인 화면에 위치정보를 같이 받아서
 //바로 날씨 화면으로 넘길 예정입니당
 
+//import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+//import 'package:get/get.dart';
 import 'package:mapssi/network.dart';
-import 'package:mapssi/screens/weather_screen.dart';
+//import 'package:mapssi/main.dart';
 import 'login_screen.dart';
 import '../my_location.dart';
 const apiKey = "122328b0a95baa0ce0c0a7697d3a30c7";
@@ -43,8 +46,6 @@ class _LoadingState extends State<Loading>{
     print(longtitude3);
 
 
-
-
     // network.dart 에서 getJsonData()불러오기 위해 network인스턴스 생성
     Network network = Network('https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric');
 
@@ -60,13 +61,15 @@ class _LoadingState extends State<Loading>{
     maxTemperature=maxTemperature2.round();
     minTemperature=minTemperature2.round();
 
+    //생성된 위치 기반 날씨 정보를 character_page으로 넘김
+    // Get.put(WeatherJasonData());
+    // WeatherJasonData dataController = Get.find<WeatherJasonData>();
+    //dataController.updateData(currentTemperature, maxTemperature, minTemperature);
 
-
-
-    //생성된 위치 기반 날씨 정보를 weatehr_page으로 넘김
-    Navigator.push(context, MaterialPageRoute(builder: (context){
-      return WeatherScreen(parseWeatherData: weatherData,);
-    }));
+    //생성된 위치 기반 날씨 정보를 weather_page으로 넘김
+    // Navigator.push(context, MaterialPageRoute(builder: (context){
+    //   return WeatherScreen(parseWeatherData: weatherData,);
+    // }));
   }
 
 

@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:mapssi/coordi_icons.dart';
+import 'package:get/get.dart';
+import 'package:mapssi/main.dart';
+import 'package:mapssi/customIconSets/coordi_icons.dart';
 
 class VerticalSlider extends StatefulWidget {
   const VerticalSlider({Key? key}) : super(key: key);
@@ -29,7 +31,7 @@ class _VerticalSliderState extends State<VerticalSlider> {
   }
 }
 
-//체형 조절
+//화면 중앙 (현재 기온, 캐릭터, 체형 조절)
 class SliderAndChkBox extends StatefulWidget {
   const SliderAndChkBox({super.key});
 
@@ -39,15 +41,14 @@ class SliderAndChkBox extends StatefulWidget {
 
 class _SliderAndChkBoxState extends State<SliderAndChkBox> {
   bool _isVisible = true;
-  var height=160.0;
+  var height=165.0;   // 키 몸무게 초기화
   var weight=80.0;
 
-  var temperature=15;
-
-
+  int? curTemp;
 
   @override
   Widget build(BuildContext context) {
+    curTemp = Get.find<WeatherJasonData>().getData()[0];
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -76,15 +77,9 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
                 child: Container(
                     padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.03),
                     child: Text(
-<<<<<<< HEAD
-                      "$temperature°C",
-                      style: TextStyle(fontSize: 35),
-                    )
-=======
-                      "$temperature",
->>>>>>> 26487b6ff89beaaf40c3c61f4eec414a59467be2
+                      "$curTemp",
+                    ),
                 ),
-              ),
               ),
               Expanded(
                 flex: 7,
