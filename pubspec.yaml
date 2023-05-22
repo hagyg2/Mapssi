@@ -95,6 +95,10 @@ flutter:
     - family: Overcoat
       fonts:
         - asset: fonts/Overcoat.ttf
+    - family: Cafe24Ssurround
+      fonts:
+        - asset: fonts/Cafe24Ssurround.ttf
+
 
 
   # The following line ensures that the Material Icons font is

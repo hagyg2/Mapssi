@@ -15,48 +15,51 @@ class SignInWithGoogle {
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
-  //카카오로그인 처리 함수
-  //카카오톡으로 실행 가능 여부 확인
-  //카카오톡 실행이 가능하면 카카오톡으로 로그인, 아니면 카카오 계정으로 로그인
-  void signInWithKakao() async {
-    if (await isKakaoTalkInstalled()) {
-      try {
-        await UserApi.instance.loginWithKakaoTalk();
-        print('카카오톡으로 로그인 성공');
-      } catch (error) {
-        print('카카오톡으로 로그인 실패 $error');
-
-        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
-        try {
-          await UserApi.instance.loginWithKakaoAccount();
-          print('카카오계정으로 로그인 성공');
-        } catch (error) {
-          print('카카오계정으로 로그인 실패 $error');
-        }
-      }
-    } else {
-      try {
-        await UserApi.instance.loginWithKakaoAccount();
-        print('카카오계정으로 로그인 성공');
-      } catch (error) {
-        print('카카오계정으로 로그인 실패 $error');
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Mapssi', style: TextStyle(fontSize: 25)),
-            SizedBox(height: 40),
+            Image.asset('assets/mapssi_logo.jpg', height: 120, width: 120,),
+            Text('맵씨', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'Cafe24Ssurround')),
+            SizedBox(height: 60),
+            Text('------------------ 로그인 ------------------', style: TextStyle(color: Colors.white)),
+            SizedBox(height: 20,),
             //카카오 로그인 버튼
             ElevatedButton(
-              onPressed: signInWithKakao,
+              onPressed: () async {
+                if (await isKakaoTalkInstalled()) {
+                  try {
+                    await UserApi.instance.loginWithKakaoTalk();
+                    print('카카오톡으로 로그인 성공');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyPageView()));
+                  } catch (error) {
+                    print('카카오톡으로 로그인 실패 $error');
+
+                    // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
+                    try {
+                      await UserApi.instance.loginWithKakaoAccount();
+                      print('카카오계정으로 로그인 성공');
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyPageView()));
+                    } catch (error) {
+                      print('카카오계정으로 로그인 실패 $error');
+                    }
+                  }
+                }
+                else {
+                  try {
+                    await UserApi.instance.loginWithKakaoAccount();
+                    print('카카오계정으로 로그인 성공');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyPageView()));
+                  } catch (error) {
+                    print('카카오계정으로 로그인 실패 $error');
+                  }
+                }
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -102,27 +105,6 @@ class LoginScreen extends StatelessWidget {
                 elevation: 1.0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0)),
-              ),
-            ),
-            SizedBox(height: 10.0,),
-            //이메일 로그인 버튼
-            ElevatedButton(
-              onPressed: (){},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(Icons.mail, color: Colors.white),
-                  Text('이메일 로그인',
-                      style: TextStyle(color: Colors.white, fontSize: 15.0)),
-                  Opacity(opacity: 0.0, child: Icon(Icons.mail)),
-                ],
-              ),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  minimumSize: Size.fromHeight(50),
-                  elevation: 1.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0))
               ),
             ),
           ],
