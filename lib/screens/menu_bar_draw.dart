@@ -1,8 +1,11 @@
 //weater_screen에 넣으면 너무 복잡할 것 같아서
 //햄버거 바 화면은 일단 여기서 만들어서 weather_screen으로 넘길겁니당
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:mapssi/screens/login_screen.dart';
 
 class MenuBarDraw extends StatelessWidget {
   @override
@@ -79,7 +82,6 @@ class MenuBarDraw extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Board()) ); },
               trailing: Icon(Icons.navigate_next_outlined),
             ),
-
         ],
       ),
     );
@@ -94,11 +96,24 @@ class Profile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("프로필"),
+        //로그아웃 버튼
+        actions: [IconButton(onPressed: () async {
+          if(loginplatform == 'kakao'){
+            await UserApi.instance.unlink();
+            Navigator.of(context).pushReplacementNamed('/login');
+          }
+          else{
+            SignInWithGoogle.signOut();
+            Navigator.of(context).pushReplacementNamed('/login');
+          }
+          }, icon: Icon(Icons.logout))]
       ),
     );
     throw UnimplementedError();
   }
 }
+
+
 
 class FavoriteArea extends StatelessWidget {
   const FavoriteArea({super.key});

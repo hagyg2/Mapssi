@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:mapssi/personal_info.dart';
 import 'package:mapssi/screens/character_screen.dart';
-import 'package:mapssi/screens/slpash_screen.dart';
+import 'package:mapssi/screens/splash_screen.dart';
 import 'package:mapssi/screens/weather_screen.dart';
 import 'screens/login_screen.dart';
 
@@ -24,12 +25,15 @@ class MyApp extends StatelessWidget {
             thumbColor: Colors.white,
           )
       ),
+      home: PersonalInfoState(),
       routes: {
         '/index': (context) => MyPageView(),
         '/login': (context) => LoginScreen(),
         '/splash': (context) => SplashScreen(),
+        '/perinfo': (context) => PersonalInfoState(),
       },
       initialRoute: '/splash',
+
     );
   }
 }
