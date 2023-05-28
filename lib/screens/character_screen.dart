@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:mapssi/main.dart';
 import 'package:mapssi/customIconSets/coordi_icons.dart';
 import 'package:mapssi/customIconSets/top_clothes_icons.dart';
@@ -7,31 +8,6 @@ import 'package:mapssi/customIconSets/overcoat_icons.dart';
 import 'package:mapssi/customIconSets/shoes_icons.dart';
 // import 'package:mapssi/customIconSets/pants.dart';
 
-class VerticalSlider extends StatefulWidget {
-  const VerticalSlider({Key? key}) : super(key: key);
-
-  @override
-  _VerticalSliderState createState() => _VerticalSliderState();
-}
-
-class _VerticalSliderState extends State<VerticalSlider> {
-  double _value = 0.5;
-
-  @override
-  Widget build(BuildContext context) {
-    return RotatedBox(
-      quarterTurns: 3,
-      child: Slider(
-        value: _value,
-        onChanged: (newValue) {
-          setState(() {
-            _value = newValue;
-          });
-        },
-      ),
-    );
-  }
-}
 
 //화면 중앙 (현재 기온, 캐릭터, 체형 조절)
 class SliderAndChkBox extends StatefulWidget {
@@ -74,6 +50,12 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
           flex: 4,
           child: Column(
             children: [
+              // ElevatedButton(onPressed: () async{
+              //   var url = Uri.parse("https://192.168.1.44:4321/");
+              //   http.Response res = await http.get(url);
+              //   print(res.body);
+              //   //Get.find<UserDataFromServer>().setUserName(_res.toString());
+              // }, child: const Text("Browse")),
               Expanded(         // 현재 기온
                 flex: 2,
                 child: Container(
@@ -295,6 +277,7 @@ class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProvi
 }
 
 
+// 화면 하단 아이콘 누르면 위로 올라오게 하기
 class Coordinater extends StatelessWidget {
   Coordinater({Key? key, required this.index}) : super(key: key);
   final int index;
@@ -380,16 +363,21 @@ class CharacterPage extends StatelessWidget {
             flex: 1,
             child: Container(
               alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(10,3,10,3),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1.0),
-                  borderRadius: BorderRadius.circular(45.0),
-                ),
-                child: const Text(
-                  '황사가 심해요! 마스크는 필수!',
-                  style: TextStyle(fontSize: 14),
-                ),
+              child: Column(
+                children: [
+
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10,3,10,3),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 1.0),
+                      borderRadius: BorderRadius.circular(45.0),
+                    ),
+                    child: const Text(
+                      '황사가 심해요! 마스크는 필수!',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
