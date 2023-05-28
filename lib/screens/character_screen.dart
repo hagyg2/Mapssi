@@ -50,14 +50,8 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
           flex: 4,
           child: Column(
             children: [
-              // ElevatedButton(onPressed: () async{
-              //   var url = Uri.parse("https://192.168.1.44:4321/");
-              //   http.Response res = await http.get(url);
-              //   print(res.body);
-              //   //Get.find<UserDataFromServer>().setUserName(_res.toString());
-              // }, child: const Text("Browse")),
               Expanded(         // 현재 기온
-                flex: 2,
+                flex: 1,
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.03,),
                   child: Text(
@@ -75,7 +69,6 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
                 ),
               ),
               Expanded(
-                flex: 1,
                 child: Visibility(       // 아래 쪽 몸무게 슬라이더
                   visible: !_isVisible,
                   child: Slider(
@@ -359,13 +352,13 @@ class CharacterPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Expanded(flex: 1,child: SizedBox()),
           Expanded( // 조언 멘트
-            flex: 1,
+            flex: 2,
             child: Container(
               alignment: Alignment.bottomCenter,
               child: Column(
                 children: [
-
                   Container(
                     padding: const EdgeInsets.fromLTRB(10,3,10,3),
                     decoration: BoxDecoration(
@@ -382,7 +375,7 @@ class CharacterPage extends StatelessWidget {
             ),
           ),
           // 체크 박스와 슬라이더
-          const Expanded(flex:7, child: SliderAndChkBox()),
+          const Expanded(flex:9, child: SliderAndChkBox()),
           // 옷 메뉴
           Expanded(
             flex: 1,

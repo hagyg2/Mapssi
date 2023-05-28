@@ -56,9 +56,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
     var weatherData = await network.getJsonData();
     print(weatherData);
 
-    double currentTemperature2 = weatherData['main']['temp'];
-    double maxTemperature2 = weatherData['main']['temp_max'];
-    double minTemperature2 = weatherData['main']['temp_min'];
+    num currentTemperature2 = weatherData['main']['temp'];
+    num maxTemperature2 = weatherData['main']['temp_max'];
+    num minTemperature2 = weatherData['main']['temp_min'];
 
     setState(() { // 불러온 정보를 기반으로 화면 다시 빌드
       cityName = weatherData['name'];
