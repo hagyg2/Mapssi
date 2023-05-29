@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:mapssi/main.dart';
 import 'package:mapssi/customIconSets/coordi_icons.dart';
 import 'package:mapssi/customIconSets/top_clothes_icons.dart';
@@ -7,31 +8,6 @@ import 'package:mapssi/customIconSets/overcoat_icons.dart';
 import 'package:mapssi/customIconSets/shoes_icons.dart';
 // import 'package:mapssi/customIconSets/pants.dart';
 
-class VerticalSlider extends StatefulWidget {
-  const VerticalSlider({Key? key}) : super(key: key);
-
-  @override
-  _VerticalSliderState createState() => _VerticalSliderState();
-}
-
-class _VerticalSliderState extends State<VerticalSlider> {
-  double _value = 0.5;
-
-  @override
-  Widget build(BuildContext context) {
-    return RotatedBox(
-      quarterTurns: 3,
-      child: Slider(
-        value: _value,
-        onChanged: (newValue) {
-          setState(() {
-            _value = newValue;
-          });
-        },
-      ),
-    );
-  }
-}
 
 //화면 중앙 (현재 기온, 캐릭터, 체형 조절)
 class SliderAndChkBox extends StatefulWidget {
@@ -75,7 +51,7 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
           child: Column(
             children: [
               Expanded(         // 현재 기온
-                flex: 2,
+                flex: 1,
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.03,),
                   child: Text(
@@ -93,7 +69,6 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
                 ),
               ),
               Expanded(
-                flex: 1,
                 child: Visibility(       // 아래 쪽 몸무게 슬라이더
                   visible: !_isVisible,
                   child: Slider(
@@ -295,6 +270,7 @@ class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProvi
 }
 
 
+// 화면 하단 아이콘 누르면 위로 올라오게 하기
 class Coordinater extends StatelessWidget {
   Coordinater({Key? key, required this.index}) : super(key: key);
   final int index;
@@ -376,25 +352,27 @@ class CharacterPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          //const Expanded(flex: 1,child: SizedBox()),
           Expanded( // 조언 멘트
             flex: 1,
             child: Container(
               alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(10,3,10,3),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1.0),
-                  borderRadius: BorderRadius.circular(45.0),
-                ),
-                child: const Text(
-                  '황사가 심해요! 마스크는 필수!',
-                  style: TextStyle(fontSize: 14),
-                ),
+              child:
+                Container(
+                  padding: const EdgeInsets.fromLTRB(10,3,10,3),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1.0),
+                    borderRadius: BorderRadius.circular(45.0),
+                  ),
+                  child: const Text(
+                    '황사가 심해요! 마스크는 필수!',
+                    style: TextStyle(fontSize: 14),
+                  ),
               ),
             ),
           ),
           // 체크 박스와 슬라이더
-          const Expanded(flex:7, child: SliderAndChkBox()),
+          const Expanded(flex:9, child: SliderAndChkBox()),
           // 옷 메뉴
           Expanded(
             flex: 1,
