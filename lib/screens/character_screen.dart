@@ -352,25 +352,22 @@ class CharacterPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Expanded(flex: 1,child: SizedBox()),
+          //const Expanded(flex: 1,child: SizedBox()),
           Expanded( // 조언 멘트
-            flex: 2,
+            flex: 1,
             child: Container(
               alignment: Alignment.bottomCenter,
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(10,3,10,3),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey, width: 1.0),
-                      borderRadius: BorderRadius.circular(45.0),
-                    ),
-                    child: const Text(
-                      '황사가 심해요! 마스크는 필수!',
-                      style: TextStyle(fontSize: 14),
-                    ),
+              child:
+                Container(
+                  padding: const EdgeInsets.fromLTRB(10,3,10,3),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1.0),
+                    borderRadius: BorderRadius.circular(45.0),
                   ),
-                ],
+                  child: const Text(
+                    '황사가 심해요! 마스크는 필수!',
+                    style: TextStyle(fontSize: 14),
+                  ),
               ),
             ),
           ),

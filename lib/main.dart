@@ -43,14 +43,14 @@ class MyApp extends StatelessWidget {
 // 모든 화면에서 유저 정보를 공유하기 위한 클래스 (GetxController 상속 받음)
 class UserDataFromServer extends GetxController{
   // 각 변수들 초기화
-  int? _id = 0; // 유저 고유 아이디
+  String? _id = "e1kl3j4h5kj"; // 유저 고유 아이디
   String? _name = "홍길동"; // 이름
   int? _gender = 0; // 성별
   int? _perCol = 0; // 퍼스널컬러
   int? _prefType = 0; // 선호 타입
 
-  setUserId(int? n){
-    _id = n;
+  setUserId(String? s){
+    _id = s;
   }
   setUserName(String? s){
     _name = s;

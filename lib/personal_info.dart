@@ -100,7 +100,7 @@ class _PersonalInfoState extends State<PersonalInfoState> {
                 print(userinfo[3]); //선호 스타일
 
                 //백엔드로 정보(userinfo) 넘겨주기
-
+                //*******************************************************
                 //메인 화면으로 이동
                 Navigator.of(context).pushReplacementNamed('/index');
               }, child: const Text('제출하기'),
