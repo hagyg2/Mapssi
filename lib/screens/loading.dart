@@ -6,19 +6,14 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-//import 'package:get/get.dart';
 import 'package:mapssi/network.dart';
 import 'package:mapssi/screens/weather_screen.dart';
-//import 'package:mapssi/main.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'login_screen.dart';
 import '../my_location.dart';
-// const apiKey = "122328b0a95baa0ce0c0a7697d3a30c7";
-//   const apiKey = "TKPlhIHeHlFWyt%2B%2F1ghOEDHuZF3F8WxzyLC7rgIQeFfH6w1IBpgssS9%2B7ft16xHXJFCM5CbCWhaYsgrqtbpGUA%3D%3D";
-//     Network network = Network('http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0 /weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric');
-
-const apiKey = "TKPlhIHeHlFWyt%2B%2F1ghOEDHuZF3F8WxzyLC7rgIQeFfH6w1IBpgssS9%2B7ft16xHXJFCM5CbCWhaYsgrqtbpGUA%3D%3D";
-
+const apiKey = "122328b0a95baa0ce0c0a7697d3a30c7";
 
 class Loading extends StatefulWidget{
   @override
@@ -26,86 +21,155 @@ class Loading extends StatefulWidget{
 }
 
 class _LoadingState extends State<Loading>{
-  var now = DateTime.now(); //시간,날짜,요일 가져오기
+  //var now = DateTime.now(); //시간,날짜,요일 가져오기
+  MyLocation myLocation = MyLocation();
 
   double? latitude3;
   double? longtitude3;
 
-  int? currentTemperature;
   int? maxTemperature;
   int? minTemperature;
 
-  String? baseDate; //발표일자
-  String? baseTime; //발표시각
-
-  //최고최저 기온 가져올 변수
-  String? baseDate_2am;
-  String? baseTime_2am;
-
-  String? currentBaseTime; //초단기 실황
-  String? currentBaseDate;
-  String? sWeatherBaseTime; //초단기 예보
-  String? sWeatherBaseDate;
-
-  int? xCoordinate;
-  int? yCoordinate; //좌표(기상청 api)
-  double? userLati2;
-  double? userLongi2; //사용자 위경도(geolocator)
+  late Position currentPosition;
+  late String currentAddress;
+  late String addressDo;
+  late String addressSi;
 
   @override
   void initState() {
     super.initState();
-    getLocation();
+    getCurrentLocationAsk();
   }
 
-  //오늘 날짜 20000406 형태로 리턴
-  String getSystemTime() {
-    return DateFormat("yyyy-MM-dd").format(now);
-  }
+  //위치 권한 요청 메소드
+  Future<void> getCurrentLocationAsk() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-  //어제 날짜 20000405 형태로 리턴
-  String getYesterdayDate() {
-    return DateFormat("yyyy-MM-dd").format(
-        DateTime.now().subtract(Duration(days: 1)));
-  }
+    permission = await Geolocator.checkPermission(); // 위치 권한 확인
 
-  //사용자 위치 불러오기 -위경도 값
-  void getLocation() async{
-    MyLocation myLocation = MyLocation();
-    await myLocation.getMyCurrentLocation();
-
-    xCoordinate = myLocation.currentX;
-    yCoordinate = myLocation.currentY;
-    userLati2 = myLocation.userlati;
-    userLongi2 = myLocation.userlongi;
-    //if (!Platform.isAndroid && !Platform.isIOS) //나중에 개발환경 확인
-        {
-      xCoordinate = 55;
-      yCoordinate = 127;
+    // 위치 서비스가 활성화되어 있는지 확인
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      _showLocationAlertDialog('위치 서비스가 비활성화되어 있습니다.');
+      return;
     }
 
-    print("x좌표 값$xCoordinate");
-    print("y좌표 값$yCoordinate");
+    else {
+      //1. 계속 거부
+      if (permission == LocationPermission.deniedForever) {
+        _showLocationAlertDialog('위치 권한이 영구적으로 거부되었습니다. 위치 설정으로 이동해주세요.');
+        return;
+      }
 
-    currentWeatherDate();
-    String currentWeather = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?serviceKey=$apiKey&numOfRows=10&pageNo=1&base_date=$currentBaseDate&base_time=$currentBaseTime&nx=$xCoordinate&ny=$yCoordinate&dataType=JSON';
+      //2. 거절
+      else if (permission == LocationPermission.denied) {
+        // 위치 권한 요청
+        permission = await Geolocator.requestPermission();
 
-    // network.dart 에서 getJsonData()불러오기 위해 network인스턴스 생성
-    Network network = Network(currentWeather);
-    var currentWeatherData = network.getCurrentWeatherData();
-    print(currentWeatherData);
+        if (permission == LocationPermission.always ||
+            permission == LocationPermission.whileInUse) {
+          currentAddress;
+        }
+        //2번 이상 거절
+        else if (permission != LocationPermission.whileInUse &&
+            permission != LocationPermission.always) {
+          _showLocationAlertDialog('위치 권한이 거부되었습니다.');
+          permission = await Geolocator.requestPermission();
 
-    //weatherScreen으로 출력
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return WeatherScreen(
-          parseCurrentWeatherData: currentWeatherData
-      );
-    }));
+          return;
+        }
+      }
+    }
   }
 
 
+  //위치 거부했을 때 메시지를 통해 위치 권한 요청
+  void _showLocationAlertDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('위치 권한 요청'),
+          content: Text('앱에서 위치 정보를 사용하기 위해 위치 권한이 필요합니다. 위치 권한을 허용하시겠습니까?'),
+          actions: [
+            TextButton(
+              child: Text('허용'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                openAppSettings(); // 위치 설정창으로 이동
+              },
+            ),
+            TextButton(
+              child: Text('거부'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _openLocationSettings();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
+  //위치 설정 화면 관련 메소드(위치 설정 화면에서 돌아왔을 때 포함)
+  void _openLocationSettings() async {
+    bool result = await Geolocator.openLocationSettings();
+    if (result) {
+      // 위치 설정 화면에서 돌아왔을 때
+      getCurrentLocationAsk();
+    }
+  }
 
+  //사용자 위치 불러오기 -위경도 값f
+  void getLocation() async {
+    MyLocation myLocation = MyLocation();
+    await myLocation.getMyCurrentLongilati();
+
+    latitude3 = myLocation.latitude2;
+    longtitude3 = myLocation.longtitude2;
+    print(latitude3);
+    print(longtitude3);
+
+    // network.dart 에서 getJsonData()불러오기 위해 network인스턴스 생성
+    String currentWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
+    String dailyWeather = 'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
+    String weeklyWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
+    //   String airCondition = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
+    String airCondition = 'http://api.openweathermap.org/data/2.5/air_pollution?lat=$latitude3&lon=$longtitude3&appid=$apiKey';
+    Network network = Network(currentWeather, dailyWeather, weeklyWeather, airCondition);
+
+    // network.dart에서 파싱된 json data를 출력해주기 위해 weatherData 변수에 getJsonData()의 값을 할당
+    var currentWeatherData = await network.getCurrentWeatherData();
+    var dailyWeatherData = await network.getdailyWeatherData();
+    var weeklyWeatherData = await network.getWeeklyeatherData();
+    var airConditionData = await network.getAirConditionData();
+
+    print(currentWeatherData);
+    print(airConditionData);
+    print(dailyWeatherData);
+
+    // 날씨 화면으로 이동
+    Navigator.pushReplacement(context, MaterialPageRoute(
+      builder: (context) =>
+          WeatherScreen(
+            latitude: myLocation.latitude2,
+            longitude: myLocation.longtitude2,
+            address: myLocation.currentAddress,
+            addressDo: myLocation.addressDo,
+            addressSi: myLocation.addressSi,
+            parseCurrentWeatherData: currentWeatherData,
+            parseDailyWeatherData: dailyWeatherData,
+            parseWeeklyWeatherData: weeklyWeatherData,
+            parseAirConditionData: airConditionData,
+            weatherDescription: '', englishDayOfWeek: '',
+
+          ),
+    ),
+
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,29 +194,4 @@ class _LoadingState extends State<Loading>{
 
     );
   }
-
-
-  void currentWeatherDate() {
-    //40분 이전이면 현재 시보다 1시간 전 `base_time`을 요청한다.
-    if (now.minute <= 40){
-
-      // 단. 00:40분 이전이라면 `base_date`는 전날이고 `base_time`은 2300이다.
-      if (now.hour == 0) {
-        currentBaseDate = DateFormat('yyyyMMdd').format(now.subtract(Duration(days:1)));
-        currentBaseTime = '2300';
-      } else {
-        currentBaseDate = DateFormat('yyyyMMdd').format(now);
-        currentBaseTime = DateFormat('HH00').format(now.subtract(Duration(hours:1)));
-      }
-    }
-    //40분 이후면 현재 시와 같은 `base_time`을 요청한다.
-    else{
-      currentBaseDate = DateFormat('yyyyMMdd').format(now);
-      currentBaseTime = DateFormat('HH00').format(now);
-    }
-  }
-
-
-
-
 }

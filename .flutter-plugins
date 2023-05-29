@@ -1,5 +1,8 @@
 # This is a generated file; do not edit or check into version control.
 flutter_config=C:\\Users\\kweou\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_config-2.0.0\\
+geocoding=C:\\Users\\kweou\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\geocoding-2.1.0\\
+geocoding_android=C:\\Users\\kweou\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\geocoding_android-2.1.0\\
+geocoding_ios=C:\\Users\\kweou\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\geocoding_ios-2.1.0\\
 geolocator=C:\\Users\\kweou\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\geolocator-9.0.2\\
 geolocator_android=C:\\Users\\kweou\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\geolocator_android-4.1.8\\
 geolocator_apple=C:\\Users\\kweou\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\geolocator_apple-2.2.5\\

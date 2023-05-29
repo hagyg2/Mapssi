@@ -22,63 +22,63 @@ class MenuBarDraw extends StatelessWidget {
             accountName: const Text("권지원"),
             accountEmail: const Text("32190250@dankook.ac.kr"),
             decoration: BoxDecoration( color: Colors.purple,),
-           ),
+          ),
 
 
-            ListTile(
-              leading: IconButton(icon: SvgPicture.asset(
-                  "assets/icons/account_circle_black_24dp.svg"),
-                onPressed: () {},
-              ),
-              title: Text('프로필'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()) ); },
-              trailing: Icon(Icons.navigate_next_outlined),
+          ListTile(
+            leading: IconButton(icon: SvgPicture.asset(
+                "assets/icons/account_circle_black_24dp.svg"),
+              onPressed: () {},
             ),
+            title: Text('프로필'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()) ); },
+            trailing: Icon(Icons.navigate_next_outlined),
+          ),
 
-            ListTile(
-              leading: IconButton(icon: SvgPicture.asset(
-                  "assets/icons/star_black_24dp.svg"),
-                onPressed: () {},
-              ),
-              title: Text('즐겨찾는 지역'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteArea()) ); },
-              trailing: Icon(Icons.navigate_next_outlined),
+          ListTile(
+            leading: IconButton(icon: SvgPicture.asset(
+                "assets/icons/star_black_24dp.svg"),
+              onPressed: () {},
             ),
+            title: Text('즐겨찾는 지역'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteArea()) ); },
+            trailing: Icon(Icons.navigate_next_outlined),
+          ),
 
-            ListTile(
-              leading: IconButton(icon: SvgPicture.asset(
-                  "assets/icons/wc_black_24dp.svg"),
-                onPressed: () {},
-              ),
-              title: Text('즐겨찾는 코디'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteCoordi()) ); },
-              trailing: Icon(Icons.navigate_next_outlined),
+          ListTile(
+            leading: IconButton(icon: SvgPicture.asset(
+                "assets/icons/wc_black_24dp.svg"),
+              onPressed: () {},
             ),
+            title: Text('즐겨찾는 코디'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteCoordi()) ); },
+            trailing: Icon(Icons.navigate_next_outlined),
+          ),
 
-            ListTile(
-              leading: IconButton(icon: SvgPicture.asset(
-                  "assets/icons/settings_black_24dp.svg"),
-                onPressed: () {},
-              ),
-              title: Text('설정'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => setting()) ); },
-              trailing: Icon(Icons.navigate_next_outlined),
+          ListTile(
+            leading: IconButton(icon: SvgPicture.asset(
+                "assets/icons/settings_black_24dp.svg"),
+              onPressed: () {},
             ),
+            title: Text('설정'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => setting()) ); },
+            trailing: Icon(Icons.navigate_next_outlined),
+          ),
 
-            ListTile(
-              leading: IconButton(icon: SvgPicture.asset(
-                  "assets/icons/assignment_black_24dp.svg"),
-                onPressed: () {},
-              ),
-              title: Text('게시판'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Board()) ); },
-              trailing: Icon(Icons.navigate_next_outlined),
+          ListTile(
+            leading: IconButton(icon: SvgPicture.asset(
+                "assets/icons/assignment_black_24dp.svg"),
+              onPressed: () {},
             ),
+            title: Text('게시판'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Board()) ); },
+            trailing: Icon(Icons.navigate_next_outlined),
+          ),
 
         ],
       ),

@@ -55,21 +55,33 @@ class WeatherJasonData extends GetxController{
 }
 
 
+
+// 전역변수로 날씨 정보 가지고 있기
+
 // 페이지 좌우 슬라이드로 넘기는 기능
 class MyPageView extends StatelessWidget {
 const MyPageView({super.key});
 
+
     @override
     Widget build(BuildContext context) {
+
       Get.put(WeatherJasonData());
       return Scaffold(
         body: PageView.builder(
           itemBuilder: (BuildContext context, int index) {
+
+
+            // 머지 후 추후 작업
+           /*
             if (index==0) { // 날씨 관련 페이지 출력
+            // loading 하여 날씨 정보 받아오기
+            //loading에서 받아온 날씨 정보 넘겨주기
               return WeatherScreen();
             } else { //캐릭터 관련 페이지 출력
               return const CharacterPage();
             }
+             */
           },
           itemCount: 2,
         ),
