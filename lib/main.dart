@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:mapssi/personal_info.dart';
+import 'package:http/http.dart' as http;
 import 'package:mapssi/screens/character_screen.dart';
-import 'package:mapssi/screens/slpash_screen.dart';
+import 'package:mapssi/screens/splash_screen.dart';
 import 'package:mapssi/screens/weather_screen.dart';
 import 'screens/login_screen.dart';
 
@@ -24,15 +26,61 @@ class MyApp extends StatelessWidget {
             thumbColor: Colors.white,
           )
       ),
+      home: PersonalInfoState(),
       routes: {
         '/index': (context) => MyPageView(),
         '/login': (context) => LoginScreen(),
         '/splash': (context) => SplashScreen(),
+        '/perinfo': (context) => PersonalInfoState(),
       },
       initialRoute: '/splash',
+
     );
   }
 }
+
+
+// 모든 화면에서 유저 정보를 공유하기 위한 클래스 (GetxController 상속 받음)
+class UserDataFromServer extends GetxController{
+  // 각 변수들 초기화
+  String? _id = "e1kl3j4h5kj"; // 유저 고유 아이디
+  String? _name = "홍길동"; // 이름
+  int? _gender = 0; // 성별
+  int? _perCol = 0; // 퍼스널컬러
+  int? _prefType = 0; // 선호 타입
+
+  setUserId(String? s){
+    _id = s;
+  }
+  setUserName(String? s){
+    _name = s;
+  }
+  setUserGender(int? n){
+    _gender = n;
+  }
+  setUserPerCol(int? n){
+    _perCol = n;
+  }
+  setUserPrefType(int? n){
+    _prefType = n;
+  }
+  getUserId(){
+    return _id;
+  }
+  getUserName(){
+    return _name;
+  }
+  getUserGender(){
+    return _gender;
+  }
+  getUserPerCol(){
+    return _perCol;
+  }
+  getUserPrefType(){
+    return _prefType;
+  }
+}
+
 
 // 모든 화면에서 날씨 정보를 공유하기 위한 클래스 (GetxController 상속 받음)
 class WeatherJasonData extends GetxController{
