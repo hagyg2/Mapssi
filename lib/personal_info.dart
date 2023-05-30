@@ -27,88 +27,88 @@ class _PersonalInfoState extends State<PersonalInfoState> {
         title: Text('Personal Info'),
         centerTitle: true,
         backgroundColor: Colors.black26,),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+      body: Center(
         child: Column(
-            children: [
-                  Text('1. 성별을 선택해주세요.'),
-                  DropdownButton(
-                    value: _selectedgender,
-                    items: _gender.map(
-                        (value) {
+          mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                    Text('1. 성별을 선택해주세요.'),
+                    DropdownButton(
+                      value: _selectedgender,
+                      items: _gender.map(
+                          (value) {
+                            return DropdownMenuItem(
+                               value: value,
+                               child: Text(value)
+                            );
+                          }
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedgender = value!;
+                          userinfo.add(_selectedgender);
+                        });
+                      },
+                    ),
+                    SizedBox(height: 20,),
+                    Text('2. 퍼스널컬러를 선택해주세요.\n모를 경우 진단하기 버튼을 눌러주세요.'),
+                    DropdownButton(
+                      value: _selectedcolor,
+                      items: _personalColor.map(
+                          (value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value)
+                            );
+                          }
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedcolor = value!;
+                          userinfo.add(_selectedcolor);
+                        });
+                      }
+                      ),
+                ElevatedButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const test1()));
+                }, child: const Text('진단하기'),
+                style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,)),
+                SizedBox(height: 20,),
+                Text('3. 선호 스타일을 선택해주세요.'),
+                DropdownButton(
+                    value: _selectedstyle,
+                    items: _favstyle.map(
+                            (value) {
                           return DropdownMenuItem(
-                             value: value,
-                             child: Text(value)
+                              value: value,
+                              child: Text(value)
                           );
                         }
                     ).toList(),
                     onChanged: (value) {
                       setState(() {
-                        _selectedgender = value!;
-                        userinfo.add(_selectedgender);
-                      });
-                    },
-                  ),
-                  SizedBox(height: 20,),
-                  Text('2. 퍼스널컬러를 선택해주세요.\n모를 경우 진단하기 버튼을 눌러주세요.'),
-                  DropdownButton(
-                    value: _selectedcolor,
-                    items: _personalColor.map(
-                        (value) {
-                          return DropdownMenuItem(
-                            value: value,
-                            child: Text(value)
-                          );
-                        }
-                    ).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedcolor = value!;
-                        userinfo.add(_selectedcolor);
+                        _selectedstyle = value!;
+                        userinfo.add(_selectedstyle);
                       });
                     }
-                    ),
-              ElevatedButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const test1()));
-              }, child: const Text('진단하기'),
-              style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,)),
-              SizedBox(height: 20,),
-              Text('3. 선호 스타일을 선택해주세요.'),
-              DropdownButton(
-                  value: _selectedstyle,
-                  items: _favstyle.map(
-                          (value) {
-                        return DropdownMenuItem(
-                            value: value,
-                            child: Text(value)
-                        );
-                      }
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedstyle = value!;
-                      userinfo.add(_selectedstyle);
-                    });
-                  }
-              ),
-              SizedBox(height: 30,),
-              ElevatedButton(onPressed: (){
-                //결과 보여주기 (임시로 확인용)
-                print(userinfo[0]); //사용자 고유 식별 정보
-                print(userinfo[1]); //성별
-                print(userinfo[2]); //퍼스널 컬러
-                print(userinfo[3]); //선호 스타일
+                ),
+                SizedBox(height: 30,),
+                ElevatedButton(onPressed: (){
+                  //결과 보여주기 (임시로 확인용)
+                  print(userinfo[0]); //사용자 고유 식별 정보
+                  print(userinfo[1]); //성별
+                  print(userinfo[2]); //퍼스널 컬러
+                  print(userinfo[3]); //선호 스타일
 
-                //백엔드로 정보(userinfo) 넘겨주기
-                //*******************************************************
-                //메인 화면으로 이동
-                Navigator.of(context).pushReplacementNamed('/index');
-              }, child: const Text('제출하기'),
-                  style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,)
-              )
-            ],
-          ),
-        ),
+                  //백엔드로 정보(userinfo) 넘겨주기
+                  //*******************************************************
+                  //메인 화면으로 이동
+                  Navigator.of(context).pushReplacementNamed('/index');
+                }, child: const Text('제출하기'),
+                    style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,)
+                )
+              ],
+            ),
+      ),
     );
   }
 }
@@ -553,7 +553,7 @@ class test10 extends StatelessWidget {
                 child: const Text('부드러운 파스텔 색'),
                 style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const test5()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const test13()));
                 },
               ),
             )
@@ -631,7 +631,7 @@ class test12 extends StatelessWidget {
                 child: const Text('그렇다.'),
                 style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PerColorSpring()));
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const PerColorSpring()), (route) => false);
                 },
               ),
             ),
@@ -641,7 +641,7 @@ class test12 extends StatelessWidget {
                 child: const Text('그렇지 않다.'),
                 style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PerColorAutumn()));
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const PerColorAutumn()), (route) => false);
                 },
               ),
             )
@@ -685,7 +685,7 @@ class test13 extends StatelessWidget {
                 child: const Text('푸른 기가 있는 차가운 색'),
                 style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PerColorSummer()));
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const PerColorSummer()), (route) => false);
                 },
               ),
             )
@@ -719,7 +719,7 @@ class test14 extends StatelessWidget {
                 child: const Text('검정, 회색 계열'),
                 style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PerColorWinter()));
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const PerColorWinter()), (route) => false);
                 },
               ),
             ),
@@ -729,7 +729,7 @@ class test14 extends StatelessWidget {
                 child: const Text('다크 브라운 계열'),
                 style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PerColorAutumn()));
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const PerColorAutumn()), (route) => false);
                 },
               ),
             )
@@ -766,7 +766,7 @@ class PerColorSpring extends StatelessWidget {
                 child: const Text('확인'),
                 style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
                 onPressed: (){
-                  Navigator.of(context).pushReplacementNamed('/perinfo');
+                  Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
                 },
               ),
           ],
@@ -800,7 +800,7 @@ class PerColorSummer extends StatelessWidget {
               child: const Text('확인'),
               style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
               onPressed: (){
-                Navigator.of(context).pushReplacementNamed('/perinfo');
+                Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
               },
             ),
           ],
@@ -834,7 +834,7 @@ class PerColorAutumn extends StatelessWidget {
               child: const Text('확인'),
               style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
               onPressed: (){
-                Navigator.of(context).pushReplacementNamed('/perinfo');
+                Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
               },
             ),
           ],
@@ -868,7 +868,7 @@ class PerColorWinter extends StatelessWidget {
               child: const Text('확인'),
               style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
               onPressed: (){
-                Navigator.of(context).pushReplacementNamed('/perinfo');
+                Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
               },
             ),
           ],
