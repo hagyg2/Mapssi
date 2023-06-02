@@ -147,7 +147,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   chkIfRegisteredAndRedirect (context, userId, userName, platform) async {
-    const serverUrl = 'http://52.79.164.56:3000/'; // 노드 서버의 엔드포인트 URL
+    const serverUrl = 'http://52.79.164.56:50000/'; // 노드 서버의 엔드포인트 URL
 
     var registeredUser = false;  // 디비에 저장된 유저인가?
     try {
