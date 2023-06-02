@@ -29,7 +29,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(
@@ -60,6 +59,7 @@ class LoginScreen extends StatelessWidget {
                     chkIfRegisteredAndRedirect(context, userId, userName, 'kakao');
                   } catch (error) {
                     print('카카오톡으로 로그인 실패 $error');
+
                     // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
                     try {
                       OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
@@ -193,12 +193,12 @@ class LoginScreen extends StatelessWidget {
         print('Request failed with status: ${response.statusCode}');
       }
       print('로그인 성공');
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const PersonalInfoState()));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const PersonalInfoState()), (route) => false);
       loginplatform = platform;
     }
     else {  // 등록된 유저의 경우 바로 화면 전환
       print('로그인 성공');
-      Navigator.push(context, MaterialPageRoute(builder: (context) => MyPageView()));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MyPageView()), (route) => false);
       loginplatform = platform;
     }
   }
