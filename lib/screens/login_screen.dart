@@ -13,7 +13,6 @@ import 'package:mapssi/personal_info.dart';
 // 로그인 되어 있으면 /splash -> /index
 
 var loginplatform;
-List<dynamic> userinfo = [];
 
 //구글 로그인
 class SignInWithGoogle {
@@ -56,7 +55,8 @@ class LoginScreen extends StatelessWidget {
                     var userId = user.id.toString(); //사용자 고유 식별자
                     var userName = user.kakaoAccount?.profile?.nickname.toString();
                     print(userId);
-                    chkIfRegisteredAndRedirect(context, userId, userName, 'kakao');
+                    loginplatform = 'kakao';
+                    chkIfRegisteredAndRedirect(context, userId, userName, loginplatform);
                   } catch (error) {
                     print('카카오톡으로 로그인 실패 $error');
 
@@ -68,7 +68,8 @@ class LoginScreen extends StatelessWidget {
                       var userId = user.id.toString(); //사용자 고유 식별자
                       var userName = user.kakaoAccount?.profile?.nickname.toString();
                       print(userId);
-                      chkIfRegisteredAndRedirect(context, userId, userName, 'kakao');
+                      loginplatform = 'kakao';
+                      chkIfRegisteredAndRedirect(context, userId, userName, loginplatform);
                     } catch (error) {
                       print('카카오계정으로 로그인 실패 $error');
                     }
@@ -83,7 +84,8 @@ class LoginScreen extends StatelessWidget {
                     var userId = user.id.toString(); //사용자 고유 식별자
                     var userName = user.kakaoAccount?.profile?.nickname.toString();
                     print(userId);
-                    chkIfRegisteredAndRedirect(context, userId, userName, 'kakao');
+                    loginplatform = 'kakao';
+                    chkIfRegisteredAndRedirect(context, userId, userName, loginplatform);
                   } catch (error) {
                     print('카카오계정으로 로그인 실패 $error');
                   }
@@ -118,7 +120,8 @@ class LoginScreen extends StatelessWidget {
                 var userId = user?.id;
                 var userName = user?.displayName;
                 if(user != null){
-                  chkIfRegisteredAndRedirect(context, userId, userName, 'google');
+                  loginplatform = 'google';
+                  chkIfRegisteredAndRedirect(context, userId, userName, loginplatform);
                 }
               },
               child: Row(
@@ -134,7 +137,7 @@ class LoginScreen extends StatelessWidget {
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                minimumSize: Size.fromHeight(50), // 높이만 50으로 설정
+                minimumSize: Size.fromHeight(50),
                 elevation: 1.0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0)),
@@ -151,22 +154,22 @@ class LoginScreen extends StatelessWidget {
 
     var registeredUser = false;  // 디비에 저장된 유저인가?
     try {
-    var url = '${serverUrl}get-userdata/$userId';
-    var response = await http.get(Uri.parse(url)); // GET 요청 보내기
+      var url = '${serverUrl}get-userdata/$userId';
+      var response = await http.get(Uri.parse(url)); // GET 요청 보내기
 
-    if (response.statusCode == 200) {  // 요청이 성공했을 경우
-    print(response.body);
-    // 저장된 것이 확인되면 true로 변경
-    if (response.body!="No Input Data" && response.body!="NoSuchData"){
-    registeredUser = true;
-    }
-    } else {
-    // 요청이 실패했을 경우
-    print('Request failed with status: ${response.statusCode}');
-    }
+      if (response.statusCode == 200) {  // 요청이 성공했을 경우
+        print(response.body);
+        // 저장된 것이 확인되면 true로 변경
+        if (response.body!="No Input Data" && response.body!="NoSuchData"){
+          registeredUser = true;
+        }
+      } else {
+        // 요청이 실패했을 경우
+        print('Request failed with status: ${response.statusCode}');
+      }
     } catch (error) {
-    // 에러 처리
-    print('Error: $error');
+      // 에러 처리
+      print('Error: $error');
     }
     if (!registeredUser) {  // 등록 안된 유저의 경우 초기 등록하기
       var url = '${serverUrl}user-register';
@@ -203,3 +206,5 @@ class LoginScreen extends StatelessWidget {
     }
   }
 }
+
+
