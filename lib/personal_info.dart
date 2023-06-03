@@ -45,7 +45,6 @@ class _PersonalInfoState extends State<PersonalInfoState> {
                       onChanged: (value) {
                         setState(() {
                           _selectedgender = value!;
-                          userinfo.add(_selectedgender);
                         });
                       },
                     ),
@@ -64,7 +63,6 @@ class _PersonalInfoState extends State<PersonalInfoState> {
                       onChanged: (value) {
                         setState(() {
                           _selectedcolor = value!;
-                          userinfo.add(_selectedcolor);
                         });
                       }
                       ),
@@ -87,22 +85,41 @@ class _PersonalInfoState extends State<PersonalInfoState> {
                     onChanged: (value) {
                       setState(() {
                         _selectedstyle = value!;
-                        userinfo.add(_selectedstyle);
                       });
                     }
                 ),
                 SizedBox(height: 30,),
                 ElevatedButton(onPressed: (){
-                  //결과 보여주기 (임시로 확인용)
-                  print(userinfo[0]); //사용자 고유 식별 정보
-                  print(userinfo[1]); //성별
-                  print(userinfo[2]); //퍼스널 컬러
-                  print(userinfo[3]); //선호 스타일
-
-                  //백엔드로 정보(userinfo) 넘겨주기
-                  //*******************************************************
-                  //메인 화면으로 이동
-                  Navigator.of(context).pushReplacementNamed('/index');
+                  //셋 중 하나라도 '선택 안됨'이면 제출 안 되도록
+                  if ((_selectedgender != '선택 안됨') && (_selectedcolor != '선택 안됨') && (_selectedstyle != '선택 안됨')) {
+                    //영어로 바꾸기
+                    List<String> userinfo = ktoe(_selectedgender, _selectedcolor, _selectedstyle);
+                    //백엔드로 정보(userinfo) 넘겨주기
+                    sendUserData(userinfo[0], userinfo[1], userinfo[2]);
+                    //메인 화면으로 이동
+                    Navigator.of(context).pushReplacementNamed('/index');
+                  }
+                  else{
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext ctx){
+                          return AlertDialog(
+                            content: Text('성별, 퍼스널 컬러, 선호 스타일을 모두 선택하였는지 확인하여주세요.'),
+                            actions: [
+                              Center(
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                    child: Text('확인')
+                                ),
+                              )
+                            ],
+                          );
+                        }
+                     );
+                  }
                 }, child: const Text('제출하기'),
                     style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,)
                 )
@@ -112,6 +129,67 @@ class _PersonalInfoState extends State<PersonalInfoState> {
     );
   }
 }
+
+//영어로 변환
+List<String> ktoe(kgender, kcolor, kstyle) {
+  List<String> info = [];
+  //성별
+  if(kgender == '남자'){
+    kgender = 'man';
+  }
+  else{
+    kgender = 'woman';
+  }
+  info.add(kgender);
+
+  //퍼스널 컬러
+  if(kcolor == '봄 웜톤'){
+    kcolor = 'Spring Warm';
+  }
+  else if(kcolor == '여름 쿨톤'){
+    kcolor = 'Summer Cool';
+  }
+  else if(kcolor == '가을 웜톤'){
+    kcolor = 'Autumn Warm';
+  }
+  else{
+    kcolor = 'Winter Cool';
+  }
+  info.add(kcolor);
+
+  //선호 스타일
+  if(kstyle == '캐주얼'){
+    kstyle = 'Casual';
+  }
+  else if(kstyle == '스트릿'){
+    kstyle = 'Street';
+  }
+  else if(kstyle == '아메카지'){
+    kstyle = 'Amekaji';
+  }
+  else if(kstyle == '스포츠'){
+    kstyle = 'Sports';
+  }
+  else if(kstyle == '클래식'){
+    kstyle = 'Classic';
+  }
+  else {
+    kstyle = 'GoffCore';
+  }
+  info.add(kstyle);
+
+  return info;
+}
+
+//성별, 퍼스널 컬러, 선호 스타일 백엔드로 넘겨주기
+void sendUserData(seletedgender, selectedcolor, selectedstyle) async {
+  var userData = {
+    'gender': seletedgender,
+    'perColor': selectedcolor,
+    'prefType': selectedstyle
+  };
+}
+
 
 //퍼스널 컬러 진단 질문
 //질문1

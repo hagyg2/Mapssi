@@ -100,11 +100,11 @@ class Profile extends StatelessWidget {
         actions: [IconButton(onPressed: () async {
           if(loginplatform == 'kakao'){
             await UserApi.instance.unlink();
-            Navigator.of(context).pushReplacementNamed('/login');
+            Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
           }
           else{
             SignInWithGoogle.signOut();
-            Navigator.of(context).pushReplacementNamed('/login');
+            Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
           }
           }, icon: Icon(Icons.logout))]
       ),
