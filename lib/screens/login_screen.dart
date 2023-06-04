@@ -153,6 +153,8 @@ class LoginScreen extends StatelessWidget {
   chkIfRegisteredAndRedirect (context, userId, userName) async {
     const serverUrl = 'http://52.79.164.56:50000/'; // 노드 서버의 엔드포인트 URL
     UserDataFromServer userController = Get.find<UserDataFromServer>();
+    userController.setUserId(userId);
+    userController.setUserName(userName);
 
     var registeredUser = false;  // 디비에 저장된 유저인가?
     try {
@@ -164,6 +166,10 @@ class LoginScreen extends StatelessWidget {
         // 저장된 것이 확인되면 true로 변경
         if (response.body!="No Input Data" && response.body!="NoSuchData"){
           registeredUser = true;
+          var registeredData = json.decode(response.body);
+          userController.setUserGender(registeredData['gender']);
+          userController.setUserPerCol(registeredData['perCol']);
+          userController.setUserPrefType(registeredData['prefType']);
         }
       } else {
         // 요청이 실패했을 경우
@@ -173,8 +179,6 @@ class LoginScreen extends StatelessWidget {
       // 에러 처리
       print('Error: $error');
     }
-    userController.setUserId(userId);
-    userController.setUserName(userName);
     if (!registeredUser) {  // 등록 안된 유저의 경우 초기 등록하기
       var url = '${serverUrl}user-register';
       var userData = {

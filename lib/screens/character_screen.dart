@@ -147,9 +147,14 @@ class ChatGPTRecommend extends StatefulWidget {
 class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
   @override
   Widget build(BuildContext context) {
+    var curTemp = Get.find<WeatherJasonData>().getData()[0];
+    UserDataFromServer userController = Get.find<UserDataFromServer>();
+    var gender = userController.getUserGender()==1 ? 'men' : 'women';
+    var prefType = userController.getUserPrefType();
+    var perCol = userController.getUserPerCol();
     if (!widget.gotResponse) {
       return ElevatedButton(onPressed: () async {
-        chatRequest('Please recommend 3 casual styles of clothing for men with spring warm-toned personal colors in sunny weather of 23 degrees. The format consists of top (color)+bottom (color) and requires no explanation.');
+        chatRequest('Please recommend 3 ${prefType} styles of clothing for ${gender} with ${perCol}-toned personal colors in sunny weather of ${curTemp} degrees. The format consists of top (color)+bottom (color) and requires no explanation.');
       }, child: const Text("AI 추천 생성"));
     } else {
       return ListView(
@@ -196,6 +201,7 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
     var url ='$serverUrl/recommend';
 
     // ChatGPT API에 전달할 데이터
+    print(userInput);
     var requestBody = {'question' : userInput};
 
     // API 요청 보내기
