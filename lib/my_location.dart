@@ -3,6 +3,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MyLocation {
+
   //MyLocation = 사용자의 위/경도 값 할당받음
   late double latitude2;
   late double longtitude2;
@@ -12,6 +13,8 @@ class MyLocation {
   late String addressSi;
 
   Future<void> getMyCurrentLongilati() async {
+
+
     try {
       LocationPermission permission = await Geolocator
           .requestPermission(); //위치 권한
@@ -21,6 +24,7 @@ class MyLocation {
       longtitude2 = position.longitude;
       print(latitude2);
       print(longtitude2);
+
 
 
       List<Placemark> placemarks = await placemarkFromCoordinates(
@@ -34,8 +38,12 @@ class MyLocation {
         addressDo = '${placemark.administrativeArea}';
         addressSi = '${placemark.locality}';
       }
+
     } catch (e) {
       print("인터넷 연결에 문제가 있습니다.");
     }
   }
+
+
+
 }

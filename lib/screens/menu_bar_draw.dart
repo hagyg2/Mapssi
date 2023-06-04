@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mapssi/screens/search_area_screen.dart';
 
 class MenuBarDraw extends StatelessWidget {
   @override
@@ -107,11 +108,32 @@ class FavoriteArea extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("즐겨찾는 지역"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  CityDropdown(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
+      body: SingleChildScrollView( //전체적인 화면을 위아래로 스크롤
+        child: Column(
+
+            children: [
+            ]
+        ),
+      ),
+
     );
-    throw UnimplementedError();
   }
 }
+
 
 class FavoriteCoordi extends StatelessWidget {
   const FavoriteCoordi({super.key});

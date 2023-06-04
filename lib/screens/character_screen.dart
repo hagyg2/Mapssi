@@ -5,6 +5,7 @@ import 'package:mapssi/customIconSets/coordi_icons.dart';
 import 'package:mapssi/customIconSets/top_clothes_icons.dart';
 import 'package:mapssi/customIconSets/overcoat_icons.dart';
 import 'package:mapssi/customIconSets/shoes_icons.dart';
+import 'package:mapssi/screens/weather_screen.dart';
 // import 'package:mapssi/customIconSets/pants.dart';
 
 class VerticalSlider extends StatefulWidget {
@@ -373,7 +374,17 @@ class CharacterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body:  GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity! > 0) {
+            // 이전 페이지로 이동
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) =>
+            WeatherScreen()),);
+          }
+        },
+    child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded( // 조언 멘트
@@ -414,6 +425,6 @@ class CharacterPage extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ),);
   }
 }

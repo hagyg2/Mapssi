@@ -1,39 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:mapssi/screens/search_area_screen.dart';
+import '../main.dart';
+import '../my_location.dart';
+import '../network.dart';
 import 'menu_bar_draw.dart';
 import 'model.dart';
+const apiKey = "122328b0a95baa0ce0c0a7697d3a30c7";
+
 
 class WeatherScreen extends StatefulWidget {
-
-  final double latitude;
-  final double longitude;
-  final String address;
-  final String addressDo;
-  final String addressSi;
-  final String englishDayOfWeek;
-
-  final dynamic parseCurrentWeatherData;
-  final dynamic parseDailyWeatherData;
-  final dynamic parseWeeklyWeatherData;
-  final dynamic parseAirConditionData;
-  final String weatherDescription;
-
-  WeatherScreen({
-    required this.latitude,
-    required this.longitude,
-    required this.address,
-    required this.addressDo,
-    required this.addressSi,
-    required this.parseCurrentWeatherData,
-    required this.parseDailyWeatherData,
-    required this.parseWeeklyWeatherData,
-    required this.parseAirConditionData,
-    required this.weatherDescription,
-    required this.englishDayOfWeek,
-  });
-
 
   @override
   _WeatherScreenState createState() => _WeatherScreenState();
@@ -43,115 +22,313 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen> {
   Model model = Model();
-  late String addresName;
-  late String addresNameDo;
-  late String addresNameSi;
-  var currentTemp;
-  late double dailyTemp;
+
+  //1. condition -> icon과 현재 상태 알아내기
+  late int condition = 500; //500 = 비
+
+  late String des = 'glgl'; //description
+  late String dailyDes = 'glgl';
+
+  late String koreanDes = '날씨상태'; // 날씨 상태 -> 한국어로
 
   late Widget icon;
 
-  late Widget airIcon;
-  late Widget airState;
-  var airDust;
+  //2. 강수량
+  late double currentRainFall = 10.0;
+
+  //3.지역(동/시 단위로)
+  late String addresNameDo;
+  late String addresNameSi;
 
 
-  DateTime now = DateTime.now();
-  late String des; //description
-  late String dailyDes;
+  //4. 현재 기온
+  var currentTemperature;
 
-  late String koreanDes;
-  late String englishDayOfWeek = DateFormat.EEEE().format(now);
-  late String koreanDayOfWeek;
+  // late double dailyTemp;
 
-  late double currentRainfall;
-  late double dailyRainfall;
 
+  //5. 최저,최고 온도 -> maxTemp, minTemp로 알아냄
   late int maxTemperature;
   late int minTemperature;
+
+
+  //6. 날짜 요일
+  final now = DateTime.now();
+  late String englishDayOfWeek = DateFormat.EEEE().format(now); //요일
+  late String koreanDayOfWeek; //요일 > 한글로
+  late String addresName;
+
+
+  //7. 미세먼지
+  late double airDust = 0.0;
+  late Widget airIcon;
+  late Widget airState;
+
+
+
+  double? latitude3;
+  double? longitude3;
+
+  //8. 일일예보
+  var dailyWeatherData;
+
+
+  List<dynamic> weatherList = [];
+  //List<WeatherData> weatherDataList = [];
+  //List<dynamic>? dailyForecasts;
+
 
   @override
   void initState() {
     super.initState();
-    updateData(widget.parseCurrentWeatherData, widget.parseAirConditionData,
-      widget.parseDailyWeatherData,);
+    if (Get.find<WeatherJasonData>().getData()[1] == 100) {
+      super.initState();
+      getLocation();
+    }
   }
 
-  void updateTemperatures() {
-    List<dynamic> weatherList = widget.parseDailyWeatherData['list'];
+  //사용자 위치 불러오기 -위경도 값f
+  void getLocation() async {
+    MyLocation myLocation = MyLocation();
+    await myLocation.getMyCurrentLongilati();
+    latitude3 = myLocation.latitude2;
+    longitude3 = myLocation.longtitude2;
+    print(latitude3);
+    print(longitude3);
 
-    double maxTemp = double.negativeInfinity;
-    double minTemp = double.infinity;
+    addresNameDo = myLocation.addressDo;
+    addresNameSi = myLocation.addressSi;
+    print(addresNameDo);
+    print(addresNameSi);
+    // network.dart 에서 getJsonData()불러오기 위해 network인스턴스 생성
+    String currentWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apiKey&units=metric';
+    String dailyWeather = 'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude3&lon=$longitude3&appid=$apiKey&units=metric';
+    String weeklyWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apiKey&units=metric';
+    String airCondition = 'http://api.openweathermap.org/data/2.5/air_pollution?lat=$latitude3&lon=$longitude3&appid=$apiKey';
+    Network network = Network(
+        currentWeather, dailyWeather, weeklyWeather, airCondition);
+    // network.dart에서 파싱된 json data를 출력해주기 위해 weatherData 변수에 getJsonData()의 값을 할당
+    var currentWeatherData = await network.getCurrentWeatherData();
+    var dailyWeatherData = await network.getdailyWeatherData();
+    var weeklyWeatherData = await network.getWeeklyeatherData();
+    var airConditionData = await network.getAirConditionData();
+    print(currentWeatherData);
+    print(dailyWeatherData);
+    print(weeklyWeatherData);
+    print(airConditionData);
 
-    for (dynamic weatherData in weatherList) {
-      double temperature = weatherData['main']['temp'].toDouble();
-      if (temperature > maxTemp) {
-        maxTemp = temperature.toDouble();
+
+
+
+    //데이터 파싱하기
+
+    currentTemperature = currentWeatherData['main']['temp'].ceil();  //현재기온
+    //int index = airConditionData['list'][0]['main']['aqi'];
+    condition = currentWeatherData['weather'][0]['id'];  //날씨 아이콘에 사용
+    airDust = airConditionData['list'][0]['components']['pm10']; //미세먼지
+    // icon = model.getWeatherIcon(condition)!;
+
+    des = currentWeatherData['weather'][0]['description']; //날씨 상태
+    koreanDes =getKoreanWeatherDescription(des);
+
+    currentRainFall =
+    currentWeatherData['rain'] != null ? currentWeatherData['rain']['1h'] : 0.0;  //현재 강수량
+
+    weatherList = dailyWeatherData['list'];    // 5일간 3시간 단위 예보
+    print('weatherList? $weatherList');
+
+
+
+
+    // 실시간 기온
+    void updateTemperatures() {
+      List<dynamic> weatherList = dailyWeatherData['list'];
+
+      double maxTemp = double.negativeInfinity;
+      double minTemp = double.infinity;
+
+      DateTime midnight = DateTime.now().subtract(Duration(hours: DateTime.now().hour));
+      DateTime nextMidnight = midnight.add(Duration(days: 1));
+
+      for (dynamic weatherData in weatherList) {
+        int timestamp = weatherData['dt'];
+        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+
+        if (dateTime.isAfter(midnight) && dateTime.isBefore(nextMidnight)) {
+          double temperature = weatherData['main']['temp'].toDouble();
+          minTemp = temperature < minTemp ? temperature : minTemp;
+          maxTemp = temperature > maxTemp ? temperature : maxTemp;
+        }
       }
-      if (temperature < minTemp) {
-        minTemp = temperature.toDouble();
+      setState(() {
+        maxTemperature = maxTemp.ceil(); //오늘의 최고 - 올림
+        minTemperature = minTemp.floor();  //오늘의 최저 - 내림
+      });
+
+    }
+    updateTemperatures();
+
+
+    print("최고ㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗ $maxTemperature");
+    print("최저ㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗ $minTemperature");
+
+
+    List<dynamic> _filterDailyForecasts(List<dynamic> weatherList) {
+      final dailyForecasts = <dynamic>[];
+
+      // 현재 날짜와 비교하기 위한 변수 초기화
+      DateTime currentDate = DateTime.now();
+
+      for (final forecast in weatherList) {
+        final dt = forecast['dt'] * 1000;
+        final forecastDate = DateTime.fromMillisecondsSinceEpoch(dt);
+
+        // 날짜가 변경되었을 때, 하루 기준의 데이터로 판단하고 추가
+        if (forecastDate.day != currentDate.day&& forecastDate.hour == 12 )  {
+          dailyForecasts.add(forecast);
+          currentDate = forecastDate;
+        }
       }
+
+      return dailyForecasts;
+
+    }
+    final dailyForecasts = _filterDailyForecasts(weatherList);
+
+    print('주간예보? $dailyForecasts');
+
+
+    for (final forecast in dailyForecasts) {
+      final dt = forecast['dt'] * 1000;
+      final forecastDate = DateTime.fromMillisecondsSinceEpoch(dt);
+      final temperature = forecast['main']['temp'];
+      final weatherDescription = forecast['weather'][0]['description'];
+
+      // 하루 기준의 데이터를 출력하거나 처리
+      print('Date: $forecastDate');
+      print('Weather Description: $weatherDescription');
     }
 
-    setState(() {
-      maxTemperature = maxTemp.round();
-      minTemperature = minTemp.round();
-    });
-  }
+    //생성된 위치 기반 날씨 정보를 character_page으로 넘김
+    WeatherJasonData dataController = Get.find<WeatherJasonData>();
+    dataController.updateData(
+      currentTemperature, maxTemperature, minTemperature, addresNameDo,
+      addresNameSi, condition, currentRainFall, airDust, koreanDes, weatherList,dailyForecasts);
 
-
-  void updateData(dynamic currentWeatherData, dynamic airConditionData,
-      dynamic dailyWeatherData) {
-    currentTemp = currentWeatherData['main']['temp'].round();
-    //int index = airConditionData['list'][0]['main']['aqi'];
-    int condition = currentWeatherData['weather'][0]['id'];
-    airDust = airConditionData['list'][0]['components']['pm10'];
-    icon = model.getWeatherIcon(condition)!;
-    airIcon = model.getAirIcon(airDust)!;
-    airState = model.getAirCondition(airDust)!;
-
-
-    addresName = widget.address;
-    addresNameDo = widget.addressDo;
-    addresNameSi = widget.addressSi;
-    des = currentWeatherData['weather'][0]['description'];
-    koreanDes = Model.getKoreanWeatherDescription(des!);
-    koreanDayOfWeek = Model.getKoreanWeekDay(englishDayOfWeek);
-
-    currentRainfall =
-    currentWeatherData['rain'] != null ? currentWeatherData['rain']['1h'] : 0.0;
+    //koreanDes = getKoreanWeatherDescription(des!);
+    //koreanDayOfWeek = getKoreanWeekDay(englishDayOfWeek);
 
   }
 
-  final List<String> weatherTexts = [
-    'Sunny',
-    'Cloudy',
-    'Rainy',
-    'Windy',
-    'Snowy',
-    'Foggy',
-    'Stormy',
-    'Partly Cloudy',
-    'Hazy',
-    'Thunderstorm',
-    'Misty',
-    'Clear Night',
-  ];
 
 
 
   @override
   Widget build(BuildContext context) {
-    // double currentTemperature = parseCurrentWeatherData['main']['temp'];
-    // double airConditionState = parseAirConditionData['list'][0]['components']['pm10'];
-    List<dynamic> weatherList = widget.parseDailyWeatherData['list'];
-    List<String> daysOfWeek = ['월요일', '화요일', '수요일', '목요일', '금요일'];
-    List<IconData> icons = [Icons.wb_sunny, Icons.cloud, Icons.wb_sunny, Icons.cloud, Icons.wb_sunny];
-    List<double> maxTemperatures = [28.0, 26.0, 30.0, 24.0, 27.0];
-    List<double> minTemperatures = [19.0, 18.0, 20.0, 16.0, 18.0];
+
+    List<dynamic> _filterDailyForecasts(List<dynamic> weatherList) {
+      final dailyForecasts = <dynamic>[];
+
+      // 현재 날짜와 비교하기 위한 변수 초기화
+      DateTime currentDate = DateTime.now();
+
+      for (final forecast in weatherList) {
+        final dt = forecast['dt'] * 1000;
+        final forecastDate = DateTime.fromMillisecondsSinceEpoch(dt);
+
+        // 날짜가 변경되었을 때, 하루 기준의 데이터로 판단하고 추가
+        if  (forecastDate.day != currentDate.day && forecastDate.hour == 12)
+        {
+          // dailyForecasts.add(currentData);
+          dailyForecasts.add(forecast);
+          currentDate = forecastDate;
+        }
+      }
+      return dailyForecasts;
+    }
+
+    var dailyForecasts = _filterDailyForecasts(weatherList);
+    print('주간예보????????????? $dailyForecasts');
+
+
+
+    for (final forecast in dailyForecasts) {
+      final dt = forecast['dt'] * 1000;
+      final forecastDate = DateTime.fromMillisecondsSinceEpoch(dt);
+      final temperature = forecast['main']['temp'];
+      final weatherDescription = forecast['weather'][0]['description'];
+
+
+      // 하루 기준의 데이터를 출력하거나 처리
+      print('Date: $forecastDate');
+      print('Weather Description: $weatherDescription');
+    }
+
+    currentTemperature = Get.find<WeatherJasonData>().getData()[0];
+    maxTemperature = Get.find<WeatherJasonData>().getData()[1];
+    minTemperature = Get.find<WeatherJasonData>().getData()[2];
+    addresNameDo = Get.find<WeatherJasonData>().getData()[3];
+    addresNameSi = Get.find<WeatherJasonData>().getData()[4];
+    condition = Get.find<WeatherJasonData>().getData()[5];
+    currentRainFall = Get.find<WeatherJasonData>().getData()[6];
+    airDust = Get.find<WeatherJasonData>().getData()[7];
+    koreanDes = Get.find<WeatherJasonData>().getData()[8];
+    weatherList = Get.find<WeatherJasonData>().getData()[9];
+    dailyForecasts = Get.find<WeatherJasonData>().getData()[10];
+
+
+    //최고 최저 날씨 구하는 코드(5일간)
+    //DateTime now = DateTime.now();
+    DateTime midnight = DateTime(now.year, now.month, now.day, 0, 0, 0);
+   // DateTime nextMidnight = midnight.add(Duration(days: 1));
+
+    List<double> maxTemperatures = [];
+    List<double> minTemperatures = [];
+
+    for (int i = 0; i < 6; i++) {
+
+      DateTime currentMidnight = midnight.add(Duration(days: i));
+      DateTime nextMidnight = midnight.add(Duration(days: i + 1));
+
+      double maxTemp = double.negativeInfinity;
+      double minTemp = double.infinity;
+
+      for (dynamic weatherData in weatherList) {
+        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
+            weatherData['dt'] * 1000);
+
+        // 현재 시간이 현재 날짜의 자정 이후이고 다음 날짜의 자정 전인 경우
+        if (dateTime.isAfter(currentMidnight) &&
+            dateTime.isBefore(nextMidnight)) {
+          double temperature = weatherData['main']['temp'].toDouble();
+          minTemp = temperature < minTemp ? temperature : minTemp;
+          maxTemp = temperature > maxTemp ? temperature : maxTemp;
+        }
+      }
+
+
+      maxTemperatures.add(maxTemp);
+      minTemperatures.add(minTemp);
+
+      print('날짜: ${currentMidnight.toString().substring(0, 10)}');
+      print('최고 온도: ${maxTemp.toStringAsFixed(1)}');
+      print('최저 온도: ${minTemp.toStringAsFixed(1)}');
+      print('===================!!!!!!!!!!=');
+    }
+
+
+
+    // int condition = getWeatherCondition() as int;
+    icon = model.getWeatherIcon(condition)!;
+    //필요없음  koreanDes = Model.getKoreanWeatherDescription(des!);
+    koreanDayOfWeek = Model.getKoreanWeekDay(englishDayOfWeek);
+    airState = model.getAirCondition(airDust)!;
+    airIcon = model.getAirIcon(airDust)!;
 
 
     return Scaffold(
+      backgroundColor: Colors.orange,
+
       appBar: AppBar(
         backgroundColor: Colors.pink,
         elevation: 0.0,
@@ -164,7 +341,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
             onPressed: () {
               //print("search button is clicked");
               Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LocationSearchPage(),),
+                context,
+                MaterialPageRoute(builder: (context) => CityDropdown(),),
               );
             },
           ),
@@ -176,8 +354,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
       ),
 
 
-      body: SingleChildScrollView( //전체적인 화면을 위아래로 스크롤
-        child: Column(
+      body: SingleChildScrollView(
+
+        // child: GestureDetector(
+        // onHorizontalDragEnd: (DragEndDetails details) {
+        // if (details.primaryVelocity! < 0) {
+        // Navigator.pushReplacement(
+        // context,
+        // MaterialPageRoute(builder: (context) =>
+        // CharacterPage(),),);}},//전체적인 화면을 위아래로 스크롤
+        child: maxTemperature != 100
+            ? Column(
 
           children: [
             //상단
@@ -196,15 +383,18 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     // padding: EdgeInsets.all(5.0),
 
                     child: Column(
+
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 30.0,),
                         icon,
+
+
                         SizedBox(height: 20),
                         Text('$koreanDes', style: TextStyle(
                             color: Colors.white, fontSize: 18.0),),
                         SizedBox(height: 10,),
-                        Text('${currentRainfall.toStringAsFixed(1)}mm',
+                        Text('${currentRainFall.toStringAsFixed(1)}mm',
                           style: TextStyle(color: Colors.white,
                               fontSize: 15.0,
                               fontWeight: FontWeight.bold),)
@@ -228,9 +418,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           style: TextStyle(fontSize: 15, color: Colors.white),),
 
                         SizedBox(height: 28.0),
-                        Text('$currentTemp°C', style: TextStyle(color: Colors
-                            .white, fontSize: 35.0, fontWeight: FontWeight
-                            .bold),),
+                        Text('$currentTemperature°C',
+                          style: TextStyle(color: Colors
+                              .white, fontSize: 35.0, fontWeight: FontWeight
+                              .bold),),
 
                         SizedBox(height: 8.0),
                         Row(
@@ -267,7 +458,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             color: Colors.white, fontSize: 13.0,),
                         ),
 
-                        SizedBox(height: 38.0),
+                        SizedBox(height: 28.0),
                         Text(
                           '미세먼지',
                           style: TextStyle(
@@ -276,6 +467,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+
                               airState,
                               airIcon,
                             ]
@@ -300,6 +492,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 children: [
                   Text('일일 예보', style: TextStyle(
                     fontSize: 24.0, fontWeight: FontWeight.bold,),),
+                  Text(' (좌우로 스크롤 !)', style: TextStyle(fontSize: 11.0),),
                   SizedBox(height: 18.0),
                   SingleChildScrollView(
                     child: Column(
@@ -316,12 +509,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               itemCount: weatherList.length,
                               itemBuilder: (context, index) {
                                 dynamic weatherData = weatherList[index];
+
                                 int hourlyTemp = weatherData['main']['temp']
                                     .round();
                                 double rainfall = weatherData.containsKey(
                                     'rain') ? weatherData['rain']['3h'] : 0.0;
-                                String weatherDescription = weatherData['weather'][0]['description'];
+                                //int rainPercent = weatherData['pop'];
+
+                                String englishDescription = weatherData['weather'][0]['description'];
+                                koreanDes = getKoreanWeatherDescription(englishDescription);
+
+                                int condition = weatherData['weather'][0]['id'];
+                                icon = model.getWeatherIcon(condition)!;
+
                                 int timestamp = weatherData['dt'];
+
+
                                 DateTime time = DateTime
                                     .fromMillisecondsSinceEpoch(
                                     timestamp * 1000);
@@ -344,11 +547,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                       // 시간 표시
                                       Text('$hourlyTemp°C', style: TextStyle(
                                         fontSize: 15, color: Colors.black,),),
-                                      Text('$koreanDes($weatherDescription)',
+                                      Text('$koreanDes($englishDescription)',
                                         style: TextStyle(
                                           fontSize: 10, color: Colors.black,),),
                                       icon,
-                                      Text('$rainfall mm', style: TextStyle(
+
+                                      Text('$rainfall(mm)', style: TextStyle(
                                         fontSize: 12, color: Colors.black,),),
 
                                     ],
@@ -369,6 +573,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       children: [
                         Text('주간 예보', style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.bold,),),
+                        Text(' (위아래로 스크롤 !)', style: TextStyle(fontSize: 11.0),),
+
                         SizedBox(height: 18.0),
                         SingleChildScrollView(
                           child: Column(
@@ -378,48 +584,95 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               //주간 예보 칸
                               Container(
                                 padding: EdgeInsets.all(40.0),
-
                                 height: 500, color: Colors.orangeAccent,
-                                child: ListView.builder(
+
+                                child:   ListView.builder(
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
-                                  itemCount: daysOfWeek.length,
+                                  // 여기부터 시작
+
+                                  itemCount: dailyForecasts.length,
                                   itemBuilder: (context, index) {
-                                    String day = daysOfWeek[index];
-                                    IconData icon = icons[index];
-                                    double maxTemp = maxTemperatures[index];
-                                    double minTemp = minTemperatures[index];
+
+                                    dynamic forecast = dailyForecasts[index];
+                                    String weatherDescription = forecast['weather'][0]['description'];
+                                    koreanDes = getKoreanWeatherDescription(weatherDescription);
+
+                                    int condition = forecast['weather'][0]['id'];
+                                    icon = model.getWeatherIcon(condition)!;
+
+                                    int timestamp = forecast['dt'];
+                                    DateTime time = DateTime
+                                        .fromMillisecondsSinceEpoch(
+                                        timestamp * 1000);
+                                    String formattedTime = DateFormat('HH:mm')
+                                        .format(time); // 시간을 HH:mm 형식으로 변환
+                                    String weekday = DateFormat.EEEE().format(
+                                        time);
+                                    String koreanWeekDay = getKoreanWeekDay(weekday);
+
+                                    int dailyMaxTemp = maxTemperatures[index+1].ceil();
+                                    int dailyMinTemp = minTemperatures[index+1].floor();
+
 
                                     return Row(
-
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceBetween,
                                       children: [
 
-
-                                        Text(day, style: TextStyle(fontSize: 18.0,
-                                          fontWeight: FontWeight.bold, color: Colors.white,),),
-                                        SizedBox(height: 77.0,),
-
-                                        Row(
+                                        Column(
                                           children: [
-                                            Icon(icon,color: Colors.white,size: 30.0,),
+                                            Text(
+                                              DateFormat('M월 d일').format(time),
 
-                                            SizedBox(width: 15.0),
-                                            Text('${maxTemp.toStringAsFixed(1)}°C',
-                                              style: TextStyle(fontSize: 14.0,color: Colors.white,),),
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black,),),
+                                            SizedBox(height: 15,),
+                                            Text('$koreanWeekDay',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,),),
+                                          ] ,
+                                        ),
 
-                                            SizedBox(width: 5.0),
-                                            Text(' / ',
-                                              style: TextStyle(fontSize: 28.0,color: Colors.white, fontWeight: FontWeight.bold,),),
 
-                                            SizedBox(width: 5.0),
-                                            Text('${minTemp.toStringAsFixed(1)}°C',
-                                              style: TextStyle(fontSize: 14.0,color: Colors.white,),),
-                                          ],
+
+                                        Row( //세로로 아이콘, 최고 최저 기온
+                                            children: [
+
+                                              Container(
+                                                margin: EdgeInsets.symmetric(vertical: 30.0),
+                                                child: icon,
+                                                // Text('$weatherDescription\n $koreanDes', style: TextStyle(
+                                                //   fontSize: 8, color: Colors.black,),),
+                                              ),
+
+                                              SizedBox(width: 18.0,),
+                                              Container(
+                                                margin: EdgeInsets.symmetric(vertical: 30.0),
+                                                child:  Text('${dailyMaxTemp}°C',
+                                                  style: TextStyle(fontSize: 14.0,color: Colors.white,),),
+
+                                              ),
+
+                                              Container(
+                                                margin: EdgeInsets.symmetric(vertical: 30.0),
+                                                child: Text(' / ',
+                                                  style: TextStyle(fontSize: 28.0,color: Colors.white, fontWeight: FontWeight.bold,),),
+
+                                              ),
+
+                                              Container(
+                                                margin: EdgeInsets.symmetric(vertical: 30.0),
+                                                child:  Text('${dailyMinTemp}°C',
+                                                  style: TextStyle(fontSize: 14.0,color: Colors.white,),),
+                                              ),
+                                            ]
                                         )
                                       ],
                                     );
-
                                   },
                                 ),
                               ),
@@ -431,13 +684,154 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ),
                 ],
               ),
-
-
             ),
           ],
+        ) : Container(
+
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 222.2),
+                Image.asset(
+                  'assets/0010.gif', // 로딩 이미지 파일 경로
+                  width: 200, // 이미지의 너비 설정
+                  height: 200,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Loading...',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+
+            ),
+          ),
         ),
       ),
     );
   }
-}
 
+
+
+  String getKoreanWeatherDescription(String englishDescription) {
+    String koreanDes =' ';
+    switch (englishDescription) {
+      case 'clear sky':
+        koreanDes = '맑음';
+        break;
+      case 'few clouds':
+      case 'scattered clouds':
+      case 'broken clouds':
+        koreanDes = '구름';
+        break;
+      case 'shower rain':
+      case 'light intensity shower rain':
+      case 'heavy intensity shower rain':
+      case 'ragged shower rain':
+        koreanDes = '소나기';
+        break;
+      case 'rain':
+      case 'light rain':
+      case 'moderate rain':
+      case 'heavy intensity rain':
+      case 'very heavy rain':
+      case 'extreme rain':
+      case 'freezing rain':
+        koreanDes = '많은 비';
+        break;
+      case 'thunderstorm':
+      case 'thunderstorm with light rain':
+      case 'thunderstorm with rain':
+      case 'thunderstorm with heavy rain':
+      case 'light thunderstorm':
+      case 'heavy thunderstorm':
+      case 'ragged thunderstorm':
+      case 'thunderstorm with light drizzle':
+      case 'thunderstorm with drizzle':
+      case 'thunderstorm with heavy drizzle':
+        koreanDes = '천둥번개';
+        break;
+      case 'snow':
+      case 'light snow':
+      case 'heavy snow':
+      case 'sleet':
+      case 'light shower sleet':
+      case 'shower sleet':
+      case 'light rain and snow':
+      case 'rain and snow':
+      case 'light shower snow':
+      case 'shower snow':
+      case 'heavy shower snow':
+        koreanDes = '눈';
+        break;
+      case 'mist':
+      case 'smoke':
+      case 'haze':
+      case 'sand/dust whirls':
+      case 'fog':
+      case 'sand':
+      case 'dust':
+        koreanDes = '안개';
+        break;
+      case 'volcanic ash':
+        koreanDes = '화산재';
+        break;
+      case 'squalls':
+        koreanDes =  '돌풍';
+        break;
+      case 'tornado':
+        koreanDes = '토네이도(회오리 바람)';
+        break;
+      case 'drizzle':
+      case 'light intensity drizzle':
+      case 'heavy intensity drizzle':
+      case 'light intensity drizzle rain':
+      case 'drizzle rain':
+      case 'heavy intensity drizzle rain':
+      case 'shower rain and drizzle':
+      case 'heavy shower rain and drizzle':
+      case 'shower drizzle' :
+        koreanDes = '이슬비';
+        break;
+      case 'overcast clouds':
+        koreanDes = '흐림';
+        break;
+      default:
+        koreanDes = '정보 없음' ;
+    }
+    return koreanDes;
+
+  }
+
+  String getKoreanWeekDay(String englishWeekDay) {
+    String koreanWeekDay = '';
+
+    switch (englishWeekDay) {
+      case 'Monday':
+        koreanWeekDay = '월요일';
+        break;
+      case 'Tuesday':
+        koreanWeekDay = '화요일';
+        break;
+      case 'Wednesday':
+        koreanWeekDay = '수요일';
+        break;
+      case 'Thursday':
+        koreanWeekDay = '목요일';
+        break;
+      case 'Friday':
+        koreanWeekDay = '금요일';
+        break;
+      case 'Saturday':
+        koreanWeekDay = '토요일';
+        break;
+      case 'Sunday':
+        koreanWeekDay = '일요일';
+        break;
+      default:
+        koreanWeekDay = '알 수 없음';
+    }
+    return koreanWeekDay;
+  }
+}

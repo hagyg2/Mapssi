@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:http/http.dart' as http;
+import 'package:mapssi/personal_info.dart';
 import 'package:mapssi/screens/character_screen.dart';
 import 'package:mapssi/screens/slpash_screen.dart';
 import 'package:mapssi/screens/weather_screen.dart';
+
 import 'screens/login_screen.dart';
 
 void main() {
@@ -24,15 +27,61 @@ class MyApp extends StatelessWidget {
             thumbColor: Colors.white,
           )
       ),
+      home: PersonalInfoState(),
       routes: {
         '/index': (context) => MyPageView(),
         '/login': (context) => LoginScreen(),
         '/splash': (context) => SplashScreen(),
+        '/perinfo': (context) => PersonalInfoState(),
       },
       initialRoute: '/splash',
+
     );
   }
 }
+
+
+// 모든 화면에서 유저 정보를 공유하기 위한 클래스 (GetxController 상속 받음)
+class UserDataFromServer extends GetxController{
+  // 각 변수들 초기화
+  String? _id = "e1kl3j4h5kj"; // 유저 고유 아이디
+  String? _name = "홍길동"; // 이름
+  int? _gender = 0; // 성별
+  int? _perCol = 0; // 퍼스널컬러
+  int? _prefType = 0; // 선호 타입
+
+  setUserId(String? s){
+    _id = s;
+  }
+  setUserName(String? s){
+    _name = s;
+  }
+  setUserGender(int? n){
+    _gender = n;
+  }
+  setUserPerCol(int? n){
+    _perCol = n;
+  }
+  setUserPrefType(int? n){
+    _prefType = n;
+  }
+  getUserId(){
+    return _id;
+  }
+  getUserName(){
+    return _name;
+  }
+  getUserGender(){
+    return _gender;
+  }
+  getUserPerCol(){
+    return _perCol;
+  }
+  getUserPrefType(){
+    return _prefType;
+  }
+}
+
 
 // 모든 화면에서 날씨 정보를 공유하기 위한 클래스 (GetxController 상속 받음)
 class WeatherJasonData extends GetxController{
@@ -40,51 +89,56 @@ class WeatherJasonData extends GetxController{
   int? cT = 0; // 현재 기온
   int? mxT = 100; // 최고 기온
   int? mnT = -100; // 최저 기온
-  String? ctName = "Seoul"; // 현재 도시
+  String? ctDo = "서울특별시"; // 현재 도시
+  String? ctSi = "강남구"; // 현재 도시
+  int? cCondition = 0;
+  double? ctRain = 0.0;
+  double? ctDust = 0.0;
+  String? ctDes = "비";
+  List? forecastInfo = [];
+  List? weeklyForecast =[];
 
-  updateData(int? currentTemperature, int? maxTemperature, int? minTemperature, String? cityName){
+  updateData(int? currentTemperature, int? maxTemperature, int? minTemperature,
+      String? addresNameDo, String? addresNameSi, int? condition,
+      double? currentRainFall, double? airDust, String? koreanDes, List? weatherList, List? dailyForecasts){
     cT = currentTemperature;
     mxT = maxTemperature;
     mnT = minTemperature;
-    ctName = cityName;
+    ctDo = addresNameDo;
+    ctSi = addresNameSi;
+    cCondition = condition;
+    ctRain = currentRainFall;
+    ctDust = airDust;
+    ctDes = koreanDes;
+    forecastInfo = weatherList;
+    weeklyForecast = dailyForecasts;
+
   }
 
   getData(){
-    return [cT, mxT, mnT, ctName];
+    return [cT, mxT, mnT, ctDo, ctSi, cCondition, ctRain, ctDust, ctDes, forecastInfo, weeklyForecast];
   }
 }
 
 
-
-// 전역변수로 날씨 정보 가지고 있기
-
 // 페이지 좌우 슬라이드로 넘기는 기능
 class MyPageView extends StatelessWidget {
-const MyPageView({super.key});
+  const MyPageView({super.key});
 
-
-    @override
-    Widget build(BuildContext context) {
-
-      Get.put(WeatherJasonData());
-      return Scaffold(
-        body: PageView.builder(
-          itemBuilder: (BuildContext context, int index) {
-
-
-            // 머지 후 추후 작업
-           /*
-            if (index==0) { // 날씨 관련 페이지 출력
-            // loading 하여 날씨 정보 받아오기
-            //loading에서 받아온 날씨 정보 넘겨주기
-              return WeatherScreen();
-            } else { //캐릭터 관련 페이지 출력
-              return const CharacterPage();
-            }
-             */
-          },
-          itemCount: 2,
-        ),
-      );
+  @override
+  Widget build(BuildContext context) {
+    Get.put(WeatherJasonData());
+    return Scaffold(
+      body: PageView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          if (index==0) { // 날씨 관련 페이지 출력
+            return WeatherScreen();
+          } else { //캐릭터 관련 페이지 출력
+            return const CharacterPage();
+          }
+        },
+        itemCount: 2,
+      ),
+    );
   }
 }

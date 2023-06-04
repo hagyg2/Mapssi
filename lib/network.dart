@@ -20,6 +20,7 @@ class Network {
     if (response.statusCode == 200) {// 200 응답코드는 정상적으로 동작했다는 응답임
       String jsonData = response.body;
       Map<String,dynamic> parsingData = jsonDecode(jsonData);
+
       return parsingData;
     }
   }
