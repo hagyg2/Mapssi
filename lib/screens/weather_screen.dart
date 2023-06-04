@@ -169,8 +169,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
     updateTemperatures();
 
 
-    print("최고ㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗ $maxTemperature");
-    print("최저ㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗ $minTemperature");
+    print("최고 $maxTemperature");
+    print("최저 $minTemperature");
 
 
     List<dynamic> _filterDailyForecasts(List<dynamic> weatherList) {
