@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:mapssi/screens/login_screen.dart';
+import 'package:http/http.dart' as http;
+
+import 'main.dart';
 
 //성별, 퍼스널 컬러, 선호 스타일 정보 입력
 class PersonalInfoState extends StatefulWidget {
@@ -10,6 +15,7 @@ class PersonalInfoState extends StatefulWidget {
 }
 
 class _PersonalInfoState extends State<PersonalInfoState> {
+  UserDataFromServer userController = Get.find<UserDataFromServer>();
 
   // 드롭다운 버튼의 선택 초기화
   final _gender = ['선택 안됨', '남자', '여자'];
@@ -89,15 +95,19 @@ class _PersonalInfoState extends State<PersonalInfoState> {
                     }
                 ),
                 SizedBox(height: 30,),
-                ElevatedButton(onPressed: (){
+                ElevatedButton(onPressed: () async {
                   //셋 중 하나라도 '선택 안됨'이면 제출 안 되도록
                   if ((_selectedgender != '선택 안됨') && (_selectedcolor != '선택 안됨') && (_selectedstyle != '선택 안됨')) {
                     //영어로 바꾸기
-                    List<String> userinfo = ktoe(_selectedgender, _selectedcolor, _selectedstyle);
+                    List<Object> userinfo = ktoe(_selectedgender, _selectedcolor, _selectedstyle);
+                    userController.setUserGender(userinfo[0] as int?);
+                    userController.setUserPerCol(userinfo[1].toString());
+                    userController.setUserPrefType(userinfo[2].toString());
                     //백엔드로 정보(userinfo) 넘겨주기
-                    sendUserData(userinfo[0], userinfo[1], userinfo[2]);
-                    //메인 화면으로 이동
-                    Navigator.of(context).pushReplacementNamed('/index');
+                    if (await sendUserData(userController.getUserId(), userinfo[0], userinfo[1], userinfo[2])) {
+                      //메인 화면으로 이동
+                      Navigator.of(context).pushReplacementNamed('/index');
+                    }
                   }
                   else{
                     showDialog(
@@ -131,14 +141,14 @@ class _PersonalInfoState extends State<PersonalInfoState> {
 }
 
 //영어로 변환
-List<String> ktoe(kgender, kcolor, kstyle) {
-  List<String> info = [];
+List<Object> ktoe(kgender, kcolor, kstyle) {
+  List<Object> info = [];
   //성별
   if(kgender == '남자'){
-    kgender = 'man';
+    kgender = 1;
   }
   else{
-    kgender = 'woman';
+    kgender = 0;
   }
   info.add(kgender);
 
@@ -182,12 +192,30 @@ List<String> ktoe(kgender, kcolor, kstyle) {
 }
 
 //성별, 퍼스널 컬러, 선호 스타일 백엔드로 넘겨주기
-void sendUserData(seletedgender, selectedcolor, selectedstyle) async {
+Future<bool> sendUserData(id, seletedgender, selectedcolor, selectedstyle) async {
+  var url = 'http://52.79.164.56:50000/set-userdata/$id';
+
   var userData = {
     'gender': seletedgender,
-    'perColor': selectedcolor,
+    'perCol': selectedcolor,
     'prefType': selectedstyle
   };
+  var response = await http.put(
+    Uri.parse(url),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode(userData),
+  );
+  print(userData.toString());
+  if (response.statusCode == 200) {  // 요청이 성공했을 경우
+    // 저장된 것이 확인되면 true로 변경
+    print(response.body);
+    print("***회원 정보 수정 성공!***");
+    return true;
+  } else {
+    // 요청이 실패했을 경우
+    print('Request failed with status: ${response.statusCode}');
+    return false;
+  }
 }
 
 
