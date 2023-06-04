@@ -150,9 +150,6 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
     if (!widget.gotResponse) {
       return ElevatedButton(onPressed: () async {
         chatRequest('Please recommend 3 casual styles of clothing for men with spring warm-toned personal colors in sunny weather of 23 degrees. The format consists of top (color)+bottom (color) and requires no explanation.');
-        setState(() {
-          widget.gotResponse = true;
-        });
       }, child: const Text("AI 추천 생성"));
     } else {
       return ListView(
@@ -183,7 +180,7 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
                         ),
                       ],
                     ),
-                    child: widget.recommended[index],
+                    child: Text(widget.recommended[index]),
                   ),
                 ),
               );}
@@ -218,12 +215,13 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
       }
       setState(() {
         var combination = '';
+        print(result);
         for (int c in result.runes) {
           if (String.fromCharCode(c).isNum) {
             if (combination != ''){
-              var clothes = combination.split("+");
+              print(combination);
+              var clothes = combination.split(RegExp(r"[+\n]")).toString();
               widget.recommended.add(clothes);
-              print(widget.recommended);
             }
             combination = '';
           } else if (String.fromCharCode(c)=='.') {
@@ -232,6 +230,10 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
             combination += String.fromCharCode(c);
           }
         }
+        var clothes = combination.split(RegExp(r"[+\n]")).toString();
+        widget.recommended.add(clothes);
+        print(widget.recommended);
+        widget.gotResponse = true;
         build(context);
       });
       return response.body;

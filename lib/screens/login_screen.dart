@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/main.dart';
@@ -56,7 +57,7 @@ class LoginScreen extends StatelessWidget {
                     var userName = user.kakaoAccount?.profile?.nickname.toString();
                     print(userId);
                     loginplatform = 'kakao';
-                    chkIfRegisteredAndRedirect(context, userId, userName, loginplatform);
+                    chkIfRegisteredAndRedirect(context, userId, userName);
                   } catch (error) {
                     print('카카오톡으로 로그인 실패 $error');
 
@@ -69,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                       var userName = user.kakaoAccount?.profile?.nickname.toString();
                       print(userId);
                       loginplatform = 'kakao';
-                      chkIfRegisteredAndRedirect(context, userId, userName, loginplatform);
+                      chkIfRegisteredAndRedirect(context, userId, userName);
                     } catch (error) {
                       print('카카오계정으로 로그인 실패 $error');
                     }
@@ -85,7 +86,7 @@ class LoginScreen extends StatelessWidget {
                     var userName = user.kakaoAccount?.profile?.nickname.toString();
                     print(userId);
                     loginplatform = 'kakao';
-                    chkIfRegisteredAndRedirect(context, userId, userName, loginplatform);
+                    chkIfRegisteredAndRedirect(context, userId, userName);
                   } catch (error) {
                     print('카카오계정으로 로그인 실패 $error');
                   }
@@ -121,7 +122,7 @@ class LoginScreen extends StatelessWidget {
                 var userName = user?.displayName;
                 if(user != null){
                   loginplatform = 'google';
-                  chkIfRegisteredAndRedirect(context, userId, userName, loginplatform);
+                  chkIfRegisteredAndRedirect(context, userId, userName);
                 }
               },
               child: Row(
@@ -149,8 +150,9 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  chkIfRegisteredAndRedirect (context, userId, userName, platform) async {
+  chkIfRegisteredAndRedirect (context, userId, userName) async {
     const serverUrl = 'http://52.79.164.56:50000/'; // 노드 서버의 엔드포인트 URL
+    UserDataFromServer userController = Get.find<UserDataFromServer>();
 
     var registeredUser = false;  // 디비에 저장된 유저인가?
     try {
@@ -171,14 +173,16 @@ class LoginScreen extends StatelessWidget {
       // 에러 처리
       print('Error: $error');
     }
+    userController.setUserId(userId);
+    userController.setUserName(userName);
     if (!registeredUser) {  // 등록 안된 유저의 경우 초기 등록하기
       var url = '${serverUrl}user-register';
       var userData = {
         '_id': userId,
         'name': userName,
         'gender': 0,
-        'perCol': 0,
-        'prefType': 0,
+        'perCol': "",
+        'prefType': "",
       };
       var response = await http.post(
         Uri.parse(url),
@@ -197,12 +201,10 @@ class LoginScreen extends StatelessWidget {
       }
       print('로그인 성공');
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const PersonalInfoState()), (route) => false);
-      loginplatform = platform;
     }
     else {  // 등록된 유저의 경우 바로 화면 전환
       print('로그인 성공');
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MyPageView()), (route) => false);
-      loginplatform = platform;
     }
   }
 }
