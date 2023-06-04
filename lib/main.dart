@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+
+
 import 'package:mapssi/personal_info.dart';
 import 'package:mapssi/screens/character_screen.dart';
 import 'package:mapssi/screens/splash_screen.dart';
 import 'package:mapssi/screens/weather_screen.dart';
+
 import 'screens/login_screen.dart';
 
 void main() {
@@ -26,6 +29,7 @@ class MyApp extends StatelessWidget {
             thumbColor: Colors.white,
           )
       ),
+
       home: MyPageView(),
       routes: {
         '/index': (context) => MyPageView(),
@@ -43,6 +47,7 @@ class MyApp extends StatelessWidget {
 // 모든 화면에서 유저 정보를 공유하기 위한 클래스 (GetxController 상속 받음)
 class UserDataFromServer extends GetxController{
   // 각 변수들 초기화
+
   String? _id = "gildong22"; // 유저 고유 아이디
   String? _name = "홍길동"; // 이름
   int? _gender = 0; // 성별
@@ -58,6 +63,7 @@ class UserDataFromServer extends GetxController{
   setUserGender(int? n){
     _gender = n;
   }
+
   setUserPerCol(String? s){
     _perCol = s;
   }
@@ -88,39 +94,56 @@ class WeatherJasonData extends GetxController{
   int? cT = 0; // 현재 기온
   int? mxT = 100; // 최고 기온
   int? mnT = -100; // 최저 기온
-  String? ctName = "Seoul"; // 현재 도시
+  String? ctDo = "서울특별시"; // 현재 도시
+  String? ctSi = "강남구"; // 현재 도시
+  int? cCondition = 0;
+  double? ctRain = 0.0;
+  double? ctDust = 0.0;
+  String? ctDes = "비";
+  List? forecastInfo = [];
+  List? weeklyForecast =[];
 
-  updateData(int? currentTemperature, int? maxTemperature, int? minTemperature, String? cityName){
+  updateData(int? currentTemperature, int? maxTemperature, int? minTemperature,
+      String? addresNameDo, String? addresNameSi, int? condition,
+      double? currentRainFall, double? airDust, String? koreanDes, List? weatherList, List? dailyForecasts){
     cT = currentTemperature;
     mxT = maxTemperature;
     mnT = minTemperature;
-    ctName = cityName;
+    ctDo = addresNameDo;
+    ctSi = addresNameSi;
+    cCondition = condition;
+    ctRain = currentRainFall;
+    ctDust = airDust;
+    ctDes = koreanDes;
+    forecastInfo = weatherList;
+    weeklyForecast = dailyForecasts;
+
   }
 
   getData(){
-    return [cT, mxT, mnT, ctName];
+    return [cT, mxT, mnT, ctDo, ctSi, cCondition, ctRain, ctDust, ctDes, forecastInfo, weeklyForecast];
   }
 }
 
 
 // 페이지 좌우 슬라이드로 넘기는 기능
 class MyPageView extends StatelessWidget {
-const MyPageView({super.key});
+  const MyPageView({super.key});
 
-    @override
-    Widget build(BuildContext context) {
-      Get.put(WeatherJasonData());
-      return Scaffold(
-        body: PageView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            if (index==0) { // 날씨 관련 페이지 출력
-              return WeatherScreen();
-            } else { //캐릭터 관련 페이지 출력
-              return const CharacterPage();
-            }
-          },
-          itemCount: 2,
-        ),
-      );
+  @override
+  Widget build(BuildContext context) {
+    Get.put(WeatherJasonData());
+    return Scaffold(
+      body: PageView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          if (index==0) { // 날씨 관련 페이지 출력
+            return WeatherScreen();
+          } else { //캐릭터 관련 페이지 출력
+            return const CharacterPage();
+          }
+        },
+        itemCount: 2,
+      ),
+    );
   }
 }

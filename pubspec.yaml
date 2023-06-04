@@ -43,6 +43,7 @@ dependencies:
   geolocator: ^9.0.2
   permission_handler: ^10.2.0
   http: ^0.13.6
+  geocoding: ^2.1.0
 
   url_launcher: ^6.0.17
   intl: ^0.17.0 #날짜/숫자 형식 지정 라이브러리
@@ -56,6 +57,7 @@ dependencies:
   google_sign_in: ^6.1.0
   kakao_flutter_sdk_user: ^1.4.2
   shared_preferences: ^2.1.1 #로그인 여부 전역에서 체크
+
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +79,7 @@ flutter:
     - assets/
     - assets/icons/
     - assets/image/
+    - assets/weather/
 
   fonts:
     - family: CoordiIcons

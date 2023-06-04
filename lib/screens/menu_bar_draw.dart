@@ -4,6 +4,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mapssi/screens/search_area_screen.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/screens/login_screen.dart';
 
@@ -25,7 +26,7 @@ class MenuBarDraw extends StatelessWidget {
             accountName: const Text("권지원"),
             accountEmail: const Text("32190250@dankook.ac.kr"),
             decoration: BoxDecoration( color: Colors.purple,),
-           ),
+          ),
 
 
             ListTile(
@@ -72,16 +73,17 @@ class MenuBarDraw extends StatelessWidget {
               trailing: Icon(Icons.navigate_next_outlined),
             ),
 
-            ListTile(
-              leading: IconButton(icon: SvgPicture.asset(
-                  "assets/icons/assignment_black_24dp.svg"),
-                onPressed: () {},
-              ),
-              title: Text('게시판'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Board()) ); },
-              trailing: Icon(Icons.navigate_next_outlined),
+          ListTile(
+            leading: IconButton(icon: SvgPicture.asset(
+                "assets/icons/assignment_black_24dp.svg"),
+              onPressed: () {},
             ),
+            title: Text('게시판'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Board()) ); },
+            trailing: Icon(Icons.navigate_next_outlined),
+          ),
+
         ],
       ),
     );
@@ -113,8 +115,6 @@ class Profile extends StatelessWidget {
   }
 }
 
-
-
 class FavoriteArea extends StatelessWidget {
   const FavoriteArea({super.key});
   @override
@@ -122,7 +122,28 @@ class FavoriteArea extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("즐겨찾는 지역"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  CityDropdown(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
+      body: SingleChildScrollView( //전체적인 화면을 위아래로 스크롤
+        child: Column(
+
+            children: [
+            ]
+        ),
+      ),
+
     );
     throw UnimplementedError();
   }
