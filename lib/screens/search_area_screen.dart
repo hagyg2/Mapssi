@@ -96,7 +96,7 @@ class _CityDropdownState extends State<CityDropdown> {
     }
 
     print("위도!!!!!!!!! $latitude");
-    print("경도!!!!!!!!! $longitude");
+    print("경도!!!!!!!!!! $longitude");
 
     }
 */
@@ -111,8 +111,8 @@ class _CityDropdownState extends State<CityDropdown> {
       Location firstLocation = locations.first;
       latitude = firstLocation.latitude;
       longitude = firstLocation.longitude;
-      print("위도!!!!!!!!! $latitude");
-      print("경도!!!!!!!!! $longitude");
+      print("위도 $latitude");
+      print("경도 $longitude");
     }
 
   }
