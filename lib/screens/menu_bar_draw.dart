@@ -1,9 +1,12 @@
 //weater_screen에 넣으면 너무 복잡할 것 같아서
 //햄버거 바 화면은 일단 여기서 만들어서 weather_screen으로 넘길겁니당
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mapssi/screens/search_area_screen.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:mapssi/screens/login_screen.dart';
 
 class MenuBarDraw extends StatelessWidget {
   @override
@@ -26,49 +29,49 @@ class MenuBarDraw extends StatelessWidget {
           ),
 
 
-          ListTile(
-            leading: IconButton(icon: SvgPicture.asset(
-                "assets/icons/account_circle_black_24dp.svg"),
-              onPressed: () {},
+            ListTile(
+              leading: IconButton(icon: SvgPicture.asset(
+                  "assets/icons/account_circle_black_24dp.svg"),
+                onPressed: () {},
+              ),
+              title: Text('프로필'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()) ); },
+              trailing: Icon(Icons.navigate_next_outlined),
             ),
-            title: Text('프로필'),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()) ); },
-            trailing: Icon(Icons.navigate_next_outlined),
-          ),
 
-          ListTile(
-            leading: IconButton(icon: SvgPicture.asset(
-                "assets/icons/star_black_24dp.svg"),
-              onPressed: () {},
+            ListTile(
+              leading: IconButton(icon: SvgPicture.asset(
+                  "assets/icons/star_black_24dp.svg"),
+                onPressed: () {},
+              ),
+              title: Text('즐겨찾는 지역'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteArea()) ); },
+              trailing: Icon(Icons.navigate_next_outlined),
             ),
-            title: Text('즐겨찾는 지역'),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteArea()) ); },
-            trailing: Icon(Icons.navigate_next_outlined),
-          ),
 
-          ListTile(
-            leading: IconButton(icon: SvgPicture.asset(
-                "assets/icons/wc_black_24dp.svg"),
-              onPressed: () {},
+            ListTile(
+              leading: IconButton(icon: SvgPicture.asset(
+                  "assets/icons/wc_black_24dp.svg"),
+                onPressed: () {},
+              ),
+              title: Text('즐겨찾는 코디'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteCoordi()) ); },
+              trailing: Icon(Icons.navigate_next_outlined),
             ),
-            title: Text('즐겨찾는 코디'),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteCoordi()) ); },
-            trailing: Icon(Icons.navigate_next_outlined),
-          ),
 
-          ListTile(
-            leading: IconButton(icon: SvgPicture.asset(
-                "assets/icons/settings_black_24dp.svg"),
-              onPressed: () {},
+            ListTile(
+              leading: IconButton(icon: SvgPicture.asset(
+                  "assets/icons/settings_black_24dp.svg"),
+                onPressed: () {},
+              ),
+              title: Text('설정'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => setting()) ); },
+              trailing: Icon(Icons.navigate_next_outlined),
             ),
-            title: Text('설정'),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => setting()) ); },
-            trailing: Icon(Icons.navigate_next_outlined),
-          ),
 
           ListTile(
             leading: IconButton(icon: SvgPicture.asset(
@@ -95,6 +98,17 @@ class Profile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("프로필"),
+        //로그아웃 버튼
+        actions: [IconButton(onPressed: () async {
+          if(loginplatform == 'kakao'){
+            await UserApi.instance.unlink();
+            Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+          }
+          else{
+            SignInWithGoogle.signOut();
+            Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+          }
+          }, icon: Icon(Icons.logout))]
       ),
     );
     throw UnimplementedError();
@@ -131,9 +145,9 @@ class FavoriteArea extends StatelessWidget {
       ),
 
     );
+    throw UnimplementedError();
   }
 }
-
 
 class FavoriteCoordi extends StatelessWidget {
   const FavoriteCoordi({super.key});

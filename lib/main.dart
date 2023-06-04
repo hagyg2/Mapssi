@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:http/http.dart' as http;
+
+
 import 'package:mapssi/personal_info.dart';
 import 'package:mapssi/screens/character_screen.dart';
-import 'package:mapssi/screens/slpash_screen.dart';
+import 'package:mapssi/screens/splash_screen.dart';
 import 'package:mapssi/screens/weather_screen.dart';
 
 import 'screens/login_screen.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Get.put(UserDataFromServer());
     return MaterialApp(
       theme: ThemeData(
           sliderTheme: const SliderThemeData(
@@ -27,7 +29,8 @@ class MyApp extends StatelessWidget {
             thumbColor: Colors.white,
           )
       ),
-      home: PersonalInfoState(),
+
+      home: MyPageView(),
       routes: {
         '/index': (context) => MyPageView(),
         '/login': (context) => LoginScreen(),
@@ -44,11 +47,12 @@ class MyApp extends StatelessWidget {
 // 모든 화면에서 유저 정보를 공유하기 위한 클래스 (GetxController 상속 받음)
 class UserDataFromServer extends GetxController{
   // 각 변수들 초기화
-  String? _id = "e1kl3j4h5kj"; // 유저 고유 아이디
+
+  String? _id = "gildong22"; // 유저 고유 아이디
   String? _name = "홍길동"; // 이름
   int? _gender = 0; // 성별
-  int? _perCol = 0; // 퍼스널컬러
-  int? _prefType = 0; // 선호 타입
+  String? _perCol = ""; // 퍼스널컬러
+  String? _prefType = ""; // 선호 타입
 
   setUserId(String? s){
     _id = s;
@@ -59,11 +63,12 @@ class UserDataFromServer extends GetxController{
   setUserGender(int? n){
     _gender = n;
   }
-  setUserPerCol(int? n){
-    _perCol = n;
+
+  setUserPerCol(String? s){
+    _perCol = s;
   }
-  setUserPrefType(int? n){
-    _prefType = n;
+  setUserPrefType(String? s){
+    _prefType = s;
   }
   getUserId(){
     return _id;
