@@ -491,17 +491,8 @@ class CharacterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  GestureDetector(
-        onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity! > 0) {
-            // 이전 페이지로 이동
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) =>
-            WeatherScreen()),);
-          }
-        },
-    child: Column(
+
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //const Expanded(flex: 1,child: SizedBox()),
@@ -544,6 +535,6 @@ class CharacterPage extends StatelessWidget {
           ),
         ],
       ),
-    ),);
+    );
   }
 }
