@@ -503,7 +503,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         Container(
                           padding: EdgeInsets.all(20.0),
 
-                          height: 190.0, color: Colors.orangeAccent,
+                          height: 220.0, color: Colors.orangeAccent,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: weatherList.length,
@@ -532,8 +532,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                     .format(time); // 시간을 HH:mm 형식으로 변환
 
                                 return Container(
-                                  width: 150, // 각 항목의 너비 조정
-                                  padding: EdgeInsets.all(5.0),
+                                  width: 130, // 각 항목의 너비 조정
+                                  padding: EdgeInsets.all(10.0),
                                   child: Column(
 
                                     crossAxisAlignment: CrossAxisAlignment
@@ -545,8 +545,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,),),
                                       // 시간 표시
+                                      SizedBox(height: 8.0,),
                                       Text('$hourlyTemp°C', style: TextStyle(
                                         fontSize: 15, color: Colors.black,),),
+                                      SizedBox(height: 8.0,),
+
                                       Text('$koreanDes($englishDescription)',
                                         style: TextStyle(
                                           fontSize: 10, color: Colors.black,),),
@@ -653,7 +656,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                               Container(
                                                 margin: EdgeInsets.symmetric(vertical: 30.0),
                                                 child:  Text('${dailyMaxTemp}°C',
-                                                  style: TextStyle(fontSize: 14.0,color: Colors.white,),),
+                                                  style: TextStyle(fontSize: 14.0,color: Colors.redAccent,fontWeight: FontWeight.bold,),),
 
                                               ),
 
@@ -667,7 +670,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                               Container(
                                                 margin: EdgeInsets.symmetric(vertical: 30.0),
                                                 child:  Text('${dailyMinTemp}°C',
-                                                  style: TextStyle(fontSize: 14.0,color: Colors.white,),),
+                                                  style: TextStyle(fontSize: 14.0,color: Colors.blueAccent, fontWeight: FontWeight.bold,),),
                                               ),
                                             ]
                                         )
