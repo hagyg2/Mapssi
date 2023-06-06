@@ -548,6 +548,8 @@ class CharacterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    gotResponse = false;
+    recommended = [];
     return Scaffold(
 
       body: Column(
