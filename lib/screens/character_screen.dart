@@ -6,11 +6,14 @@ import 'package:http/http.dart' as http;
 import 'package:mapssi/main.dart';
 import 'package:mapssi/customIconSets/coordi_icons.dart';
 import 'package:mapssi/customIconSets/top_clothes_icons.dart';
+import 'package:mapssi/customIconSets/bottoms_icons.dart';
 import 'package:mapssi/customIconSets/overcoat_icons.dart';
 import 'package:mapssi/customIconSets/shoes_icons.dart';
-import 'package:mapssi/screens/weather_screen.dart';
-// import 'package:mapssi/customIconSets/pants.dart';
+import 'package:mapssi/color_table.dart';
 
+
+bool gotResponse = false;
+List recommended = [];
 
 //화면 중앙 (현재 기온, 캐릭터, 체형 조절)
 class SliderAndChkBox extends StatefulWidget {
@@ -138,8 +141,6 @@ class ClothesInfo {
 // 지피티 추천 파트
 class ChatGPTRecommend extends StatefulWidget {
   ChatGPTRecommend({Key? key}) : super(key: key);
-  bool gotResponse = false;
-  List recommended = [];
 
   @override
   State<ChatGPTRecommend> createState() => _ChatGPTRecommendState();
@@ -153,10 +154,13 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
     var gender = userController.getUserGender()==1 ? 'men' : 'women';
     var prefType = userController.getUserPrefType();
     var perCol = userController.getUserPerCol();
-    if (!widget.gotResponse) {
+    if (!gotResponse) {
       return ElevatedButton(onPressed: () async {
-        chatRequest('Please recommend 3 ${prefType} styles of clothing for ${gender} with ${perCol}-toned personal colors in sunny weather of ${curTemp} degrees. The format consists of top (color)+bottom (color) and requires no explanation.');
-      }, child: const Text("AI 추천 생성"));
+        chatRequest('''Please recommend 3 ${prefType} styles of clothing for ${gender} with ${perCol}-toned personal colors in sunny weather of ${curTemp} degrees.
+        The format consists of color & top clothes + color & bottom clothes and requires no explanation.''');
+      },
+      child: const Text("AI 추천 생성"),
+      style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width*0.7,0)),));
     } else {
       return ListView(
         children: <Widget>[
@@ -186,7 +190,32 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
                         ),
                       ],
                     ),
-                    child: Text(widget.recommended[index]),
+                    child: Column(
+                      children: [
+                        Expanded(flex: 1,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Color(recommended[index][0][0]),
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(30),
+                                        topRight: Radius.circular(30)
+                                    ),
+                                )
+                            )
+                        ),
+                        Expanded(flex: 1,
+                            child:Container(
+                                decoration: BoxDecoration(
+                                    color: Color(recommended[index][1][0]),
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(30),
+                                      bottomRight: Radius.circular(30)
+                                    ),
+                                )
+                            )
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );}
@@ -219,28 +248,14 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
         result = response.body;
       } else {
         result = json.decode(response.body)['content'].toString();
+        print(result);
       }
       setState(() {
-        var combination = '';
-        print(result);
-        for (int c in result.runes) {
-          if (String.fromCharCode(c).isNum) {
-            if (combination != ''){
-              print(combination);
-              var clothes = combination.split(RegExp(r"[+\n]")).toString();
-              widget.recommended.add(clothes);
-            }
-            combination = '';
-          } else if (String.fromCharCode(c)=='.') {
-            continue;
-          } else {
-            combination += String.fromCharCode(c);
-          }
+        parser(result);
+        print(recommended);
+        if (recommended.length==3) {
+          gotResponse = true;
         }
-        var clothes = combination.split(RegExp(r"[+\n]")).toString();
-        widget.recommended.add(clothes);
-        print(widget.recommended);
-        widget.gotResponse = true;
         build(context);
       });
       return response.body;
@@ -250,6 +265,47 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
     }
   }
 
+  void parser (String result) {
+    if (result=='No Response') {
+      return;
+    }
+    for (var combination in result.split("\n")) {
+      var clothes = combination.split("+");
+      var top = clothes[0].split(" ").sublist(1);
+      var bottom = clothes[1].split(" ").sublist(1);
+      int? topColor;
+      int? bottomColor;
+      var topType = "top";
+      var bottomType = "bottom";
+      if (colorMap.containsKey(top[1])) {
+        topType = top.sublist(2).join(' ');
+        String expectedColor = (top[0] + top[1]).toLowerCase();
+        if (colorMap.containsKey(expectedColor)) {
+          topColor = colorMap[expectedColor];
+        } else {
+          topColor = colorMap[top[1]];
+        }
+      } else {
+        topColor = colorMap[top[0]];
+        topType = top.sublist(1).join(' ');
+      }
+      if (colorMap.containsKey(bottom[1])) {
+        bottomType = bottom.sublist(2).join(' ');
+        String expectedColor = (bottom[0] + bottom[1]).toLowerCase();
+        if (colorMap.containsKey(expectedColor)) {
+          bottomColor = colorMap[expectedColor];
+        } else {
+          bottomColor = colorMap[bottom[1]];
+        }
+      } else {
+        bottomColor = colorMap[bottom[0]];
+        bottomType = bottom.sublist(1).join(' ');
+      }
+      topColor ?? (topColor = 0xFF000000);
+      bottomColor ?? (bottomColor = 0xFF000000);
+      recommended.add([[topColor, topType], [bottomColor, bottomType]]);
+    }
+  }
 }
 
 
@@ -274,7 +330,16 @@ class CoordiBottomSheet extends StatefulWidget {
     ClothesInfo(const Icon(TopClothes.zip_hoodie, size: 45), "zip_hoodie")
   ];
 
-  final List pantsList = [];
+  final List pantsList = [
+    ClothesInfo(const Icon(Bottoms.cargo, size: 45), "cargo"),
+    ClothesInfo(const Icon(Bottoms.flare_pants, size: 45), "flare_pants"),
+    ClothesInfo(const Icon(Bottoms.jogger_pants, size: 45), "jogger_pants"),
+    ClothesInfo(const Icon(Bottoms.loose_pants, size: 45), "loose_pants"),
+    ClothesInfo(const Icon(Bottoms.short_cargo, size: 45), "short_cargo"),
+    ClothesInfo(const Icon(Bottoms.shorts, size: 45), "shorts"),
+    ClothesInfo(const Icon(Bottoms.slim_fit_pants, size: 45), "slim_fit_pants"),
+    ClothesInfo(const Icon(Bottoms.trousers, size: 45), "trousers"),
+  ];
 
   final List shoesList = [
     ClothesInfo(const Icon(Shoes.chelsea_boot, size: 45), "chelsea_boot"),
@@ -308,7 +373,7 @@ class CoordiBottomSheet extends StatefulWidget {
 class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProviderStateMixin{
   int _currentSheetIndex = 0;
   late AnimationController _animationController;
-  List clothesNum = [13,0,9,10,0]; // 상 하 신 외 개수
+  List clothesNum = [13,8,9,10,3]; // 상 하 신 외 개수
 
   @override
   void initState() {
@@ -366,14 +431,8 @@ class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProvi
                             // 버튼 클릭 시 실행할 코드
                           },
                           child: Container(
-                            height: MediaQuery
-                                .of(context)
-                                .size
-                                .width * 0.27,
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width * 0.27,
+                            height: MediaQuery.of(context).size.width * 0.27,
+                            width: MediaQuery.of(context).size.width * 0.27,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(color: Colors.black, width: 1),
@@ -390,8 +449,7 @@ class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProvi
                                 ),
                               ],
                             ),
-                            child: clothesList[_currentSheetIndex][index]
-                                .clothesIcon,
+                            child: clothesList[_currentSheetIndex][index].clothesIcon,
                           ),
                         ),
                       );
