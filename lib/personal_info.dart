@@ -106,7 +106,7 @@ class _PersonalInfoState extends State<PersonalInfoState> {
                     //백엔드로 정보(userinfo) 넘겨주기
                     if (await sendUserData(userController.getUserId(), userinfo[0], userinfo[1], userinfo[2])) {
                       //메인 화면으로 이동
-                      Navigator.of(context).pushReplacementNamed('/index');
+                      Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
                     }
                   }
                   else{
