@@ -80,20 +80,15 @@ flutter:
     - assets/icons/
     - assets/image/
     - assets/weather/
+    - assets/clothes/bottoms/
+    - assets/clothes/overcoat/
+    - assets/clothes/shoes/
+    - assets/clothes/tops/
 
   fonts:
     - family: CoordiIcons
       fonts:
         - asset: fonts/CoordiIcons.ttf
-    - family: TopClothes
-      fonts:
-        - asset: fonts/TopClothes.ttf
-    - family: Shoes
-      fonts:
-        - asset: fonts/Shoes.ttf
-    - family: Overcoat
-      fonts:
-        - asset: fonts/Overcoat.ttf
     - family: Cafe24Ssurround
       fonts:
         - asset: fonts/Cafe24Ssurround.ttf

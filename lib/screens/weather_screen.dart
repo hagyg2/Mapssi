@@ -11,14 +11,11 @@ import 'menu_bar_draw.dart';
 import 'model.dart';
 const apiKey = "122328b0a95baa0ce0c0a7697d3a30c7";
 
-
 class WeatherScreen extends StatefulWidget {
 
   @override
   _WeatherScreenState createState() => _WeatherScreenState();
 }
-
-
 
 class _WeatherScreenState extends State<WeatherScreen> {
   Model model = Model();
@@ -503,7 +500,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         Container(
                           padding: EdgeInsets.all(20.0),
 
-                          height: 220.0, color: Colors.orangeAccent,
+                          height: MediaQuery.of(context).size.height*0.28, color: Colors.orangeAccent,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: weatherList.length,
@@ -587,7 +584,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               //주간 예보 칸
                               Container(
                                 padding: EdgeInsets.all(40.0),
-                                height: 500, color: Colors.orangeAccent,
+                                height: MediaQuery.of(context).size.height*0.55, color: Colors.orangeAccent,
 
                                 child:   ListView.builder(
                                   scrollDirection: Axis.vertical,

@@ -5,14 +5,11 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapssi/main.dart';
 import 'package:mapssi/customIconSets/coordi_icons.dart';
-import 'package:mapssi/customIconSets/top_clothes_icons.dart';
-import 'package:mapssi/customIconSets/bottoms_icons.dart';
-import 'package:mapssi/customIconSets/overcoat_icons.dart';
-import 'package:mapssi/customIconSets/shoes_icons.dart';
 import 'package:mapssi/color_table.dart';
 
 
 bool gotResponse = false;
+List gptResponse = [];
 List recommended = [];
 
 //화면 중앙 (현재 기온, 캐릭터, 체형 조절)
@@ -130,10 +127,10 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
 
 // 메뉴 열리면 나오는 옷 정보
 class ClothesInfo {
-  Icon? clothesIcon;
+  AssetImage? clothesImage;
   String? clothesName;
-  ClothesInfo (ic, n) {
-    clothesIcon = ic;
+  ClothesInfo (img, n) {
+    clothesImage = img;
     clothesName = n;
   }
 }
@@ -159,12 +156,13 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
         chatRequest('''Please recommend 3 ${prefType} styles of clothing for ${gender} with ${perCol}-toned personal colors in sunny weather of ${curTemp} degrees.
         The format consists of color & top clothes + color & bottom clothes and requires no explanation.''');
       },
-      child: const Text("AI 추천 생성"),
-      style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width*0.7,0)),));
+      style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width*0.7,0)),),
+      child: const Text("AI 추천 생성"));
     } else {
       return ListView(
         children: <Widget>[
           GridView.count(
+            childAspectRatio: 0.7,
             crossAxisCount: 3, // 한 행에 들어갈 아이템 의 개수
             shrinkWrap: true, // GridView 의 크기를 its contents 에 맞게 조절
             physics: const ScrollPhysics(), // GridView 에서 스크롤 가능 하게 만듦
@@ -174,48 +172,53 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
                   onTap: () {
                     // 버튼 클릭 시 실행할 코드
                   },
-                  child: Container(
-                    height: MediaQuery.of(context).size.width * 0.27,
-                    width: MediaQuery.of(context).size.width * 0.27,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.black,width: 1),
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(1), // 그림자 색상 및 투명도
-                          spreadRadius: 1, // 그림자의 퍼지는 정도
-                          blurRadius: 7, // 그림자의 흐림 정도
-                          offset: Offset(0, 3), // 그림자의 위치 조정
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Expanded(flex: 1,
-                            child: Container(
-                                decoration: BoxDecoration(
+                  child: Column(
+                    children: [
+                      Container(
+                      height: MediaQuery.of(context).size.width * 0.27,
+                      width: MediaQuery.of(context).size.width * 0.27,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black,width: 1),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(1), // 그림자 색상 및 투명도
+                            spreadRadius: 1, // 그림자의 퍼지는 정도
+                            blurRadius: 7, // 그림자의 흐림 정도
+                            offset: const Offset(0, 3), // 그림자의 위치 조정
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(flex: 1,
+                              child: Container(
+                                  decoration: BoxDecoration(
                                     color: Color(recommended[index][0][0]),
                                     borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(30),
                                         topRight: Radius.circular(30)
                                     ),
-                                )
-                            )
-                        ),
-                        Expanded(flex: 1,
-                            child:Container(
-                                decoration: BoxDecoration(
+                                  )
+                              )
+                          ),
+                          Expanded(flex: 1,
+                              child:Container(
+                                  decoration: BoxDecoration(
                                     color: Color(recommended[index][1][0]),
                                     borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(30),
-                                      bottomRight: Radius.circular(30)
+                                        bottomLeft: Radius.circular(30),
+                                        bottomRight: Radius.circular(30)
                                     ),
-                                )
-                            )
-                        ),
-                      ],
+                                  )
+                              )
+                          ),
+                        ],
+                      ),
                     ),
+                      Text(gptResponse[index],textAlign: TextAlign.center),
+                    ],
                   ),
                 ),
               );}
@@ -270,6 +273,7 @@ class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
       return;
     }
     for (var combination in result.split("\n")) {
+      gptResponse.add(combination);
       var clothes = combination.split("+");
       var top = clothes[0].split(" ").sublist(1);
       var bottom = clothes[1].split(" ").sublist(1);
@@ -315,55 +319,55 @@ class CoordiBottomSheet extends StatefulWidget {
   final int index;
 
   final List topClothesList = [
-    ClothesInfo(const Icon(TopClothes.casual_shirt, size: 45), "casual_shirt"),
-    ClothesInfo(const Icon(TopClothes.casual_sweat_shirt, size: 45), "casual_sweat_shirt"),
-    ClothesInfo(const Icon(TopClothes.casual_t_shirt, size: 45), "casual_t_shirt"),
-    ClothesInfo(const Icon(TopClothes.hoodie, size: 45), "hoodie"),
-    ClothesInfo(const Icon(TopClothes.pocket_t_shirt, size: 45), "pocket_t_shirt"),
-    ClothesInfo(const Icon(TopClothes.polo_shirt, size: 45), "polo_shirt"),
-    ClothesInfo(const Icon(TopClothes.reglan_sweat_shirt, size: 45), "reglan_sweat_shirt"),
-    ClothesInfo(const Icon(TopClothes.reglan_t_shirt, size: 45), "reglan_t_shirt"),
-    ClothesInfo(const Icon(TopClothes.sleeveless_shirt, size: 45), "sleeveless_shirt"),
-    ClothesInfo(const Icon(TopClothes.sleeveless_top, size: 45), "sleeveless_top"),
-    ClothesInfo(const Icon(TopClothes.tank_top, size: 45), "tank_top"),
-    ClothesInfo(const Icon(TopClothes.v_neck_t_shirt, size: 45), "v_neck_t_shirt"),
-    ClothesInfo(const Icon(TopClothes.zip_hoodie, size: 45), "zip_hoodie")
+    ClothesInfo(const AssetImage('assets/clothes/tops/casual_shirt.png'), "casual_shirt"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/casual_sweat_shirt.png'), "casual_sweat_shirt"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/casual_t_shirt.png'), "casual_t_shirt"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/hoodie.png'), "hoodie"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/pocket_t_shirt.png'), "pocket_t_shirt"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/polo_shirt.png'), "polo_shirt"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/reglan_sweat_shirt.png'), "reglan_sweat_shirt"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/reglan_t_shirt.png'), "reglan_t_shirt"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/sleeveless_shirt.png'), "sleeveless_shirt"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/sleeveless_top.png'), "sleeveless_top"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/tank_top.png'), "tank_top"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/v_neck_t_shirt.png'), "v_neck_t_shirt"),
+    ClothesInfo(const AssetImage('assets/clothes/tops/zip_hoodie.png'), "zip_hoodie")
   ];
 
   final List pantsList = [
-    ClothesInfo(const Icon(Bottoms.cargo, size: 45), "cargo"),
-    ClothesInfo(const Icon(Bottoms.flare_pants, size: 45), "flare_pants"),
-    ClothesInfo(const Icon(Bottoms.jogger_pants, size: 45), "jogger_pants"),
-    ClothesInfo(const Icon(Bottoms.loose_pants, size: 45), "loose_pants"),
-    ClothesInfo(const Icon(Bottoms.short_cargo, size: 45), "short_cargo"),
-    ClothesInfo(const Icon(Bottoms.shorts, size: 45), "shorts"),
-    ClothesInfo(const Icon(Bottoms.slim_fit_pants, size: 45), "slim_fit_pants"),
-    ClothesInfo(const Icon(Bottoms.trousers, size: 45), "trousers"),
+    ClothesInfo(const AssetImage('assets/clothes/bottoms/cargo.png'), "cargo"),
+    ClothesInfo(const AssetImage('assets/clothes/bottoms/flare_pants.png'), "flare_pants"),
+    ClothesInfo(const AssetImage('assets/clothes/bottoms/jogger_pants.png'), "jogger_pants"),
+    ClothesInfo(const AssetImage('assets/clothes/bottoms/loose_pants.png'), "loose_pants"),
+    ClothesInfo(const AssetImage('assets/clothes/bottoms/short_cargo.png'), "short_cargo"),
+    ClothesInfo(const AssetImage('assets/clothes/bottoms/shorts.png'), "shorts"),
+    ClothesInfo(const AssetImage('assets/clothes/bottoms/slim_fit_pants.png'), "slim_fit_pants"),
+    ClothesInfo(const AssetImage('assets/clothes/bottoms/trousers.png'), "trousers"),
   ];
 
   final List shoesList = [
-    ClothesInfo(const Icon(Shoes.chelsea_boot, size: 45), "chelsea_boot"),
-    ClothesInfo(const Icon(Shoes.dress_shoes, size: 45), "dress_shoes"),
-    ClothesInfo(const Icon(Shoes.flat_shoes, size: 45), "flat_shoes"),
-    ClothesInfo(const Icon(Shoes.high_heel, size: 45), "high_heel"),
-    ClothesInfo(const Icon(Shoes.running_shoes, size: 45), "running_shoes"),
-    ClothesInfo(const Icon(Shoes.slip_on, size: 45), "slip_on"),
-    ClothesInfo(const Icon(Shoes.slipper, size: 45), "slipper"),
-    ClothesInfo(const Icon(Shoes.sneakers, size: 45), "sneakers"),
-    ClothesInfo(const Icon(Shoes.walker, size: 45), "walker")
+    ClothesInfo(const AssetImage('assets/clothes/shoes/chelsea_boot.png'), "chelsea_boot"),
+    ClothesInfo(const AssetImage('assets/clothes/shoes/dress_shoes.png'), "dress_shoes"),
+    ClothesInfo(const AssetImage('assets/clothes/shoes/flat_shoes.png'), "flat_shoes"),
+    ClothesInfo(const AssetImage('assets/clothes/shoes/high_heel.png'), "high_heel"),
+    ClothesInfo(const AssetImage('assets/clothes/shoes/running_shoes.png'), "running_shoes"),
+    ClothesInfo(const AssetImage('assets/clothes/shoes/slip_on.png'), "slip_on"),
+    ClothesInfo(const AssetImage('assets/clothes/shoes/slipper.png'), "slipper"),
+    ClothesInfo(const AssetImage('assets/clothes/shoes/sneakers.png'), "sneakers"),
+    ClothesInfo(const AssetImage('assets/clothes/shoes/walker.png'), "walker")
   ];
 
   final List overcoatList = [
-    ClothesInfo(const Icon(Overcoat.bomber, size: 45), "bomber"),
-    ClothesInfo(const Icon(Overcoat.cardigan, size: 45), "cardigan"),
-    ClothesInfo(const Icon(Overcoat.casual_jacket, size: 45), "casual_jacket"),
-    ClothesInfo(const Icon(Overcoat.collar_cardigan, size: 45), "collar_cardigan"),
-    ClothesInfo(const Icon(Overcoat.leather_jacket, size: 45), "leather_jacket"),
-    ClothesInfo(const Icon(Overcoat.overcoat, size: 45), "overcoat"),
-    ClothesInfo(const Icon(Overcoat.parka, size: 45), "parka"),
-    ClothesInfo(const Icon(Overcoat.sport_jacket, size: 45), "sport_jacket"),
-    ClothesInfo(const Icon(Overcoat.track_jacket, size: 45), "track_jacket"),
-    ClothesInfo(const Icon(Overcoat.windcheater, size: 45), "windcheater"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/bomber.png'), "bomber"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/cardigan.png'), "cardigan"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/casual_jacket.png'), "casual_jacket"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/collar_cardigan.png'), "collar_cardigan"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/leather_jacket.png'), "leather_jacket"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/overcoat.png'), "overcoat"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/parka.png'), "parka"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/sport_jacket.png'), "sport_jacket"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/track_jacket.png'), "track_jacket"),
+    ClothesInfo(const AssetImage('assets/clothes/overcoat/windcheater.png'), "windcheater"),
   ];
 
   @override
@@ -433,6 +437,7 @@ class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProvi
                           child: Container(
                             height: MediaQuery.of(context).size.width * 0.27,
                             width: MediaQuery.of(context).size.width * 0.27,
+                            padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(color: Colors.black, width: 1),
@@ -449,7 +454,13 @@ class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProvi
                                 ),
                               ],
                             ),
-                            child: clothesList[_currentSheetIndex][index].clothesIcon,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: clothesList[_currentSheetIndex][index].clothesImage
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       );
@@ -548,6 +559,8 @@ class CharacterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    gotResponse = false;
+    recommended = [];
     return Scaffold(
 
       body: Column(
