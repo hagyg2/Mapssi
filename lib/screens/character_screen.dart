@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapssi/main.dart';
-import 'package:mapssi/customIconSets/coordi_icons.dart';
 import 'package:mapssi/color_table.dart';
 
 
@@ -21,7 +20,7 @@ class SliderAndChkBox extends StatefulWidget {
 }
 
 class _SliderAndChkBoxState extends State<SliderAndChkBox> {
-  bool _isVisible = true;
+  // bool _isVisible = true;
   var height=165.0;   // 키 몸무게 초기화
   var weight=80.0;
 
@@ -30,95 +29,125 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
   @override
   Widget build(BuildContext context) {
     curTemp = Get.find<WeatherJasonData>().getData()[0];
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        // 체크 박스
-        Expanded(
-          flex: 1,
-          child: Container(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.03),
-            child: Checkbox(
-              value: _isVisible,
-              onChanged: (value) {
-                setState(() {
-                  _isVisible = value ?? true;
-                });
-              },
-            ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // // 체크 박스
+              // Expanded(
+              //   flex: 1,
+              //   child: Container(
+              //     child: Checkbox(
+              //       value: _isVisible,
+              //       onChanged: (value) {
+              //         setState(() {
+              //           _isVisible = value ?? true;
+              //         });
+              //       },
+              //     ),
+              //   ),
+              // ),
+
+              // 현재 기온
+              Container(
+                child: Text(
+                  style: const TextStyle(fontSize: 50,
+                    color: Colors.black,
+                    fontFamily: 'SUITE',
+                    fontWeight: FontWeight.w800,
+                  ),
+                  "$curTemp°C",
+                ),
+              ),
+            ],
           ),
         ),
         // 아바타 이미지
         Expanded(
-          flex: 4,
-          child: Column(
-            children: [
-              Expanded(         // 현재 기온
-                flex: 1,
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.03,),
-                  child: Text(
-                    style: const TextStyle(fontSize: 40),
-                    "$curTemp°C",
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: height*2.6,
-                width: weight*3,
-                child: Image.asset(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+            decoration: BoxDecoration(
+              color: Color(0xFFFFFDF9),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 3,
+                  offset: Offset(0, 1), // 그림자의 위치 조정
+                )
+              ]
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+              child: Image.asset(
                   'assets/male_avatar.png',
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Expanded(
-                child: Visibility(       // 아래 쪽 몸무게 슬라이더
-                  visible: !_isVisible,
-                  child: Slider(
-                    min: 40,
-                    max: 120,
-                    divisions : 16,
-                    value: weight,
-                    onChanged: (newValue) {
-                      setState(() {
-                        weight = newValue;
-                        build(context);
-                      });
-                    },
-                    label: '$weight',
-                  ),
-                ),
-              )
-              ],
-          ),
-        ),
-        Expanded(               // 오른쪽 키 슬라이더
-          flex: 1,
-          child: Visibility(
-            visible: !_isVisible,
-            child: RotatedBox(
-              quarterTurns: 3,
-              child: Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.height * 0.35,
-                  child: Slider(
-                    min: 130,
-                    max: 200,
-                    value: height,
-                    divisions : 14,
-                    onChanged: (newValue) {
-                      setState(() {
-                        height = newValue;
-                        build(context);
-                      });
-                    },
-                    label: '$height',
-                  ),
-                ),
+                  fit: BoxFit.contain,
               ),
             ),
           ),
-        ),
+        )
+        // Expanded(
+        //   flex: 4,
+        //   child: Column(
+        //     children: [
+        //       SizedBox(
+        //         child: Image.asset(
+        //           'assets/male_avatar.png',
+        //           fit: BoxFit.fill,
+        //         ),
+        //       ),
+        //       Expanded(
+        //         child: Visibility(       // 아래 쪽 몸무게 슬라이더
+        //           visible: !_isVisible,
+        //           child: Slider(
+        //             min: 40,
+        //             max: 120,
+        //             divisions : 16,
+        //             value: weight,
+        //             onChanged: (newValue) {
+        //               setState(() {
+        //                 weight = newValue;
+        //                 build(context);
+        //               });
+        //             },
+        //             label: '$weight',
+        //           ),
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // ),
+        // Expanded(               // 오른쪽 키 슬라이더
+        //   flex: 1,
+        //   child: Visibility(
+        //     visible: !_isVisible,
+        //     child: RotatedBox(
+        //       quarterTurns: 3,
+        //       child: Center(
+        //         child: SizedBox(
+        //           width: MediaQuery.of(context).size.height * 0.35,
+        //           child: Slider(
+        //             min: 130,
+        //             max: 200,
+        //             value: height,
+        //             divisions : 14,
+        //             onChanged: (newValue) {
+        //               setState(() {
+        //                 height = newValue;
+        //                 build(context);
+        //               });
+        //             },
+        //             label: '$height',
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -485,62 +514,45 @@ class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProvi
 class Coordinater extends StatelessWidget {
   Coordinater({Key? key, required this.index}) : super(key: key);
   final int index;
-  final List<Icon> icons = [const Icon(CoordiIcons.shirts), const Icon(CoordiIcons.pants), const Icon(CoordiIcons.shoes), const Icon(CoordiIcons.coat), const Icon(CoordiIcons.ai_recommend)];
+  final List<String> categories = ["상의", "하의", "외투", "신발", "추천"];
 
   @override
   Widget build(BuildContext context) {
-    Icon varIcon;
-    varIcon = icons[index];
-
-    return IconButton(
-      icon: varIcon,
-      onPressed: () {
-        showCoordiBottomSheet(context, index);
-      },
-    );
+    String category = categories[index];
+    if (index<4) {
+      return TextButton(
+        child: Text(category, style: TextStyle(color: Colors.black,
+            fontFamily: 'SUITE',
+            fontWeight: FontWeight.w800,
+            fontSize: 20)),
+        onPressed: () {
+          showCoordiBottomSheet(context, index);
+        },
+      );
+    } else {
+      return TextButton(
+        child: Text(category, style: TextStyle(color: Colors.red,
+            fontFamily: 'SUITE',
+            fontWeight: FontWeight.w800,
+            fontSize: 20)),
+        onPressed: () {
+          showCoordiBottomSheet(context, index);
+        },
+      );
+    }
   }
 
   showCoordiBottomSheet (BuildContext context, int ind) {
-    BuildContext temp;
+    // BuildContext temp;
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
       builder: (BuildContext context) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.4,
+        return Container(
           child: Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(child: IconButton(onPressed: () {
-                      temp = context;
-                      Navigator.pop(context);
-                      showCoordiBottomSheet(temp, 0);
-                    }, icon: icons[0])),
-                    Expanded(child: IconButton(onPressed: () {
-                      temp = context;
-                      Navigator.pop(context);
-                      showCoordiBottomSheet(temp, 1);
-                    }, icon: icons[1])),
-                    Expanded(child: IconButton(onPressed: () {
-                      temp = context;
-                      Navigator.pop(context);
-                      showCoordiBottomSheet(temp, 2);
-                    }, icon: icons[2])),
-                    Expanded(child: IconButton(onPressed: () {
-                      temp = context;
-                      Navigator.pop(context);
-                      showCoordiBottomSheet(temp, 3);
-                    }, icon: icons[3])),
-                    Expanded(child: IconButton(onPressed: () {
-                      temp = context;
-                      Navigator.pop(context);
-                      showCoordiBottomSheet(temp, 4);
-                    }, icon: icons[4])),
-                  ],
-                ),
                 Expanded(
                   child: CoordiBottomSheet(index: ind),
                 )
@@ -562,49 +574,114 @@ class CharacterPage extends StatelessWidget {
     gotResponse = false;
     recommended = [];
     return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/background_image.png'),
+            fit: BoxFit.cover,
+          )
+        ),
+        child: Padding( // 양 옆 간격
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // 페이지 표시 동그라미 두 개
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0,50,0,20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 15,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey,
+                      ),
+                    ),
+                    SizedBox(width: 10), // 회색 동그라미와 검정색 동그라미 사이 간격
+                    Container(
+                      width: 15,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          //const Expanded(flex: 1,child: SizedBox()),
-          Expanded( // 조언 멘트
-            flex: 1,
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              child:
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10,3,10,3),
+              // 조언 멘트
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                child:
+                  Container(
+                    child: const Text(
+                      '황사가 심해요! 마스크는 필수!',
+                      style: TextStyle(fontSize: 16,
+                        color: Colors.black,
+                        fontFamily: 'SUITE',
+                        fontWeight: FontWeight.w800,),
+                    ),
+                ),
+              ),
+
+              // 중간부 (체크 박스와 슬라이더, 캐릭터)
+              const Expanded(flex:8, child: SliderAndChkBox()),
+
+              // 하단부 (옷 메뉴)
+              Expanded(
+                flex: 1,
+                child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey, width: 1.0),
-                    borderRadius: BorderRadius.circular(45.0),
+                      color: Color(0xFFFFFDF9),
+                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(0),top: Radius.circular(20)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 3,
+                          offset: Offset(0, 1), // 그림자의 위치 조정
+                        )
+                      ]
                   ),
-                  child: const Text(
-                    '황사가 심해요! 마스크는 필수!',
-                    style: TextStyle(fontSize: 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Coordinater(index: 0),
+                      const VerticalDivider(
+                        color: Color(0xFFBCBCBC),
+                        width: 2,
+                        thickness: 1.5,
+                      ),
+                      Coordinater(index: 1),
+                      const VerticalDivider(
+                        color: Color(0xFFBCBCBC),
+                        width: 2,
+                        thickness: 1.5,
+                      ),
+                      Coordinater(index: 2),
+                      const VerticalDivider(
+                        color: Color(0xFFBCBCBC),
+                        width: 2,
+                        thickness: 1.5,
+                      ),
+                      Coordinater(index: 3),
+                      const VerticalDivider(
+                        color: Color(0xFFBCBCBC),
+                        width: 2,
+                        thickness: 1.5,
+                      ),
+                      Coordinater(index: 4)
+                    ],
                   ),
+                ),
               ),
-            ),
+            ],
           ),
-          // 체크 박스와 슬라이더
-          const Expanded(flex:9, child: SliderAndChkBox()),
-          // 옷 메뉴
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: const BoxDecoration(border: Border(top: BorderSide(color: Colors.black,width: 1))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Coordinater(index: 0),
-                  Coordinater(index: 1),
-                  Coordinater(index: 2),
-                  Coordinater(index: 3),
-                  Coordinater(index: 4)
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

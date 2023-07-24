@@ -29,7 +29,9 @@ class _SplashScreenState extends State<SplashScreen>{
       }
       //로그인 되어 있지 않을 경우 나타나는 화면
       else {
-        Navigator.of(context).pushReplacementNamed('/login');
+        // ######### 개발중엔 바로 홈화면으로 가도록 변경 ##########
+        // Navigator.of(context).pushReplacementNamed('/login');
+        Navigator.of(context).pushReplacementNamed('/index');
       }
     });
   }
