@@ -50,9 +50,9 @@ class UserDataFromServer extends GetxController{
 
   String? _id = "gildong22"; // 유저 고유 아이디
   String? _name = "홍길동"; // 이름
-  int? _gender = 0; // 성별
-  String? _perCol = ""; // 퍼스널컬러
-  String? _prefType = ""; // 선호 타입
+  int? _gender = 1; // 성별
+  String? _perCol = "Spring Warm"; // 퍼스널컬러
+  String? _prefType = "Casual"; // 선호 타입
 
   setUserId(String? s){
     _id = s;
