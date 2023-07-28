@@ -2,14 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:mapssi/main.dart';
-import 'package:mapssi/color_table.dart';
 
-
-bool gotResponse = false;
-List gptResponse = [];
-List recommended = [];
 
 //화면 중앙 (현재 기온, 캐릭터, 체형 조절)
 class SliderAndChkBox extends StatefulWidget {
@@ -164,240 +158,17 @@ class ClothesInfo {
   }
 }
 
-// 지피티 추천 파트
-class ChatGPTRecommend extends StatefulWidget {
-  ChatGPTRecommend({Key? key}) : super(key: key);
-
-  @override
-  State<ChatGPTRecommend> createState() => _ChatGPTRecommendState();
-}
-
-class _ChatGPTRecommendState extends State<ChatGPTRecommend> {
-  @override
-  Widget build(BuildContext context) {
-    var curTemp = Get.find<WeatherJasonData>().getData()[0];
-    UserDataFromServer userController = Get.find<UserDataFromServer>();
-    var gender = userController.getUserGender()==1 ? 'men' : 'women';
-    var prefType = userController.getUserPrefType();
-    var perCol = userController.getUserPerCol();
-    if (!gotResponse) {
-      return ElevatedButton(onPressed: () async {
-        chatRequest('''Please recommend 3 ${prefType} styles of clothing for ${gender} with ${perCol}-toned personal colors in sunny weather of ${curTemp} degrees.
-        The format consists of color & top clothes + color & bottom clothes and requires no explanation.''');
-      },
-      style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width*0.7,0)),),
-      child: const Text("AI 추천 생성"));
-    } else {
-      return ListView(
-        children: <Widget>[
-          GridView.count(
-            childAspectRatio: 0.7,
-            crossAxisCount: 3, // 한 행에 들어갈 아이템 의 개수
-            shrinkWrap: true, // GridView 의 크기를 its contents 에 맞게 조절
-            physics: const ScrollPhysics(), // GridView 에서 스크롤 가능 하게 만듦
-            children: List.generate(3, (index) {
-              return Center(
-                child: InkWell(
-                  onTap: () {
-                    // 버튼 클릭 시 실행할 코드
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                      height: MediaQuery.of(context).size.width * 0.27,
-                      width: MediaQuery.of(context).size.width * 0.27,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black,width: 1),
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(1), // 그림자 색상 및 투명도
-                            spreadRadius: 1, // 그림자의 퍼지는 정도
-                            blurRadius: 7, // 그림자의 흐림 정도
-                            offset: const Offset(0, 3), // 그림자의 위치 조정
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Expanded(flex: 1,
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Color(recommended[index][0][0]),
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        topRight: Radius.circular(30)
-                                    ),
-                                  )
-                              )
-                          ),
-                          Expanded(flex: 1,
-                              child:Container(
-                                  decoration: BoxDecoration(
-                                    color: Color(recommended[index][1][0]),
-                                    borderRadius: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(30),
-                                        bottomRight: Radius.circular(30)
-                                    ),
-                                  )
-                              )
-                          ),
-                        ],
-                      ),
-                    ),
-                      Text(gptResponse[index],textAlign: TextAlign.center),
-                    ],
-                  ),
-                ),
-              );}
-            ),
-          ),
-        ],
-      );
-    }
-  }
-
-  Future<String> chatRequest(String userInput) async {
-    const serverUrl = 'http://52.79.164.56:50000'; // 노드 서버의 엔드포인트 URL
-    var url ='$serverUrl/recommend';
-
-    // ChatGPT API에 전달할 데이터
-    print(userInput);
-    var requestBody = {'question' : userInput};
-
-    // API 요청 보내기
-    final response = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(requestBody)
-    );
-
-    if (response.statusCode == 200) {
-      // API 요청이 성공적으로 완료되었을 때
-      var result = '';
-      if (response.body=='No Response'){
-        result = response.body;
-      } else {
-        result = json.decode(response.body)['content'].toString();
-        print(result);
-      }
-      setState(() {
-        parser(result);
-        print(recommended);
-        if (recommended.length==3) {
-          gotResponse = true;
-        }
-        build(context);
-      });
-      return response.body;
-    } else {
-      // API 요청이 실패했을 때
-      throw Exception('ChatGPT API 요청 실패: ${response.statusCode}');
-    }
-  }
-
-  void parser (String result) {
-    if (result=='No Response') {
-      return;
-    }
-    for (var combination in result.split("\n")) {
-      gptResponse.add(combination);
-      var clothes = combination.split("+");
-      var top = clothes[0].split(" ").sublist(1);
-      var bottom = clothes[1].split(" ").sublist(1);
-      int? topColor;
-      int? bottomColor;
-      var topType = "top";
-      var bottomType = "bottom";
-      if (colorMap.containsKey(top[1])) {
-        topType = top.sublist(2).join(' ');
-        String expectedColor = (top[0] + top[1]).toLowerCase();
-        if (colorMap.containsKey(expectedColor)) {
-          topColor = colorMap[expectedColor];
-        } else {
-          topColor = colorMap[top[1]];
-        }
-      } else {
-        topColor = colorMap[top[0]];
-        topType = top.sublist(1).join(' ');
-      }
-      if (colorMap.containsKey(bottom[1])) {
-        bottomType = bottom.sublist(2).join(' ');
-        String expectedColor = (bottom[0] + bottom[1]).toLowerCase();
-        if (colorMap.containsKey(expectedColor)) {
-          bottomColor = colorMap[expectedColor];
-        } else {
-          bottomColor = colorMap[bottom[1]];
-        }
-      } else {
-        bottomColor = colorMap[bottom[0]];
-        bottomType = bottom.sublist(1).join(' ');
-      }
-      topColor ?? (topColor = 0xFF000000);
-      bottomColor ?? (bottomColor = 0xFF000000);
-      recommended.add([[topColor, topType], [bottomColor, bottomType]]);
-    }
-  }
-}
-
 
 // 코디 선택 메뉴
 class CoordiBottomSheet extends StatefulWidget {
   CoordiBottomSheet({Key? key, required this.index}) : super(key: key);
   final int index;
 
-  final List topClothesList = [
-    ClothesInfo(const AssetImage('assets/clothes/tops/casual_shirt.png'), "casual_shirt"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/casual_sweat_shirt.png'), "casual_sweat_shirt"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/casual_t_shirt.png'), "casual_t_shirt"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/hoodie.png'), "hoodie"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/pocket_t_shirt.png'), "pocket_t_shirt"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/polo_shirt.png'), "polo_shirt"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/reglan_sweat_shirt.png'), "reglan_sweat_shirt"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/reglan_t_shirt.png'), "reglan_t_shirt"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/sleeveless_shirt.png'), "sleeveless_shirt"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/sleeveless_top.png'), "sleeveless_top"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/tank_top.png'), "tank_top"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/v_neck_t_shirt.png'), "v_neck_t_shirt"),
-    ClothesInfo(const AssetImage('assets/clothes/tops/zip_hoodie.png'), "zip_hoodie")
-  ];
-
-  final List pantsList = [
-    ClothesInfo(const AssetImage('assets/clothes/bottoms/cargo.png'), "cargo"),
-    ClothesInfo(const AssetImage('assets/clothes/bottoms/flare_pants.png'), "flare_pants"),
-    ClothesInfo(const AssetImage('assets/clothes/bottoms/jogger_pants.png'), "jogger_pants"),
-    ClothesInfo(const AssetImage('assets/clothes/bottoms/loose_pants.png'), "loose_pants"),
-    ClothesInfo(const AssetImage('assets/clothes/bottoms/short_cargo.png'), "short_cargo"),
-    ClothesInfo(const AssetImage('assets/clothes/bottoms/shorts.png'), "shorts"),
-    ClothesInfo(const AssetImage('assets/clothes/bottoms/slim_fit_pants.png'), "slim_fit_pants"),
-    ClothesInfo(const AssetImage('assets/clothes/bottoms/trousers.png'), "trousers"),
-  ];
-
-  final List shoesList = [
-    ClothesInfo(const AssetImage('assets/clothes/shoes/chelsea_boot.png'), "chelsea_boot"),
-    ClothesInfo(const AssetImage('assets/clothes/shoes/dress_shoes.png'), "dress_shoes"),
-    ClothesInfo(const AssetImage('assets/clothes/shoes/flat_shoes.png'), "flat_shoes"),
-    ClothesInfo(const AssetImage('assets/clothes/shoes/high_heel.png'), "high_heel"),
-    ClothesInfo(const AssetImage('assets/clothes/shoes/running_shoes.png'), "running_shoes"),
-    ClothesInfo(const AssetImage('assets/clothes/shoes/slip_on.png'), "slip_on"),
-    ClothesInfo(const AssetImage('assets/clothes/shoes/slipper.png'), "slipper"),
-    ClothesInfo(const AssetImage('assets/clothes/shoes/sneakers.png'), "sneakers"),
-    ClothesInfo(const AssetImage('assets/clothes/shoes/walker.png'), "walker")
-  ];
-
-  final List overcoatList = [
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/bomber.png'), "bomber"),
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/cardigan.png'), "cardigan"),
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/casual_jacket.png'), "casual_jacket"),
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/collar_cardigan.png'), "collar_cardigan"),
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/leather_jacket.png'), "leather_jacket"),
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/overcoat.png'), "overcoat"),
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/parka.png'), "parka"),
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/sport_jacket.png'), "sport_jacket"),
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/track_jacket.png'), "track_jacket"),
-    ClothesInfo(const AssetImage('assets/clothes/overcoat/windcheater.png'), "windcheater"),
-  ];
+  final List topTypes = ['상의', '스웨터/맨투맨', '셔츠', '티셔츠', '후드', '레글런', '민소매', '원피스', '크롭티', '스포츠'];
+  final List botTypes = ['하의', '데님', '카고', '조거', '반바지', '트라우저/슬랙스', '치마', '스포츠'];
+  final List outTypes = ['외투', '점퍼', '코트', '야상', '재킷', '조끼', '가디건', '바람막이'];
+  final List shoeTypes = ['신발', '운동화', '스니커즈', '부츠', '구두', '슬리퍼', '샌들'];
+  List recTypes = ['추천템', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식'];
 
   @override
   State<CoordiBottomSheet> createState() => _CoordiBottomSheetState();
@@ -406,7 +177,7 @@ class CoordiBottomSheet extends StatefulWidget {
 class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProviderStateMixin{
   int _currentSheetIndex = 0;
   late AnimationController _animationController;
-  List clothesNum = [13,8,9,10,3]; // 상 하 신 외 개수
+  List clothesTypeNum = [10, 8, 8, 7, 6]; // 상 하 신 외 개수
 
   @override
   void initState() {
@@ -431,83 +202,114 @@ class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProvi
     return _buildBottomSheet();
   }
 
-  StatefulWidget _buildBottomSheet() {
-    if (_currentSheetIndex<4) {
-      List clothesList = [
-        widget.topClothesList,
-        widget.pantsList,
-        widget.shoesList,
-        widget.overcoatList
-      ];
-      return BottomSheet(
-        onClosing: () {},
-        builder: (BuildContext context) {
-          return FadeTransition(
-              opacity: Tween<double>(begin: 0, end: 1).animate(
-                CurvedAnimation(
-                  curve: Curves.easeIn,
-                  parent: ModalRoute.of(context)!.animation!,
-                  reverseCurve: Curves.easeOut,
-                ),
+StatefulWidget _buildBottomSheet() {
+    List clothesList = [
+      widget.topTypes,
+      widget.botTypes,
+      widget.outTypes,
+      widget.shoeTypes,
+      widget.recTypes
+    ];
+    return BottomSheet(
+      onClosing: () {},
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      ),
+      builder: (BuildContext context) {
+        return FadeTransition(
+            opacity: Tween<double>(begin: 0, end: 1).animate(
+              CurvedAnimation(
+                curve: Curves.easeIn,
+                parent: ModalRoute.of(context)!.animation!,
+                reverseCurve: Curves.easeOut,
               ),
-              child: ListView(
-                children: <Widget>[
-                  GridView.count(
-                    crossAxisCount: 3, // 한 행에 들어갈 아이템 의 개수
-                    shrinkWrap: true, // GridView 의 크기를 its contents 에 맞게 조절
-                    physics: const ScrollPhysics(), // GridView 에서 스크롤 가능 하게 만듦
+            ),
+            child: Column(
+              children: [
+                // X 버튼과 의상 선택 글자
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,15,15,5),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: IconButton(
+                            onPressed: (){Navigator.pop(context);},
+                            icon: const Icon(Icons.close_rounded),
+                            iconSize: 40,
+                            style: IconButton.styleFrom(
+                              elevation: 0,
+                              focusColor: Colors.transparent
+                            )
+                        ),
+                      ),
+                      Text(clothesList[_currentSheetIndex][0]+" 선택", style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontFamily: "SUITE",
+                        fontWeight: FontWeight.w800),
+                      )
+                    ],
+                  ),
+                ),
+
+                // 의상 선택 옵션들
+                Container(
+                  height: MediaQuery.of(context).size.height*0.68,
+                  child: ListView(
+                    shrinkWrap: true,
                     children: List.generate(
-                        clothesNum[_currentSheetIndex], (index) {
-                      return Center(
-                        child: InkWell(
-                          onTap: () {
-                            // 버튼 클릭 시 실행할 코드
-                          },
-                          child: Container(
-                            height: MediaQuery.of(context).size.width * 0.27,
-                            width: MediaQuery.of(context).size.width * 0.27,
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black, width: 1),
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(1),
-                                  // 그림자 색상 및 투명도
-                                  spreadRadius: 1,
-                                  // 그림자의 퍼지는 정도
-                                  blurRadius: 7,
-                                  // 그림자의 흐림 정도
-                                  offset: Offset(0, 3), // 그림자의 위치 조정
-                                ),
-                              ],
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: clothesList[_currentSheetIndex][index].clothesImage
-                                ),
+                      clothesTypeNum[_currentSheetIndex]-1, (index) {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 25),
+                              child: Row(
+                                children: [
+                                  Expanded(flex: 2,
+                                      child: Image.asset('assets/clothes/tops/sweat_shirt.png', width: MediaQuery.of(context).size.width*0.2, fit: BoxFit.cover)
+                                  ),
+                                  Expanded(flex: 4,
+                                      child: TextButton(
+                                        onPressed: (){},
+                                        child: Text(clothesList[_currentSheetIndex][index+1], style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.black,
+                                            fontFamily: "SUITE",
+                                            fontWeight: FontWeight.w800)
+                                        ),
+                                        style: ButtonStyle(
+                                          overlayColor: MaterialStateProperty.all(Colors.black12), // 터치 효과를 없앰
+                                        ), // 텍스트 색상 변경),
+                                      )
+                                  ),
+                                  Expanded(flex: 1, child: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward_ios_rounded)))
+                                ],
                               ),
                             ),
-                          ),
-                        ),
-                      );
-                    }
+                            const Divider(
+                              color: Color(0xFFDEDEDE),
+                              height: 1,
+                              thickness: 2,
+                              indent: 25,
+                              endIndent: 25,
+                            )
+                          ],
+                        );
+                      }
                     ),
                   ),
-                ],
-              )
-          );
-        },
-        // 첫 번째 bottom sheet 의 위젯 구현
-      );
-    } else {
-      return ChatGPTRecommend();
+                ),
+              ],
+            )
+        );
+      },
+      // 첫 번째 bottom sheet 의 위젯 구현
+    );
     }
   }
 
-}
+
 
 
 // 화면 하단 아이콘 누르면 위로 올라오게 하기
@@ -546,18 +348,14 @@ class Coordinater extends StatelessWidget {
     // BuildContext temp;
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
       builder: (BuildContext context) {
-        return Container(
-          child: Column(
-              children: [
-                Expanded(
-                  child: CoordiBottomSheet(index: ind),
-                )
-              ]
-          ),
+        return SizedBox(
+          height: MediaQuery.of(context).size.height*0.77,
+          child: CoordiBottomSheet(index: ind)
         );
       },
     );
@@ -565,14 +363,12 @@ class Coordinater extends StatelessWidget {
 }
 
 
-// 캐릭터 페이지
+// 메뉴가 올라오지 않은 캐릭터 페이지 전체
 class CharacterPage extends StatelessWidget {
   const CharacterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    gotResponse = false;
-    recommended = [];
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
