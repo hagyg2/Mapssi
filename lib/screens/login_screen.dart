@@ -24,28 +24,35 @@ class SignInWithGoogle {
 
 //로그인 화면
 class LoginScreen extends StatelessWidget {
-
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
+      backgroundColor: Color(0xffFFFDF9),
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/mapssi_logo.jpg', height: 120, width: 120,),
-            Text('맵씨', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'Cafe24Ssurround')),
-            SizedBox(height: 60),
-            Text('------------------ 로그인 ------------------', style: TextStyle(color: Colors.white)),
-
-            SizedBox(height: 20,),
+            Text('Mapssi', style: TextStyle(fontSize: 70, fontFamily: 'Dovemayo_gothic', fontWeight: FontWeight.w700),),
+            Text('맵씨로 맵시있게', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic'),),
+            SizedBox(height: 250,),
+            Text('SNS계정으로 간편 로그인/회원가입', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic'),),
+            SizedBox(height: 10,),
 
             //카카오 로그인 버튼
             ElevatedButton(
-              onPressed: () async {
+              child: Text('카카오로 로그인'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.yellow,
+                  foregroundColor: Colors.black,
+                  minimumSize: Size(280, 40),
+                  elevation: 1.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)
+                  )
+              ),
+              onPressed: ()async{
                 //카카오톡이 설치되어 있는 경우
                 if (await isKakaoTalkInstalled()) {
                   //카카오톡이 설치되어 있고 카카오계정이 연결되어 있는 경우
@@ -92,31 +99,23 @@ class LoginScreen extends StatelessWidget {
                   }
                 }
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(Icons.chat_bubble, color: Colors.black,),
-                  Text('카카오 로그인',
-                      style: TextStyle(color: Colors.black87, fontSize: 15.0)),
-                  Opacity(
-                    opacity: 0.0, child: Icon(Icons.chat_bubble),
-                  ),
-                ],
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellow,
-                minimumSize: Size.fromHeight(50),
-                elevation: 1.0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0)),
-              ),
             ),
 
-            SizedBox(height: 10.0,),
+            SizedBox(height: 10,),
 
             //구글 로그인 버튼
             ElevatedButton(
-              onPressed: () async {
+              child: Text('구글로 로그인'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  minimumSize: Size(280, 40),
+                  elevation: 1.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)
+                  )
+              ),
+              onPressed: ()async{
                 var user = await SignInWithGoogle.login();
                 var userId = user?.id;
                 var userName = user?.displayName;
@@ -125,30 +124,14 @@ class LoginScreen extends StatelessWidget {
                   chkIfRegisteredAndRedirect(context, userId, userName);
                 }
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Image.asset('assets/google_login.jpg'),
-                  Text('구글 로그인',
-                      style: TextStyle(color: Colors.black87, fontSize: 15.0)),
-                  Opacity(
-                    opacity: 0.0, child: Image.asset('assets/google_login.jpg'),
-                  ),
-                ],
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                minimumSize: Size.fromHeight(50),
-                elevation: 1.0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0)),
-              ),
-            ),
+            )
+
           ],
         ),
       ),
     );
   }
+}
 
   chkIfRegisteredAndRedirect (context, userId, userName) async {
     const serverUrl = 'http://52.79.164.56:50000/'; // 노드 서버의 엔드포인트 URL
@@ -211,6 +194,3 @@ class LoginScreen extends StatelessWidget {
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MyPageView()), (route) => false);
     }
   }
-}
-
-

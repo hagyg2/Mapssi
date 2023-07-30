@@ -855,27 +855,49 @@ class PerColorSpring extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('퍼스널컬러 진단 결과'),
-        centerTitle: true,
-        backgroundColor: Colors.black26,),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('당신의 퍼스널 컬러는'),
-                SizedBox(height: 30,),
-                Text('봄 웜톤 입니다!'),
-                SizedBox(height: 30,),
-                Text('확인 버튼을 누르고 입력 화면에서\n퍼스널컬러를 다시 선택해주세요.'),
-                SizedBox(height: 10,),
-                ElevatedButton(
-                child: const Text('확인'),
-                style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/background_image.png'),
+              fit: BoxFit.cover,
+            )
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 20),),
+              Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('봄 웜톤', style: TextStyle(fontSize: 50, color: Color(0xffEDB8A8)),),
+                  Text('입니다!', style: TextStyle(fontSize: 20),)
+                ],
+              ),
+              SizedBox(height: 150),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 10, color: Colors.grey),)
+                ],
+              ),
+              SizedBox(height: 10,),
+              ElevatedButton(
+                child: Text('확인'),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xffFFFAF3),
+                    surfaceTintColor: Color(0xffFFFAF3),
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)
+                    )
+                ),
                 onPressed: (){
                   Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
                 },
-              ),
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -889,27 +911,49 @@ class PerColorSummer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('퍼스널컬러 진단 결과'),
-        centerTitle: true,
-        backgroundColor: Colors.black26,),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('당신의 퍼스널 컬러는'),
-            SizedBox(height: 30,),
-            Text('여름 쿨톤 입니다!'),
-            SizedBox(height: 30,),
-            Text('확인 버튼을 누르고 입력 화면에서\n퍼스널컬러를 다시 선택해주세요.'),
-            SizedBox(height: 10,),
-            ElevatedButton(
-              child: const Text('확인'),
-              style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
-              onPressed: (){
-                Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
-              },
-            ),
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/background_image.png'),
+              fit: BoxFit.cover,
+            )
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 20),),
+              Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('겨울 쿨톤', style: TextStyle(fontSize: 50, color: Color(0xffECA7BB)),),
+                  Text('입니다!', style: TextStyle(fontSize: 20),)
+                ],
+              ),
+              SizedBox(height: 150),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 10, color: Colors.grey),)
+                ],
+              ),
+              SizedBox(height: 10,),
+              ElevatedButton(
+                child: Text('확인'),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xffFFFAF3),
+                    surfaceTintColor: Color(0xffFFFAF3),
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)
+                    )
+                ),
+                onPressed: (){
+                  Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -923,27 +967,49 @@ class PerColorAutumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('퍼스널컬러 진단 결과'),
-        centerTitle: true,
-        backgroundColor: Colors.black26,),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('당신의 퍼스널 컬러는'),
-            SizedBox(height: 30,),
-            Text('가을 웜톤 입니다!'),
-            SizedBox(height: 30,),
-            Text('확인 버튼을 누르고 입력 화면에서\n퍼스널컬러를 다시 선택해주세요.'),
-            SizedBox(height: 10,),
-            ElevatedButton(
-              child: const Text('확인'),
-              style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
-              onPressed: (){
-                Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
-              },
-            ),
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/background_image.png'),
+              fit: BoxFit.cover,
+            )
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 20),),
+              Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('가을 웜톤', style: TextStyle(fontSize: 50, color: Color(0xffF1A78E)),),
+                  Text('입니다!', style: TextStyle(fontSize: 20),)
+                ],
+              ),
+              SizedBox(height: 150),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 10, color: Colors.grey),)
+                ],
+              ),
+              SizedBox(height: 10,),
+              ElevatedButton(
+                child: Text('확인'),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xffFFFAF3),
+                    surfaceTintColor: Color(0xffFFFAF3),
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)
+                    )
+                ),
+                onPressed: (){
+                  Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -957,32 +1023,52 @@ class PerColorWinter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('퍼스널컬러 진단 결과'),
-        centerTitle: true,
-        backgroundColor: Colors.black26,),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('당신의 퍼스널 컬러는'),
-            SizedBox(height: 30,),
-            Text('겨울 쿨톤 입니다!'),
-            SizedBox(height: 30,),
-            Text('확인 버튼을 누르고 입력 화면에서\n퍼스널컬러를 다시 선택해주세요.'),
-            SizedBox(height: 10,),
-            ElevatedButton(
-              child: const Text('확인'),
-              style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,),
-              onPressed: (){
-                Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
-              },
-            ),
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/background_image.png'),
+              fit: BoxFit.cover,
+            )
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 20),),
+              Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('겨울 쿨톤', style: TextStyle(fontSize: 50, color: Color(0xffEC70BF)),),
+                  Text('입니다!', style: TextStyle(fontSize: 20),)
+                ],
+              ),
+              SizedBox(height: 150),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 10, color: Colors.grey),)
+                ],
+              ),
+              SizedBox(height: 10,),
+              ElevatedButton(
+                child: Text('확인'),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xffFFFAF3),
+                    surfaceTintColor: Color(0xffFFFAF3),
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)
+                    )
+                ),
+                onPressed: (){
+                  Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-
 
