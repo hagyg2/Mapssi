@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => SplashScreen(),
         '/perinfo': (context) => PersonalInfoState(),
       },
-      initialRoute: '/splash',
+      initialRoute: '/index',
 
     );
   }
