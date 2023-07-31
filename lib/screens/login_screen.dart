@@ -187,7 +187,7 @@ class LoginScreen extends StatelessWidget {
         print('Request failed with status: ${response.statusCode}');
       }
       print('로그인 성공');
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const PersonalInfoState()), (route) => false);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const genderpage()), (route) => false);
     }
     else {  // 등록된 유저의 경우 바로 화면 전환
       print('로그인 성공');
