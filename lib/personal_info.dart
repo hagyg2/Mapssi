@@ -3,202 +3,560 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'main.dart';
 
-//성별, 퍼스널 컬러, 선호 스타일 정보 입력
-class PersonalInfoState extends StatefulWidget {
-  const PersonalInfoState({Key? key}) : super(key: key);
+List<Object> UserInfo = [0, 0, 0];
 
-  @override
-  State<PersonalInfoState> createState() => _PersonalInfoState();
-}
-
-class _PersonalInfoState extends State<PersonalInfoState> {
-  UserDataFromServer userController = Get.find<UserDataFromServer>();
-
-  // 드롭다운 버튼의 선택 초기화
-  final _gender = ['선택 안됨', '남자', '여자'];
-  final _personalColor = ['선택 안됨', '봄 웜톤', '여름 쿨톤', '가을 웜톤', '겨울 쿨톤'];
-  final _favstyle = ['선택 안됨', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '고프코어'];
-
-  var _selectedgender = '선택 안됨';
-  var _selectedcolor = '선택 안됨';
-  var _selectedstyle = '선택 안됨';
+//성별
+class genderpage extends StatelessWidget {
+  const genderpage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Personal Info'),
-        centerTitle: true,
-        backgroundColor: Colors.black26,),
-      body: Center(
+      body: Container(
+        decoration: const BoxDecoration(
+            image:DecorationImage(
+                image:AssetImage('assets/background_image.png'),
+                fit: BoxFit.cover
+            )
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                    Text('1. 성별을 선택해주세요.'),
-                    DropdownButton(
-                      value: _selectedgender,
-                      items: _gender.map(
-                          (value) {
-                            return DropdownMenuItem(
-                               value: value,
-                               child: Text(value)
-                            );
-                          }
-                      ).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedgender = value!;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 20,),
-                    Text('2. 퍼스널컬러를 선택해주세요.\n모를 경우 진단하기 버튼을 눌러주세요.'),
-                    DropdownButton(
-                      value: _selectedcolor,
-                      items: _personalColor.map(
-                          (value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(value)
-                            );
-                          }
-                      ).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedcolor = value!;
-                        });
-                      }
-                      ),
-                ElevatedButton(onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const test1()));
-                }, child: const Text('진단하기'),
-                style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,)),
-                SizedBox(height: 20,),
-                Text('3. 선호 스타일을 선택해주세요.'),
-                DropdownButton(
-                    value: _selectedstyle,
-                    items: _favstyle.map(
-                            (value) {
-                          return DropdownMenuItem(
-                              value: value,
-                              child: Text(value)
-                          );
-                        }
-                    ).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedstyle = value!;
-                      });
-                    }
-                ),
-                SizedBox(height: 30,),
-                ElevatedButton(onPressed: () async {
-                  //셋 중 하나라도 '선택 안됨'이면 제출 안 되도록
-                  if ((_selectedgender != '선택 안됨') && (_selectedcolor != '선택 안됨') && (_selectedstyle != '선택 안됨')) {
-                    //영어로 바꾸기
-                    List<Object> userinfo = ktoe(_selectedgender, _selectedcolor, _selectedstyle);
-                    userController.setUserGender(userinfo[0] as int?);
-                    userController.setUserPerCol(userinfo[1].toString());
-                    userController.setUserPrefType(userinfo[2].toString());
-                    //백엔드로 정보(userinfo) 넘겨주기
-                    if (await sendUserData(userController.getUserId(), userinfo[0], userinfo[1], userinfo[2])) {
-                      //메인 화면으로 이동
-                      Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
-                    }
-                  }
-                  else{
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext ctx){
-                          return AlertDialog(
-                            content: Text('성별, 퍼스널 컬러, 선호 스타일을 모두 선택하였는지 확인하여주세요.'),
-                            actions: [
-                              Center(
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                    child: Text('확인')
-                                ),
-                              )
-                            ],
-                          );
-                        }
-                     );
-                  }
-                }, child: const Text('제출하기'),
-                    style: ElevatedButton.styleFrom(primary: Colors.black26, onPrimary: Colors.white,)
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 25,),
+                Text('성별', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: new LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width - 20,
+                    lineHeight: 10,
+                    percent: 1/3,
+                    backgroundColor: Colors.black12,
+                    progressColor: Colors.black,
+                    linearStrokeCap: LinearStrokeCap.roundAll,
+                  ),
                 )
               ],
             ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  margin: EdgeInsets.all(20),
+                  child: Text('성별이 어떻게 되시나요?', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic')),
+                )
+            ),
+            Spacer(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: const Text('남성', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffFFFAF3),
+                      surfaceTintColor: Color(0xffFFFAF3),
+                      foregroundColor: Colors.black,
+                      minimumSize: Size(280, 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)
+                      )
+                  ),
+                  onPressed: () {
+                    UserInfo[0] = 1;
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const percolpage()));
+                  },
+                ),
+                SizedBox(height: 10,),
+                ElevatedButton(
+                  child: const Text('여성', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffFFFAF3),
+                      surfaceTintColor: Color(0xffFFFAF3),
+                      foregroundColor: Colors.black,
+                      minimumSize: Size(280, 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)
+                      )
+                  ),
+                  onPressed: () {
+                    UserInfo[0] = 0;
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const percolpage()));
+                  },
+                ),
+                SizedBox(height: 25,)
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-//영어로 변환
-List<Object> ktoe(kgender, kcolor, kstyle) {
-  List<Object> info = [];
-  //성별
-  if(kgender == '남자'){
-    kgender = 1;
-  }
-  else{
-    kgender = 0;
-  }
-  info.add(kgender);
+//퍼스널컬러
+class percolpage extends StatelessWidget {
+  const percolpage({Key? key}) : super(key: key);
 
-  //퍼스널 컬러
-  if(kcolor == '봄 웜톤'){
-    kcolor = 'Spring Warm';
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+            image:DecorationImage(
+                image:AssetImage('assets/background_image.png'),
+                fit: BoxFit.cover
+            )
+        ),
+        child: Column(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 25,),
+                Text('퍼스널컬러', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: new LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width - 20,
+                    lineHeight: 10,
+                    percent: 2/3,
+                    backgroundColor: Colors.black12,
+                    progressColor: Colors.black,
+                    linearStrokeCap: LinearStrokeCap.roundAll,
+                  ),
+                )
+              ],
+            ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  margin: EdgeInsets.all(20),
+                  child: Text('퍼스널컬러가 무엇인가요?', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic')),
+                )
+            ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Text('모름 버튼을 누르면 퍼스널컬러 진단 페이지로 이동합니다!', style: TextStyle(fontSize: 18, fontFamily: 'Dovemayo_gothic')),
+                )
+            ),
+            Spacer(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: const Text('봄 웜톤', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffFFFAF3),
+                      surfaceTintColor: Color(0xffFFFAF3),
+                      foregroundColor: Colors.black,
+                      minimumSize: Size(280, 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)
+                      )
+                  ),
+                  onPressed: () {
+                    UserInfo[1] = 'Spring Warm';
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const prefstylepage()));
+                  },
+                ),
+                SizedBox(height: 10,),
+                ElevatedButton(
+                  child: const Text('여름 쿨톤', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffFFFAF3),
+                      surfaceTintColor: Color(0xffFFFAF3),
+                      foregroundColor: Colors.black,
+                      minimumSize: Size(280, 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)
+                      )
+                  ),
+                  onPressed: () {
+                    UserInfo[1] = 'Summer Cool';
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const prefstylepage()));
+                  },
+                ),
+                SizedBox(height: 10,),
+                ElevatedButton(
+                  child: const Text('가을 웜톤', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffFFFAF3),
+                      surfaceTintColor: Color(0xffFFFAF3),
+                      foregroundColor: Colors.black,
+                      minimumSize: Size(280, 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)
+                      )
+                  ),
+                  onPressed: () {
+                    UserInfo[1] = 'Autumn Warm';
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const prefstylepage()));
+                  },
+                ),
+                SizedBox(height: 10,),
+                ElevatedButton(
+                  child: const Text('겨울 쿨톤', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffFFFAF3),
+                      surfaceTintColor: Color(0xffFFFAF3),
+                      foregroundColor: Colors.black,
+                      minimumSize: Size(280, 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)
+                      )
+                  ),
+                  onPressed: () {
+                    UserInfo[1] = 'Winter Cool';
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const prefstylepage()));
+                  },
+                ),
+                SizedBox(height: 10,),
+                ElevatedButton(
+                  child: const Text('모름', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffFFFAF3),
+                      surfaceTintColor: Color(0xffFFFAF3),
+                      foregroundColor: Colors.black,
+                      minimumSize: Size(280, 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)
+                      )
+                  ),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const test1()));
+                  },
+                ),
+                SizedBox(height: 25,)
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
-  else if(kcolor == '여름 쿨톤'){
-    kcolor = 'Summer Cool';
-  }
-  else if(kcolor == '가을 웜톤'){
-    kcolor = 'Autumn Warm';
-  }
-  else{
-    kcolor = 'Winter Cool';
-  }
-  info.add(kcolor);
+}
 
-  //선호 스타일
-  if(kstyle == '캐주얼'){
-    kstyle = 'Casual';
-  }
-  else if(kstyle == '스트릿'){
-    kstyle = 'Street';
-  }
-  else if(kstyle == '아메카지'){
-    kstyle = 'Amekaji';
-  }
-  else if(kstyle == '스포츠'){
-    kstyle = 'Sports';
-  }
-  else if(kstyle == '클래식'){
-    kstyle = 'Classic';
-  }
-  else {
-    kstyle = 'GoffCore';
-  }
-  info.add(kstyle);
+//선호 스타일
+class prefstylepage extends StatefulWidget {
+  const prefstylepage({Key? key}) : super(key: key);
 
-  return info;
+  @override
+  State<prefstylepage> createState() => _prefstylepage();
+}
+
+class _prefstylepage extends State<prefstylepage> {
+  UserDataFromServer userController = Get.find<UserDataFromServer>();
+  int selectedButtonIndex = -1; //선택된 버튼의 인덱스 (-1은 아무 버튼도 선택되지 않음을 의미)
+
+  void _handleButtonPress(int index) {
+    setState(() {
+      selectedButtonIndex = index;
+      if (index == 0){
+        UserInfo[2] = 'Casual';
+      }
+      else if (index == 1){
+        UserInfo[2] = 'Street';
+      }
+      else if(index == 2){
+        UserInfo[2] = 'Amekaji';
+      }
+      else if(index == 3){
+        UserInfo[2] = 'Classic';
+      }
+      else if(index == 4){
+        UserInfo[2] = 'GoffCore';
+      }
+      else if(index == 5){
+        UserInfo[2] = 'Lovely';
+      }
+      else if(index == 6){
+        UserInfo[2] = 'Sports';
+      }
+      else if(index == 7){
+        UserInfo[2] = 'Casual';
+      }
+      else{
+        UserInfo[2] = 'Casual';
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+            image:DecorationImage(
+                image:AssetImage('assets/background_image.png'),
+                fit: BoxFit.cover
+            )
+        ),
+        child: Column(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 25,),
+                Text('선호 스타일', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: new LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width - 20,
+                    lineHeight: 10,
+                    percent: 3/3,
+                    backgroundColor: Colors.black12,
+                    progressColor: Colors.black,
+                    linearStrokeCap: LinearStrokeCap.roundAll,
+                  ),
+                )
+              ],
+            ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  margin: EdgeInsets.all(20),
+                  child: Text('선호 스타일이 무엇인가요?', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic')),
+                )
+            ),
+            Container(
+              margin: EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => _handleButtonPress(0),
+                          style: ElevatedButton.styleFrom(
+                              primary: selectedButtonIndex == 0? Colors.grey : Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(150, 150),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              )
+                          ),
+                          child: Text('캐주얼', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                        ),
+                      ),
+
+                      SizedBox(width: 10,height: 10,),
+
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => _handleButtonPress(1),
+                          child: Text('스트릿', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                          style: ElevatedButton.styleFrom(
+                              primary: selectedButtonIndex == 1? Colors.grey : Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(150, 150),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              )
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(width: 10,height: 10,),
+
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => _handleButtonPress(2),
+                          child: Text('아메카지', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                          style: ElevatedButton.styleFrom(
+                              primary: selectedButtonIndex == 2? Colors.grey : Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(150, 150),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              )
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => _handleButtonPress(3),
+                          child: Text('클래식', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                          style: ElevatedButton.styleFrom(
+                              primary: selectedButtonIndex == 3? Colors.grey : Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(150, 150),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              )
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(width: 10,height: 10,),
+
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => _handleButtonPress(4),
+                          child: Text('고프코어', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                          style: ElevatedButton.styleFrom(
+                              primary: selectedButtonIndex == 4? Colors.grey : Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(150, 150),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              )
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(width: 10,height: 10,),
+
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => _handleButtonPress(5),
+                          child: Text('러블리', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                          style: ElevatedButton.styleFrom(
+                              primary: selectedButtonIndex == 5? Colors.grey : Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(150, 150),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              )
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: selectedButtonIndex == 6? Colors.grey : Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(150, 150),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              )
+                          ),
+                          onPressed: () => _handleButtonPress(6),
+                          child: Text('스포츠', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                        ),
+                      ),
+
+                      SizedBox(width: 10,height: 10,),
+
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: selectedButtonIndex == 7? Colors.grey : Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(150, 150),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              )
+                          ),
+                          onPressed: () => _handleButtonPress(7),
+                          child: Text('캐주얼', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                        ),
+                      ),
+
+                      SizedBox(width: 10,height: 10,),
+
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: selectedButtonIndex == 8? Colors.grey : Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(150, 150),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              )
+                          ),
+                          onPressed: () => _handleButtonPress(8),
+                          child: Text('캐주얼', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  ElevatedButton(
+                    child: Text('제출하기', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic'),),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xffFFFAF3),
+                        surfaceTintColor: Color(0xffFFFAF3),
+                        foregroundColor: Colors.black,
+                        minimumSize: Size(280, 40),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)
+                        )
+                    ),
+                    onPressed: ()async{
+                      if(UserInfo[2] != 0){
+                        print(UserInfo[0]);
+                        print(UserInfo[1]);
+                        print(UserInfo[2]);
+                        /*
+                        userController.setUserGender(UserInfo[0] as int?);
+                        userController.setUserPerCol(UserInfo[1].toString());
+                        userController.setUserPrefType(UserInfo[2].toString());
+                        //백엔드로 정보(userinfo) 넘겨주기
+                        if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
+                          //메인 화면으로 이동
+                          Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
+                        }
+                        */
+                        Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
+                      }
+                      else{
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext ctx){
+                              return AlertDialog(
+                                content: Text('선호 스타일을 선택하였는지 확인하여주세요.', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic'),),
+                                actions: [
+                                  Center(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('확인', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic'),),
+                                    ),
+                                  )
+                                ],
+                              );
+                            }
+                        );
+                      }
+                    },
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 //성별, 퍼스널 컬러, 선호 스타일 백엔드로 넘겨주기
-Future<bool> sendUserData(id, seletedgender, selectedcolor, selectedstyle) async {
+Future<bool> sendUserData(id, usergender, usercolor, userstyle) async {
   var url = 'http://52.79.164.56:50000/set-userdata/$id';
 
   var userData = {
-    'gender': seletedgender,
-    'perCol': selectedcolor,
-    'prefType': selectedstyle
+    'gender': usergender,
+    'perCol': usercolor,
+    'prefType': userstyle
   };
   var response = await http.put(
     Uri.parse(url),
@@ -866,24 +1224,24 @@ class PerColorSpring extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 20),),
+              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic'),),
               Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('봄 웜톤', style: TextStyle(fontSize: 50, color: Color(0xffEDB8A8)),),
-                  Text('입니다!', style: TextStyle(fontSize: 20),)
+                  Text('봄 웜톤', style: TextStyle(fontSize: 55, fontFamily: 'Dovemayo_gothic', color: Color(0xffEDB8A8)),),
+                  Text('입니다!', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic'),)
                 ],
               ),
               SizedBox(height: 150),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 10, color: Colors.grey),)
+                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic', color: Colors.grey)),
+                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic', color: Colors.grey),)
                 ],
               ),
               SizedBox(height: 10,),
               ElevatedButton(
-                child: Text('확인'),
+                child: Text('확인', style: TextStyle(fontFamily: 'Dovemayo_gothic'),),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffFFFAF3),
                     surfaceTintColor: Color(0xffFFFAF3),
@@ -893,7 +1251,7 @@ class PerColorSpring extends StatelessWidget {
                     )
                 ),
                 onPressed: (){
-                  Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const percolpage()), (route) => false);
                 },
               )
             ],
@@ -922,24 +1280,24 @@ class PerColorSummer extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 20),),
+              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic'),),
               Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('겨울 쿨톤', style: TextStyle(fontSize: 50, color: Color(0xffECA7BB)),),
-                  Text('입니다!', style: TextStyle(fontSize: 20),)
+                  Text('여름 쿨톤', style: TextStyle(fontSize: 55, fontFamily: 'Dovemayo_gothic', color: Color(0xffECA7BB)),),
+                  Text('입니다!', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic'),)
                 ],
               ),
               SizedBox(height: 150),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 10, color: Colors.grey),)
+                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic', color: Colors.grey)),
+                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic', color: Colors.grey),)
                 ],
               ),
               SizedBox(height: 10,),
               ElevatedButton(
-                child: Text('확인'),
+                child: Text('확인', style: TextStyle(fontFamily: 'Dovemayo_gothic'),),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffFFFAF3),
                     surfaceTintColor: Color(0xffFFFAF3),
@@ -949,7 +1307,7 @@ class PerColorSummer extends StatelessWidget {
                     )
                 ),
                 onPressed: (){
-                  Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const percolpage()), (route) => false);
                 },
               )
             ],
@@ -978,24 +1336,24 @@ class PerColorAutumn extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 20),),
+              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic'),),
               Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('가을 웜톤', style: TextStyle(fontSize: 50, color: Color(0xffF1A78E)),),
-                  Text('입니다!', style: TextStyle(fontSize: 20),)
+                  Text('가을 웜톤', style: TextStyle(fontSize: 55, fontFamily: 'Dovemayo_gothic', color: Color(0xffF1A78E)),),
+                  Text('입니다!', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic'),)
                 ],
               ),
               SizedBox(height: 150),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 10, color: Colors.grey),)
+                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic', color: Colors.grey)),
+                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic', color: Colors.grey),)
                 ],
               ),
               SizedBox(height: 10,),
               ElevatedButton(
-                child: Text('확인'),
+                child: Text('확인', style: TextStyle(fontFamily: 'Dovemayo_gothic'),),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffFFFAF3),
                     surfaceTintColor: Color(0xffFFFAF3),
@@ -1005,7 +1363,7 @@ class PerColorAutumn extends StatelessWidget {
                     )
                 ),
                 onPressed: (){
-                  Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const percolpage()), (route) => false);
                 },
               )
             ],
@@ -1034,24 +1392,24 @@ class PerColorWinter extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 20),),
+              Text('당신의 퍼스널컬러는', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic'),),
               Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('겨울 쿨톤', style: TextStyle(fontSize: 50, color: Color(0xffEC70BF)),),
-                  Text('입니다!', style: TextStyle(fontSize: 20),)
+                  Text('겨울 쿨톤', style: TextStyle(fontSize: 55, fontFamily: 'Dovemayo_gothic', color: Color(0xffEC70BF)),),
+                  Text('입니다!', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic'),)
                 ],
               ),
               SizedBox(height: 150),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 10, color: Colors.grey),)
+                  Text('확인 버튼을 누르고', style: TextStyle(fontSize: 10, fontFamily: 'Dovemayo_gothic', color: Colors.grey)),
+                  Text('퍼스널컬러를 다시 선택해주세요', style: TextStyle(fontSize: 10, fontFamily: 'Dovemayo_gothic', color: Colors.grey),)
                 ],
               ),
               SizedBox(height: 10,),
               ElevatedButton(
-                child: Text('확인'),
+                child: Text('확인', style: TextStyle(fontFamily: 'Dovemayo_gothic'),),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffFFFAF3),
                     surfaceTintColor: Color(0xffFFFAF3),
@@ -1061,7 +1419,7 @@ class PerColorWinter extends StatelessWidget {
                     )
                 ),
                 onPressed: (){
-                  Navigator.pushNamedAndRemoveUntil(context, '/perinfo', (route) => false);
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const percolpage()), (route) => false);
                 },
               )
             ],
