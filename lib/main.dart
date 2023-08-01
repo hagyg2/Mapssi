@@ -35,9 +35,9 @@ class MyApp extends StatelessWidget {
         '/index': (context) => MyPageView(),
         '/login': (context) => LoginScreen(),
         '/splash': (context) => SplashScreen(),
-        '/perinfo': (context) => PersonalInfoState(),
+        '/perinfo': (context) => genderpage(),
       },
-      initialRoute: '/index',
+      initialRoute: '/perinfo',
 
     );
   }
