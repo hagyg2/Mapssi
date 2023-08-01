@@ -46,7 +46,11 @@ class Model {
     } else if (151.0 <= airDust) {
       return Image.asset('assets/image/airconditionworst.png', width: 70.0, height: 70.0,);
     } else {
-      return Text('모름', style: TextStyle(fontSize: 18.0, color: Colors.white,),);
+      return Text('모름', style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.black,
+                fontFamily: 'SUITE',
+                fontWeight: FontWeight.w700,),);
 
     }
   }
@@ -54,16 +58,15 @@ class Model {
   Widget? getAirCondition(double airDust) {
     //int airDust = int.parse(code);
     if (0.0 <= airDust && airDust <= 30.99) {
-      return Text("좋음", style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold,),);
+      return Text("좋음", style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'SUITE', fontWeight: FontWeight.w700,),);
     } else if (31.0 <= airDust && airDust <= 80.99) {
-      return Text("보통", style: TextStyle(
-        color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold,),);
+      return Text("보통", style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'SUITE', fontWeight: FontWeight.w700,),);
     } else if (81.0 <= airDust && airDust <= 150.99) {
-      return Text("나쁨", style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold,),);
+      return Text("나쁨", style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'SUITE', fontWeight: FontWeight.w700,),);
     } else if (151.0 <= airDust) {
-      return Text('매우 나쁨', style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold,),);
+      return Text('매우 나쁨', style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'SUITE', fontWeight: FontWeight.w700,),);
     } else {
-      return Text('모름', style: TextStyle(fontSize: 18.0, color: Colors.white,),);
+      return Text('모름', style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'SUITE', fontWeight: FontWeight.w700,),);
     }
   }
 

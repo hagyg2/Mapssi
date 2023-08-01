@@ -57,7 +57,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 
   //7. 미세먼지
-  late double airDust = 0.0;
+  late double airDust = 0.00;
   late Widget airIcon;
   late Widget airState;
 
@@ -323,17 +323,56 @@ class _WeatherScreenState extends State<WeatherScreen> {
     airIcon = model.getAirIcon(airDust)!;
 
 
+    String text1= "$addresNameSi";
+    String text2 =" $addresNameDo";
+
     return Scaffold(
-      backgroundColor: Colors.orange,
 
       appBar: AppBar(
-        backgroundColor: Colors.pink,
-        elevation: 0.0,
-        //깊이감(그림자)
-        title: Text('Mapssi-날씨 옷 코디'),
-        centerTitle: true,
-        // 앱바 가운데 정렬
+      //  backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+
+        flexibleSpace: Image(
+          image: AssetImage('assets/background_image.png'),
+          fit: BoxFit.cover, // 이미지가 AppBar에 맞게 확장됨
+        ),
+
+
+        title: Center(
+          child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: text1,
+                      style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
+                    ),
+                    TextSpan(
+                      text: "\n",
+                    ),
+                    TextSpan(
+                      text: text2,
+                      style: TextStyle(fontSize: 13, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ),
+          //     GestureDetector(
+          //       onTap: () {
+          //         // 아이콘 클릭 시 동작할 내용을 여기에 추가
+          //         Navigator.push(
+          //           context,
+          //           MaterialPageRoute(builder: (context) => CityDropdown()),
+          //         );
+          //       },
+          //       child: Icon(Icons.search), // 아이콘을 GestureDetector로 감싸서 클릭 이벤트 추가
+          //     ),
+          //   ],
+          // ),
+
+        ),
+
         actions: [
+          /*
           IconButton(icon: SvgPicture.asset("assets/icons/search.svg"),
             onPressed: () {
               //print("search button is clicked");
@@ -343,15 +382,57 @@ class _WeatherScreenState extends State<WeatherScreen> {
               );
             },
           ),
+          */
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,0,20,0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  width: 15,
+                  height: 7,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(width: 10), // 회색 동그라미와 검정색 동그라미 사이 간격
+                Container(
+                  width: 15,
+                  height: 7,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+
         ],
       ),
+
+
+
+        //Text('$addresNameSi ($addresNameDo)'),
+
+
 
       drawer: const Drawer( //햄버거 바
         child: MenuBarDraw(),
       ),
 
 
-      body: SingleChildScrollView(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/background_image.png'),
+            fit: BoxFit.cover,
+          )
+    ),
+      child: SingleChildScrollView(
 
         // child: GestureDetector(
         // onHorizontalDragEnd: (DragEndDetails details) {
@@ -365,13 +446,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
           children: [
             //상단
-            //SizedBox(height: 20.0),
-
+            SizedBox(height: 20.0),
             Container(
-              height: 200.0,
-              color: Colors.orange, //#투명 = transparent
+            // height: 300.0,
+              height: MediaQuery.of(context).size.height*0.3,
+
+            // color: Colors.red, // 없애도 됨. 공간 확인용.
 
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center, // 가로 방향으로 중앙 배치
                 children: [
                   //아이콘이랑 날씨상태, 강수량
                   Expanded(
@@ -380,91 +463,93 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     // padding: EdgeInsets.all(5.0),
 
                     child: Column(
-
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 30.0,),
-                        icon,
-
+                        SizedBox(height: 25.0,),
+                        //icon,
+                        Icon(
+                          Icons.sunny,
+                          size: 100.0,
+                          color: Colors.black,
+                        ),
 
                         SizedBox(height: 20),
                         Text('$koreanDes', style: TextStyle(
-                            color: Colors.white, fontSize: 18.0),),
+                            fontSize: 30.0,
+                            color: Colors.black,
+                            fontFamily: 'SUITE',
+                            fontWeight: FontWeight.w800,),),
+
                         SizedBox(height: 10,),
                         Text('${currentRainFall.toStringAsFixed(1)}mm',
-                          style: TextStyle(color: Colors.white,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold),)
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.black,
+                            fontFamily: 'SUITE',
+                            fontWeight: FontWeight.w700,),),
                       ],
                     ),
                   ),
 
-                  //지역명, 기온, 최고최저 기온
-                  Expanded(
-
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 25,),
-                        Text('$addresNameSi',
-                          style: TextStyle(fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),),
-                        SizedBox(height: 8,),
-                        Text('($addresNameDo)',
-                          style: TextStyle(fontSize: 15, color: Colors.white),),
-
-                        SizedBox(height: 28.0),
-                        Text('$currentTemperature°C',
-                          style: TextStyle(color: Colors
-                              .white, fontSize: 35.0, fontWeight: FontWeight
-                              .bold),),
-
-                        SizedBox(height: 8.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('$maxTemperature°C', style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold),),
-                            Text(' / ', style: TextStyle(color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold),),
-                            Text('$minTemperature°C', style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold),),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
 
                   //요일, 미세먼지 실황
-                  SizedBox(width: 10.0),
+                  SizedBox(width: 5),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 40.0),
+                        SizedBox(height: 20.0),
                         Text(
                           DateFormat('M월 d일 $koreanDayOfWeek').format(now),
                           style: TextStyle(
-                            color: Colors.white, fontSize: 13.0,),
-                        ),
+                              fontSize: 13.0,
+                              color: Colors.black,
+                              fontFamily: 'SUITE',
+                              fontWeight: FontWeight.w700,),),
 
-                        SizedBox(height: 28.0),
-                        Text(
-                          '미세먼지',
-                          style: TextStyle(
-                            color: Colors.white, fontSize: 16.0,),
-                        ),
+                    SizedBox(height:10.0),
+                    Text('$currentTemperature°C',
+                      style: TextStyle(
+                        fontSize: 44.0,
+                        color: Colors.black,
+                        fontFamily: 'SUITE',
+                        fontWeight: FontWeight.w800,),),
+
+
+                    SizedBox(height: 4.0),
+                    Row(
+                      children: [
+                        Text(' $maxTemperature°C', style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.red,
+                          fontFamily: 'SUITE',
+                          fontWeight: FontWeight.w700,),),
+
+
+                        Text('  /  ', style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black,
+                          fontFamily: 'SUITE',
+                          fontWeight: FontWeight.w700,),),
+
+                        Text('$minTemperature°C', style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.blue,
+                          fontFamily: 'SUITE',
+                          fontWeight: FontWeight.w700,),),
+                        ],
+                    ),
+
+                        SizedBox(height: 10.0),
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-
+                              Text('미세\n먼지', style: TextStyle(
+                                fontSize: 13.0,
+                                color: Colors.black,
+                                fontFamily: 'SUITE',
+                                fontWeight: FontWeight.w700,),),
+                              SizedBox(width: 18.0),
                               airState,
                               airIcon,
                             ]
@@ -480,27 +565,43 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
             //예보 칸
             Container(
-              color: Colors.orange,
-              padding: EdgeInsets.all(20.0),
+              //color: Colors.red,
+              padding: EdgeInsets.symmetric(horizontal: 27.0, vertical: 8.0),
 
               //일일 예보 글자칸
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text('일일 예보', style: TextStyle(
-                    fontSize: 24.0, fontWeight: FontWeight.bold,),),
-                  Text(' (좌우로 스크롤 !)', style: TextStyle(fontSize: 11.0),),
+                    fontSize: 28.0,
+                    color: Colors.black,
+                    fontFamily: 'SUITE',
+                    fontWeight: FontWeight.w700,),),
                   SizedBox(height: 18.0),
+
+
                   SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
-                        // 일일 예보 칸
+                        // 일일 예보 박스+내용
                         Container(
-                          padding: EdgeInsets.all(20.0),
 
-                          height: MediaQuery.of(context).size.height*0.28, color: Colors.orangeAccent,
+                          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                          height: MediaQuery.of(context).size.height*0.25,
+                          decoration: BoxDecoration(
+                              color: Color(0xFFFFFDF9),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  spreadRadius: 2,
+                                  blurRadius: 3,
+                                  offset: Offset(0, 1), // 그림자의 위치 조정
+                                )
+                              ]
+                          ),
+
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: weatherList.length,
@@ -529,31 +630,46 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                     .format(time); // 시간을 HH:mm 형식으로 변환
 
                                 return Container(
-                                  width: 130, // 각 항목의 너비 조정
-                                  padding: EdgeInsets.all(10.0),
+                                  width: 120, // 각 항목의 너비 조정
+                                  //color: Colors.blue,
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
                                   child: Column(
 
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
 
+                                      SizedBox(height: 3.0,),
                                       Text('$formattedTime', style: TextStyle(
-                                        fontSize: 22,
+                                        fontSize: 15,
                                         color: Colors.black,
-                                        fontWeight: FontWeight.bold,),),
+                                        fontFamily: 'SUITE',
+                                        fontWeight: FontWeight.w500,),),
                                       // 시간 표시
                                       SizedBox(height: 8.0,),
                                       Text('$hourlyTemp°C', style: TextStyle(
-                                        fontSize: 15, color: Colors.black,),),
-                                      SizedBox(height: 8.0,),
+                                        fontSize: 22,
+                                        color: Colors.black,
+                                        fontFamily: 'SUITE',
+                                        fontWeight: FontWeight.w800),),
 
-                                      Text('$koreanDes($englishDescription)',
+                                      SizedBox(height: 8.0,),
+                                    /*  Text('$koreanDes($englishDescription)',
                                         style: TextStyle(
                                           fontSize: 10, color: Colors.black,),),
-                                      icon,
+                                     */
+                                      //icon,
+                                      Icon(
+                                        Icons.cloud,
+                                        size: 50.0,
+                                        color: Colors.black,
+                                      ),
 
+                                      SizedBox(height: 5.0,),
                                       Text('$rainfall(mm)', style: TextStyle(
-                                        fontSize: 12, color: Colors.black,),),
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                        fontFamily: 'SUITE',
+                                        fontWeight: FontWeight.w300),),
 
                                     ],
                                   ),
@@ -564,129 +680,144 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ),
 
+
                   SizedBox(height: 40.0),
 
-                  //주간 예보 글자 찬
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text('주간 예보', style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.bold,),),
-                        Text(' (위아래로 스크롤 !)', style: TextStyle(fontSize: 11.0),),
+                  //주간 예보 글자 칸
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text('주간 예보', style: TextStyle(
+                        fontSize: 28.0,
+                        color: Colors.black,
+                        fontFamily: 'SUITE',
+                        fontWeight: FontWeight.w700,),),
 
-                        SizedBox(height: 18.0),
-                        SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                      SizedBox(height: 18.0), // 주간예보 글씨와 박스 사이 간격
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
 
-                              //주간 예보 칸
-                              Container(
-                                padding: EdgeInsets.all(40.0),
-                                height: MediaQuery.of(context).size.height*0.55, color: Colors.orangeAccent,
+                          //주간 예보 칸
+                          Container(
+                            padding: EdgeInsets.all(40.0),
+                            height: MediaQuery.of(context).size.height*0.7,
 
-                                child:   ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  // 여기부터 시작
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFFFDF9),
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    spreadRadius: 2,
+                                    blurRadius: 3,
+                                    offset: Offset(0, 1), // 그림자의 위치 조정
+                                  )
+                                ]
+                            ),
 
-                                  itemCount: dailyForecasts.length,
-                                  itemBuilder: (context, index) {
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: dailyForecasts.map((forecast) {
+                                String weatherDescription = forecast['weather'][0]['description'];
+                                koreanDes = getKoreanWeatherDescription(weatherDescription);
 
-                                    dynamic forecast = dailyForecasts[index];
-                                    String weatherDescription = forecast['weather'][0]['description'];
-                                    koreanDes = getKoreanWeatherDescription(weatherDescription);
+                                int condition = forecast['weather'][0]['id'];
+                                icon = model.getWeatherIcon(condition)!;
 
-                                    int condition = forecast['weather'][0]['id'];
-                                    icon = model.getWeatherIcon(condition)!;
+                                int timestamp = forecast['dt'];
+                                DateTime time = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+                                String formattedTime = DateFormat('HH:mm').format(time); // 시간을 HH:mm 형식으로 변환
+                                String weekday = DateFormat.EEEE().format(time);
+                                String koreanWeekDay = getKoreanWeekDay(weekday);
+                                int dailyMaxTemp = maxTemperatures[dailyForecasts.indexOf(forecast) + 1].ceil();
+                                int dailyMinTemp = minTemperatures[dailyForecasts.indexOf(forecast) + 1].floor();
 
-                                    int timestamp = forecast['dt'];
-                                    DateTime time = DateTime
-                                        .fromMillisecondsSinceEpoch(
-                                        timestamp * 1000);
-                                    String formattedTime = DateFormat('HH:mm')
-                                        .format(time); // 시간을 HH:mm 형식으로 변환
-                                    String weekday = DateFormat.EEEE().format(
-                                        time);
-                                    String koreanWeekDay = getKoreanWeekDay(weekday);
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween, //요일과 날씨 정보 간격
+                                  children: [
 
-                                    int dailyMaxTemp = maxTemperatures[index+1].ceil();
-                                    int dailyMinTemp = minTemperatures[index+1].floor();
-
-
-                                    return Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceBetween,
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-
-                                        Column(
-                                          children: [
-                                            Text(
-                                              DateFormat('M월 d일').format(time),
-
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,),),
-                                            SizedBox(height: 15,),
-                                            Text('$koreanWeekDay',
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,),),
-                                          ] ,
+                                        Text(
+                                          DateFormat('M월 d일').format(time),
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.black,
+                                            fontFamily: 'SUITE',
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-
-
-
-                                        Row( //세로로 아이콘, 최고 최저 기온
-                                            children: [
-
-                                              Container(
-                                                margin: EdgeInsets.symmetric(vertical: 30.0),
-                                                child: icon,
-                                                // Text('$weatherDescription\n $koreanDes', style: TextStyle(
-                                                //   fontSize: 8, color: Colors.black,),),
-                                              ),
-
-                                              SizedBox(width: 18.0,),
-                                              Container(
-                                                margin: EdgeInsets.symmetric(vertical: 30.0),
-                                                child:  Text('${dailyMaxTemp}°C',
-                                                  style: TextStyle(fontSize: 14.0,color: Colors.redAccent,fontWeight: FontWeight.bold,),),
-
-                                              ),
-
-                                              Container(
-                                                margin: EdgeInsets.symmetric(vertical: 30.0),
-                                                child: Text(' / ',
-                                                  style: TextStyle(fontSize: 28.0,color: Colors.white, fontWeight: FontWeight.bold,),),
-
-                                              ),
-
-                                              Container(
-                                                margin: EdgeInsets.symmetric(vertical: 30.0),
-                                                child:  Text('${dailyMinTemp}°C',
-                                                  style: TextStyle(fontSize: 14.0,color: Colors.blueAccent, fontWeight: FontWeight.bold,),),
-                                              ),
-                                            ]
-                                        )
+                                        SizedBox(height: 5,), // 날짜와 요일 사이 간격
+                                        Text(
+                                          '$koreanWeekDay',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.black,
+                                            fontFamily: 'SUITE',
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
                                       ],
-                                    );
-                                  },
-                                ),
+                                    ),
+
+                                      //세로로 아이콘, 최고 최저 기온
+                                    Row(
+                                      children: [
+                                        Container(
+                                            margin: EdgeInsets.symmetric(vertical: 30.0),
+                                            child:
+                                            //  icons,
+                                            Icon(
+                                              Icons.wb_sunny_sharp, // 사용할 아이콘
+                                              size: 30.0, // 크기 지정 (원하는 크기로 변경)
+                                              color: Colors.black, // 아이콘 색상 지정 (선택사항)
+                                            )
+
+                                          ),
+                                        SizedBox(width: 18.0,),
+
+                                        Container(
+                                            margin: EdgeInsets.symmetric(vertical: 30.0),
+                                            child: Text(
+                                              '${dailyMaxTemp}°C',
+                                              style: TextStyle(fontSize: 13.0, color: Colors.redAccent, fontFamily: 'SUITE', fontWeight: FontWeight.w500,),
+                                            ),
+                                          ),
+                                        Container(
+                                            margin: EdgeInsets.symmetric(vertical: 30.0),
+                                            child: Text(
+                                              ' / ',
+                                              style: TextStyle(fontSize: 25.0, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w100,),
+                                            ),
+                                          ),
+                                        Container(
+                                            margin: EdgeInsets.symmetric(vertical: 30.0),
+                                            child: Text(
+                                              '${dailyMinTemp}°C',
+                                              style: TextStyle(fontSize: 13.0, color: Colors.blueAccent, fontFamily: 'SUITE', fontWeight: FontWeight.w500,),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                }).toList(),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                        ],
                     ),
-                  ),
-                ],
+
+                  ],
               ),
             ),
-          ],
+            ],
         ) : Container(
+
+
 
           child: Center(
             child: Column(
@@ -694,7 +825,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
               children: [
                 SizedBox(height: 222.2),
                 Image.asset(
-                  'assets/0010.gif', // 로딩 이미지 파일 경로
+                  'assets/loading.gif', // 로딩 이미지 파일 경로
                   width: 200, // 이미지의 너비 설정
                   height: 200,
                 ),
@@ -709,7 +840,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           ),
         ),
       ),
-    );
+    ),);
   }
 
 
