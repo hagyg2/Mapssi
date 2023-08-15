@@ -467,11 +467,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       children: [
                         SizedBox(height: 25.0,),
                         //icon,
-                        Icon(
-                          Icons.sunny,
-                          size: 100.0,
-                          color: Colors.black,
-                        ),
+                        // Icon(
+                        //   Icons.sunny,
+                        //   size: 100.0,
+                        //   color: Colors.black,
+                        // ),
+                        WeatherIconWidget(
+                          image: model.getWeatherIcon(condition), // condition 값에 따른 이미지 가져오기
+                          size: 100,
+                          color: Colors.black54),
+
 
                         SizedBox(height: 20),
                         Text('$koreanDes', style: TextStyle(
@@ -511,7 +516,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     SizedBox(height:10.0),
                     Text('$currentTemperature°C',
                       style: TextStyle(
-                        fontSize: 44.0,
+                        fontSize: 45.0,
                         color: Colors.black,
                         fontFamily: 'SUITE',
                         fontWeight: FontWeight.w800,),),
@@ -541,7 +546,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         ],
                     ),
 
-                        SizedBox(height: 10.0),
+                        SizedBox(height: 17.0),
                         Row(
                             children: [
                               Text('미세\n먼지', style: TextStyle(
@@ -551,6 +556,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 fontWeight: FontWeight.w700,),),
                               SizedBox(width: 18.0),
                               airState,
+                              SizedBox(width: 7.0),
                               airIcon,
                             ]
 
@@ -618,7 +624,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 koreanDes = getKoreanWeatherDescription(englishDescription);
 
                                 int condition = weatherData['weather'][0]['id'];
-                                icon = model.getWeatherIcon(condition)!;
+                                //icon = model.getWeatherIcon(condition)!;
 
                                 int timestamp = weatherData['dt'];
 
@@ -656,13 +662,19 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                     /*  Text('$koreanDes($englishDescription)',
                                         style: TextStyle(
                                           fontSize: 10, color: Colors.black,),),
-                                     */
                                       //icon,
                                       Icon(
                                         Icons.cloud,
                                         size: 50.0,
                                         color: Colors.black,
                                       ),
+                                     */
+
+                                      WeatherIconWidget(
+                                        image: model.getWeatherIcon(condition), // condition 값에 따른 이미지 가져오기
+                                        size: 50,
+                                        color: Colors.black54),
+
 
                                       SizedBox(height: 5.0,),
                                       Text('$rainfall(mm)', style: TextStyle(
@@ -723,7 +735,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 koreanDes = getKoreanWeatherDescription(weatherDescription);
 
                                 int condition = forecast['weather'][0]['id'];
-                                icon = model.getWeatherIcon(condition)!;
+                                //icon = model.getWeatherIcon(condition)!;
 
                                 int timestamp = forecast['dt'];
                                 DateTime time = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
@@ -768,12 +780,20 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                         Container(
                                             margin: EdgeInsets.symmetric(vertical: 30.0),
                                             child:
+                                                /*
                                             //  icons,
                                             Icon(
                                               Icons.wb_sunny_sharp, // 사용할 아이콘
-                                              size: 30.0, // 크기 지정 (원하는 크기로 변경)
-                                              color: Colors.black, // 아이콘 색상 지정 (선택사항)
+                                              size: 30.0,
+                                              color: Colors.black,
                                             )
+                                                 */
+                                            WeatherIconWidget(
+                                                image: model.getWeatherIcon(condition), // condition 값에 따른 이미지 가져오기
+                                                size: 30,
+                                                color: Colors.black54),
+
+
 
                                           ),
                                         SizedBox(width: 18.0,),
@@ -825,7 +845,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
               children: [
                 SizedBox(height: 222.2),
                 Image.asset(
-                  'assets/loading.gif', // 로딩 이미지 파일 경로
+                  'assets/loading_new.gif', // 로딩 이미지 파일 경로
                   width: 200, // 이미지의 너비 설정
                   height: 200,
                 ),
@@ -964,5 +984,27 @@ class _WeatherScreenState extends State<WeatherScreen> {
         koreanWeekDay = '알 수 없음';
     }
     return koreanWeekDay;
+  }
+
+
+
+
+
+
+
+}
+class WeatherIconWidget extends StatelessWidget {
+  final Widget? image;
+  final double size;
+
+  WeatherIconWidget({required this.image, required this.size, required Color color});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: image, // 이미지 위젯을 화면에 출력
+    );
   }
 }

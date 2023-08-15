@@ -14,18 +14,23 @@ class MenuBarDraw extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     //햄버거 바 메뉴
+    final beigeColor = Color.fromRGBO( 236,230,204, 1.0);
+    final beigeColor2 = Color.fromRGBO(	236,230,204, 1.0);
+
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.lightBlue,
+              backgroundColor: beigeColor,
             ),
-            accountName: const Text("권지원"),
-            accountEmail: const Text("32190250@dankook.ac.kr"),
-            decoration: BoxDecoration( color: Colors.purple,),
+            accountName: const Text("권지원", style: TextStyle(color: Colors.black),),
+            accountEmail: const Text("32190250@dankook.ac.kr", style: TextStyle(color: Colors.black),),
+            decoration: BoxDecoration( color: Color(0xffFFFAF3)),
           ),
 
           SizedBox(height: 15.0),

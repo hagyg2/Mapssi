@@ -14,21 +14,21 @@ class Model {
   Widget? getWeatherIcon(int condition) {
     if (condition < 300) {
       return SvgPicture.asset(
-        'assets/weather/icons8-클라우드-조명-50.png', color: Colors.white,);
+        'assets/weather/icons8-클라우드-조명-50.png', color: Colors.black54,);
     }  else if (condition < 500) {
       return SvgPicture.asset(
         'svg/climacon-cloud_rain.svg',
-        color: Colors.black87,
+        color: Colors.black54,
       );
     }else if (condition < 600) {
       return SvgPicture.asset(
-        'assets/icons/climacon-cloud_snow_alt.svg', color: Colors.white,);
+        'assets/icons/climacon-cloud_snow_alt.svg', color: Colors.black54,);
     } else if (condition == 800) {
       return SvgPicture.asset(
-        'assets/icons/climacon-sun.svg', color: Colors.white,);
+        'assets/icons/climacon-sun.svg', color: Colors.black54,);
     } else if (condition <= 804) {
       return SvgPicture.asset(
-        'assets/icons/climacon-cloud_sun.svg', color: Colors.white,);
+        'assets/icons/climacon-cloud_sun.svg', color: Colors.black54,);
     } else {
       return null;
     }
@@ -38,13 +38,13 @@ class Model {
   Widget? getAirIcon(double airDust) {
     //int airDust = int.parse(code);
     if (0.00 <= airDust && airDust <= 30.99) {
-      return Image.asset('assets/image/airconditiongood.png', width: 70.0, height: 70.0,);
+      return Image.asset('assets/image/airconditionbest.png', width: 35.0, height: 35.0,);
     } else if (31.0 <= airDust && airDust <= 80.99) {
-      return Image.asset('assets/image/airconditionnormal.png', width: 70.0, height: 70.0,);
+      return Image.asset('assets/image/airconditiongood.png', width: 35.0, height: 35.0,);
     } else if (81.0 <= airDust && airDust <= 150.99) {
-      return Image.asset('assets/image/airconditionbad.png', width: 70.0, height: 70.0,);
+      return Image.asset('assets/image/airconditionnormal.png', width: 35.0, height: 35.0,);
     } else if (151.0 <= airDust) {
-      return Image.asset('assets/image/airconditionworst.png', width: 70.0, height: 70.0,);
+      return Image.asset('assets/image/airconditionbad.png', width: 35.0, height: 35.0,);
     } else {
       return Text('모름', style: TextStyle(
                 fontSize: 18.0,
@@ -280,6 +280,8 @@ String getKoreanWeatherDescription(String englishDescription) {
       koreanDes = '정보 없음' ;
   }
   return koreanDes;
+
+
 
 }
 
