@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/main.dart';
-
 
 //화면 중앙 (현재 기온, 캐릭터, 체형 조절)
 class SliderAndChkBox extends StatefulWidget {
@@ -15,14 +15,16 @@ class SliderAndChkBox extends StatefulWidget {
 
 class _SliderAndChkBoxState extends State<SliderAndChkBox> {
   // bool _isVisible = true;
-  var height=165.0;   // 키 몸무게 초기화
-  var weight=80.0;
+  // var height=165.0;   // 키 몸무게 초기화
+  // var weight=80.0;
 
   int? curTemp;
+  String gender = 'male';
 
   @override
   Widget build(BuildContext context) {
     curTemp = Get.find<WeatherJasonData>().getData()[0];
+    Get.find<UserDataFromServer>().getUserGender()==0 ? gender = 'female' : gender = 'male';
     return Column(
       children: [
         Container(
@@ -63,6 +65,7 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+            // 그림자
             decoration: BoxDecoration(
               color: Color(0xFFFFFDF9),
               borderRadius: BorderRadius.circular(20),
@@ -71,14 +74,14 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
                   color: Colors.black.withOpacity(0.3),
                   spreadRadius: 2,
                   blurRadius: 3,
-                  offset: Offset(0, 1), // 그림자의 위치 조정
+                  offset: Offset(0, 1), // 위치 조정
                 )
               ]
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
               child: Image.asset(
-                  'assets/male_avatar.png',
+                  'assets/character/${gender}_default.png',
                   fit: BoxFit.contain,
               ),
             ),
