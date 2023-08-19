@@ -47,10 +47,9 @@ class MyApp extends StatelessWidget {
 // 모든 화면에서 유저 정보를 공유하기 위한 클래스 (GetxController 상속 받음)
 class UserDataFromServer extends GetxController{
   // 각 변수들 초기화
-
   String? _id = "gildong22"; // 유저 고유 아이디
   String? _name = "홍길동"; // 이름
-  int? _gender = 1; // 성별
+  int? _gender = 0; // 성별
   String? _perCol = "Spring Warm"; // 퍼스널컬러
   String? _prefType = "Casual"; // 선호 타입
 
@@ -132,7 +131,9 @@ class MyPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 날씨, 사용자 정보 전역변수화
     Get.put(WeatherJasonData());
+    Get.put(UserDataFromServer());
     return Scaffold(
       body: PageView.builder(
         itemBuilder: (BuildContext context, int index) {
