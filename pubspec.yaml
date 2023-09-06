@@ -50,6 +50,7 @@ flutter:
     - assets/icons/
     - assets/image/
     - assets/weather/
+    - assets/character/
     - assets/clothes/bottoms/
     - assets/clothes/overcoat/
     - assets/clothes/shoes/

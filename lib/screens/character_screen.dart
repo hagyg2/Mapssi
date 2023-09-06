@@ -1,25 +1,31 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/main.dart';
 
-//화면 중앙 (현재 기온, 캐릭터, 체형 조절)
-class SliderAndChkBox extends StatefulWidget {
-  const SliderAndChkBox({super.key});
-
-  @override
-  _SliderAndChkBoxState createState() => _SliderAndChkBoxState();
+TextStyle txtStyle (fs) {
+  return TextStyle(fontSize: fs,
+    color: Colors.black,
+    fontFamily: 'SUITE',
+    fontWeight: FontWeight.w800,
+  );
 }
 
-class _SliderAndChkBoxState extends State<SliderAndChkBox> {
+//화면 중앙 (현재 기온, 캐릭터)
+class CharAndTemp extends StatefulWidget {
+  const CharAndTemp({super.key});
+
+  @override
+  _CharAndTempState createState() => _CharAndTempState();
+}
+
+class _CharAndTempState extends State<CharAndTemp> {
   // bool _isVisible = true;
   // var height=165.0;   // 키 몸무게 초기화
   // var weight=80.0;
 
   int? curTemp;
   String gender = 'male';
+  List<Widget> clothesStack = []; // 동적으로 추가될 위젯들의 리스트
 
   @override
   Widget build(BuildContext context) {
@@ -49,40 +55,45 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
               // 현재 기온
               Container(
                 child: Text(
-                  style: const TextStyle(fontSize: 50,
-                    color: Colors.black,
-                    fontFamily: 'SUITE',
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: txtStyle(50),
                   "$curTemp°C",
                 ),
               ),
             ],
           ),
         ),
-        // 아바타 이미지
+        // 캐릭터 이미지
         Expanded(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
             // 그림자
             decoration: BoxDecoration(
-              color: Color(0xFFFFFDF9),
+              color: const Color(0xFFFFFDF9),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.3),
                   spreadRadius: 2,
                   blurRadius: 3,
-                  offset: Offset(0, 1), // 위치 조정
+                  offset: const Offset(0, 1), // 위치 조정
                 )
               ]
             ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-              child: Image.asset(
-                  'assets/character/${gender}_default.png',
-                  fit: BoxFit.contain,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              // 캐릭터 의상 스택 부분
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // 기본 캐릭터
+                  Image.asset(
+                    'assets/character/${gender}_default.png',
+                    fit: BoxFit.fill,
+                  ),
+                  // 위에 의상
+                  ...clothesStack,
+                ],
               ),
             ),
           ),
@@ -148,6 +159,11 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
       ],
     );
   }
+
+
+
+
+
 }
 
 
@@ -155,29 +171,29 @@ class _SliderAndChkBoxState extends State<SliderAndChkBox> {
 class ClothesInfo {
   AssetImage? clothesImage;
   String? clothesName;
-  ClothesInfo (img, n) {
+  ClothesInfo (img, name) {
     clothesImage = img;
-    clothesName = n;
+    clothesName = name;
   }
 }
 
 
-// 코디 선택 메뉴
-class CoordiBottomSheet extends StatefulWidget {
-  CoordiBottomSheet({Key? key, required this.index}) : super(key: key);
+// 옷 고르기
+class ClothesOptions extends StatefulWidget {
+  ClothesOptions({Key? key, required this.index}) : super(key: key);
   final int index;
 
   final List topTypes = ['상의', '스웨터/맨투맨', '셔츠', '티셔츠', '후드', '레글런', '민소매', '원피스', '크롭티', '스포츠'];
   final List botTypes = ['하의', '데님', '카고', '조거', '반바지', '트라우저/슬랙스', '치마', '스포츠'];
   final List outTypes = ['외투', '점퍼', '코트', '야상', '재킷', '조끼', '가디건', '바람막이'];
   final List shoeTypes = ['신발', '운동화', '스니커즈', '부츠', '구두', '슬리퍼', '샌들'];
-  List recTypes = ['추천템', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식'];
+  final List recTypes = ['추천템', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식'];
 
   @override
-  State<CoordiBottomSheet> createState() => _CoordiBottomSheetState();
+  State<ClothesOptions> createState() => _ClothesOptionsState();
 }
 
-class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProviderStateMixin{
+class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderStateMixin{
   int _currentSheetIndex = 0;
   late AnimationController _animationController;
   List clothesTypeNum = [10, 8, 8, 7, 6]; // 상 하 신 외 개수
@@ -205,7 +221,7 @@ class _CoordiBottomSheetState extends State<CoordiBottomSheet>  with TickerProvi
     return _buildBottomSheet();
   }
 
-StatefulWidget _buildBottomSheet() {
+  StatefulWidget _buildBottomSheet() {
     List clothesList = [
       widget.topTypes,
       widget.botTypes,
@@ -246,18 +262,14 @@ StatefulWidget _buildBottomSheet() {
                             )
                         ),
                       ),
-                      Text(clothesList[_currentSheetIndex][0]+" 선택", style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.black,
-                        fontFamily: "SUITE",
-                        fontWeight: FontWeight.w800),
+                      Text(clothesList[_currentSheetIndex][0]+" 선택", style: txtStyle(22),
                       )
                     ],
                   ),
                 ),
 
                 // 의상 선택 옵션들
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.height*0.68,
                   child: ListView(
                     shrinkWrap: true,
@@ -275,14 +287,10 @@ StatefulWidget _buildBottomSheet() {
                                   Expanded(flex: 4,
                                       child: TextButton(
                                         onPressed: (){},
-                                        child: Text(clothesList[_currentSheetIndex][index+1], style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.black,
-                                            fontFamily: "SUITE",
-                                            fontWeight: FontWeight.w800)
-                                        ),
                                         style: ButtonStyle(
                                           overlayColor: MaterialStateProperty.all(Colors.black12), // 터치 효과를 없앰
+                                        ),
+                                        child: Text(clothesList[_currentSheetIndex][index+1], style: txtStyle(20)
                                         ), // 텍스트 색상 변경),
                                       )
                                   ),
@@ -309,42 +317,37 @@ StatefulWidget _buildBottomSheet() {
       },
       // 첫 번째 bottom sheet 의 위젯 구현
     );
-    }
   }
+}
 
 
 
 
-// 화면 하단 아이콘 누르면 위로 올라오게 하기
-class Coordinater extends StatelessWidget {
-  Coordinater({Key? key, required this.index}) : super(key: key);
+// 메뉴 위로 올라오게 하기
+class BottomMenu extends StatelessWidget {
+  BottomMenu({Key? key, required this.index}) : super(key: key);
   final int index;
   final List<String> categories = ["상의", "하의", "외투", "신발", "추천"];
 
   @override
   Widget build(BuildContext context) {
     String category = categories[index];
+    Color txtColor;
     if (index<4) {
-      return TextButton(
-        child: Text(category, style: TextStyle(color: Colors.black,
-            fontFamily: 'SUITE',
-            fontWeight: FontWeight.w800,
-            fontSize: 20)),
-        onPressed: () {
-          showCoordiBottomSheet(context, index);
-        },
-      );
+      txtColor = Colors.black;
     } else {
-      return TextButton(
-        child: Text(category, style: TextStyle(color: Colors.red,
-            fontFamily: 'SUITE',
-            fontWeight: FontWeight.w800,
-            fontSize: 20)),
-        onPressed: () {
-          showCoordiBottomSheet(context, index);
-        },
-      );
+      txtColor = Colors.red;
     }
+    return TextButton(
+      child: Text(category, style: TextStyle(color: txtColor,
+          fontFamily: 'SUITE',
+          fontWeight: FontWeight.w800,
+          fontSize: 20)
+      ),
+      onPressed: () {
+        showCoordiBottomSheet(context, index);
+      },
+    );
   }
 
   showCoordiBottomSheet (BuildContext context, int ind) {
@@ -358,7 +361,7 @@ class Coordinater extends StatelessWidget {
       builder: (BuildContext context) {
         return SizedBox(
           height: MediaQuery.of(context).size.height*0.77,
-          child: CoordiBottomSheet(index: ind)
+          child: ClothesOptions(index: ind)
         );
       },
     );
@@ -372,6 +375,13 @@ class CharacterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 메뉴 옵션들 간에 벽(divider)
+    var divider = const VerticalDivider(
+      color: Color(0xFFBCBCBC),
+      width: 2,
+      thickness: 1.5,
+    );
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -399,7 +409,7 @@ class CharacterPage extends StatelessWidget {
                         color: Colors.grey,
                       ),
                     ),
-                    SizedBox(width: 10), // 회색 동그라미와 검정색 동그라미 사이 간격
+                    const SizedBox(width: 10), // 회색 동그라미와 검정색 동그라미 사이 간격
                     Container(
                       width: 15,
                       height: 7,
@@ -414,66 +424,44 @@ class CharacterPage extends StatelessWidget {
 
               // 조언 멘트
               Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                child:
-                  Container(
-                    child: const Text(
-                      '황사가 심해요! 마스크는 필수!',
-                      style: TextStyle(fontSize: 16,
-                        color: Colors.black,
-                        fontFamily: 'SUITE',
-                        fontWeight: FontWeight.w800,),
-                    ),
-                ),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                child: Text(
+                    '황사가 심해요! 마스크는 필수!',
+                    style: txtStyle(16),
+                  ),
               ),
 
               // 중간부 (체크 박스와 슬라이더, 캐릭터)
-              const Expanded(flex:8, child: SliderAndChkBox()),
+              const Expanded(flex:8, child: CharAndTemp()),
 
               // 하단부 (옷 메뉴)
               Expanded(
                 flex: 1,
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Color(0xFFFFFDF9),
-                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(0),top: Radius.circular(20)),
+                      color: const Color(0xFFFFFDF9),
+                      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(0),top: Radius.circular(20)),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.3),
                           spreadRadius: 2,
                           blurRadius: 3,
-                          offset: Offset(0, 1), // 그림자의 위치 조정
+                          offset: const Offset(0, 1), // 그림자의 위치 조정
                         )
                       ]
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Coordinater(index: 0),
-                      const VerticalDivider(
-                        color: Color(0xFFBCBCBC),
-                        width: 2,
-                        thickness: 1.5,
-                      ),
-                      Coordinater(index: 1),
-                      const VerticalDivider(
-                        color: Color(0xFFBCBCBC),
-                        width: 2,
-                        thickness: 1.5,
-                      ),
-                      Coordinater(index: 2),
-                      const VerticalDivider(
-                        color: Color(0xFFBCBCBC),
-                        width: 2,
-                        thickness: 1.5,
-                      ),
-                      Coordinater(index: 3),
-                      const VerticalDivider(
-                        color: Color(0xFFBCBCBC),
-                        width: 2,
-                        thickness: 1.5,
-                      ),
-                      Coordinater(index: 4)
+                      BottomMenu(index: 0),
+                      divider,
+                      BottomMenu(index: 1),
+                      divider,
+                      BottomMenu(index: 2),
+                      divider,
+                      BottomMenu(index: 3),
+                      divider,
+                      BottomMenu(index: 4)
                     ],
                   ),
                 ),
