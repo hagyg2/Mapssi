@@ -43,10 +43,6 @@ String weatherCast () {
       case '맑음':
         recMent = '맑고 화창한 날씨! 자외선에 유의해요!';
         break;
-      case '구름':
-      case '흐림':
-        recMent = '좋은 하루되세요!';
-        break;
       case '소나기':
       case '많은 비':
       case '천둥번개':
@@ -63,7 +59,10 @@ String weatherCast () {
       case '토네이도(회오리 바람)':
         recMent = '바람이 거세요! 낙하물에 유의해요!';
         break;
-      case 'default':
+      case '구름':
+      case '흐림':
+      case '정보 없음':
+      default:
         recMent = '행복한 하루되세요!';
         break;
     }
@@ -71,8 +70,8 @@ String weatherCast () {
   return recMent;
 }
 
-var topImage = setImage('assets/character/female/상의/beige_offshoulder_001.png', 365, 175); // 상의
-var outImage = setImage('assets/character/female/상의/beige_offshoulder.png', 450, 100); // 아우터
+var topImage = setImage('assets/character/female/상의/beige_offshoulder_002.png', 365, 175); // 상의
+var outImage = setImage('assets/character/female/상의/beige_offshoulder_002.png', 450, 100); // 아우터
 var botImage = setImage('assets/character/female/하의/blue_wide_denim.png', 145, 263);   // 하의
 var shoeImage = setImage('assets/character/female/신발/white_airforce.png', 350, 70);  // 신발
 
@@ -260,14 +259,15 @@ class ClothesInfo {
 
 // 옷 고르기
 class ClothesOptions extends StatefulWidget {
-  ClothesOptions({Key? key, required this.index}) : super(key: key);
-  final int index;
+  ClothesOptions({Key? key, required this.depth, required this.indexes}) : super(key: key);
+  final int depth;
+  final List<int> indexes;
 
-  final List topTypes = ['상의', '스웨터/맨투맨', '셔츠', '티셔츠', '후드', '레글런', '민소매', '원피스', '크롭티', '스포츠'];
+  final List topTypes = ['상의', '티셔츠', '스웨터/맨투맨', '셔츠/블라우스', '후드', '레글런', '민소매', '원피스', '크롭티', '스포츠'];
   final List botTypes = ['하의', '데님', '카고', '조거', '반바지', '트라우저/슬랙스', '치마', '스포츠'];
   final List outTypes = ['외투', '점퍼', '코트', '야상', '재킷', '조끼', '가디건', '바람막이'];
   final List shoeTypes = ['신발', '운동화', '스니커즈', '부츠', '구두', '슬리퍼', '샌들'];
-  final List recTypes = ['추천템', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식'];
+  final List recTypes = ['추천템', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '러블리', '고프코어'];
 
   @override
   State<ClothesOptions> createState() => _ClothesOptionsState();
@@ -296,7 +296,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   @override
   Widget build(BuildContext context) {
     setState(() {
-      _currentSheetIndex = widget.index;
+      _currentSheetIndex = widget.indexes[0];
     });
     return _buildBottomSheet();
   }
@@ -331,18 +331,35 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
+                        padding: (widget.depth == 0) ? const EdgeInsets.only(right: 5.0) : const EdgeInsets.symmetric(horizontal: 5.0),
                         child: IconButton(
-                            onPressed: (){Navigator.pop(context);},
-                            icon: const Icon(Icons.close_rounded),
-                            iconSize: 40,
+                            onPressed:
+                            (widget.depth == 0) ?
+                                (){Navigator.pop(context);} :
+                                (){
+                                Navigator.pop(context);
+                                showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                                    ),
+                                    builder: (BuildContext context) {
+                                      return SizedBox(
+                                          height: MediaQuery.of(context).size.height*0.77,
+                                          child: ClothesOptions(depth: 0, indexes: [_currentSheetIndex,0])
+                                      );
+                                    }
+                                );
+                              },
+                            icon: (widget.depth == 0) ? const Icon(Icons.close_rounded) : const Icon(Icons.arrow_back_ios_rounded),
+                            iconSize: (widget.depth == 0) ? 40 : 27,
                             style: IconButton.styleFrom(
                               elevation: 0,
                               focusColor: Colors.transparent
                             )
                         ),
                       ),
-                      Text(clothesList[_currentSheetIndex][0]+" 선택", style: txtStyle(22),
+                      Text(clothesList[_currentSheetIndex][widget.indexes[1]], style: txtStyle(22),
                       )
                     ],
                   ),
@@ -370,7 +387,19 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                       // 의상 선택 버튼
                                       child: TextButton(
                                         onPressed: (){
-
+                                          Navigator.pop(context);
+                                          showModalBottomSheet(context: context,
+                                              isScrollControlled: true,
+                                              shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                                              ),
+                                              builder: (BuildContext context) {
+                                                return SizedBox(
+                                                    height: MediaQuery.of(context).size.height*0.77,
+                                                    child: ClothesOptions(depth: widget.depth+1, indexes: [_currentSheetIndex,index+1])
+                                                );
+                                              }
+                                            );
                                         },
                                         style: ButtonStyle(
                                           overlayColor: MaterialStateProperty.all(Colors.black12), // 터치 효과를 없앰
@@ -379,7 +408,21 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                         ), // 텍스트 색상 변경),
                                       )
                                   ),
-                                  Expanded(flex: 1, child: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward_ios_rounded)))
+                                  Expanded(flex: 1, child: IconButton(onPressed: (){
+                                    Navigator.pop(context);
+                                    showModalBottomSheet(context: context,
+                                        isScrollControlled: true,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                                        ),
+                                        builder: (BuildContext context) {
+                                          return SizedBox(
+                                              height: MediaQuery.of(context).size.height*0.77,
+                                              child: ClothesOptions(depth: widget.depth+1, indexes: [_currentSheetIndex,index+1])
+                                          );
+                                        }
+                                    );
+                                  }, icon: const Icon(Icons.arrow_forward_ios_rounded)))
                                 ],
                               ),
                             ),
@@ -446,7 +489,7 @@ class BottomMenu extends StatelessWidget {
       builder: (BuildContext context) {
         return SizedBox(
           height: MediaQuery.of(context).size.height*0.77,
-          child: ClothesOptions(index: ind)
+          child: ClothesOptions(depth: 0, indexes: [ind, 0])
         );
       },
     );
