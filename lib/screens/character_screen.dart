@@ -2,13 +2,79 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapssi/main.dart';
 
-TextStyle txtStyle (fs) {
+// 현재 페이지에서 쓰일 TextStyle (글씨체 색상 굵기 고정 / 크기만 조절)
+TextStyle txtStyle (double fs) {
   return TextStyle(fontSize: fs,
     color: Colors.black,
     fontFamily: 'SUITE',
     fontWeight: FontWeight.w800,
   );
 }
+
+// 이미지 사이즈 조절 및 설정
+Image setImage(String url, double w, double h) {
+  return Image.asset(
+    url,
+    width: w,
+    height: h,
+    fit: BoxFit.fill,
+  );
+}
+
+// 스택에서의 이미지 위치 조절
+Positioned clothesPosition (double x, double y,Image img) {
+  return Positioned(
+    top: x,
+    left: y,
+    child: img,
+  );
+}
+
+String weatherCast () {
+  double airDust = Get.find<WeatherJasonData>().getData()[7];
+  String recMent = '';
+  if (airDust>75){
+    recMent = '미세먼지 매우 나쁨! 마스크 꼭 챙기세요!';
+  } else if (airDust>35) {
+    recMent = '미세먼지 나쁨! 마스크 챙기세요!';
+  } else {
+    String description = Get.find<WeatherJasonData>().getData()[8];
+    switch (description) {
+      case '맑음':
+        recMent = '맑고 화창한 날씨! 자외선에 유의해요!';
+        break;
+      case '구름':
+      case '흐림':
+        recMent = '좋은 하루되세요!';
+        break;
+      case '소나기':
+      case '많은 비':
+      case '천둥번개':
+      case '이슬비':
+        recMent = '비가 내려요! 우산 꼭 챙기세요!';
+        break;
+      case '눈':
+        recMent = '눈이 온대요! 빙판길 조심하세요!';
+        break;
+      case '안개':
+        recMent = '운전자분들은 안개 조심하세요!';
+        break;
+      case '돌풍':
+      case '토네이도(회오리 바람)':
+        recMent = '바람이 거세요! 낙하물에 유의해요!';
+        break;
+      case 'default':
+        recMent = '행복한 하루되세요!';
+        break;
+    }
+  }
+  return recMent;
+}
+
+var topImage = setImage('assets/character/female/상의/beige_offshoulder_001.png', 365, 175); // 상의
+var outImage = setImage('assets/character/female/상의/beige_offshoulder.png', 450, 100); // 아우터
+var botImage = setImage('assets/character/female/하의/blue_wide_denim.png', 145, 263);   // 하의
+var shoeImage = setImage('assets/character/female/신발/white_airforce.png', 350, 70);  // 신발
 
 //화면 중앙 (현재 기온, 캐릭터)
 class CharAndTemp extends StatefulWidget {
@@ -24,13 +90,19 @@ class _CharAndTempState extends State<CharAndTemp> {
   // var weight=80.0;
 
   int? curTemp;
-  String gender = 'male';
-  List<Widget> clothesStack = []; // 동적으로 추가될 위젯들의 리스트
+  String gender = 'female';
+
+  late List<Widget> clothesStack;
 
   @override
   Widget build(BuildContext context) {
     curTemp = Get.find<WeatherJasonData>().getData()[0];
-    Get.find<UserDataFromServer>().getUserGender()==0 ? gender = 'female' : gender = 'male';
+    clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
+      clothesPosition(490, 5, shoeImage),  // 신발
+      clothesPosition(120, 0, topImage),    // 상의
+      clothesPosition(225, 100, botImage),   // 하의
+      //clothesPosition(50, 30, outImage)    // 아우터
+    ];
     return Column(
       children: [
         Container(
@@ -160,9 +232,17 @@ class _CharAndTempState extends State<CharAndTemp> {
     );
   }
 
+  void addWidget() {
+    setState(() {
+    });
+  }
 
-
-
+  void removeWidget() {
+    if (clothesStack.isNotEmpty) {
+      setState(() {
+      });
+    }
+  }
 
 }
 
@@ -273,6 +353,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                   height: MediaQuery.of(context).size.height*0.68,
                   child: ListView(
                     shrinkWrap: true,
+                    // 의상 종류 리스트
                     children: List.generate(
                       clothesTypeNum[_currentSheetIndex]-1, (index) {
                         return Column(
@@ -282,11 +363,15 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                               child: Row(
                                 children: [
                                   Expanded(flex: 2,
+                                      // 대표 의상 이미지
                                       child: Image.asset('assets/clothes/tops/sweat_shirt.png', width: MediaQuery.of(context).size.width*0.2, fit: BoxFit.cover)
                                   ),
                                   Expanded(flex: 4,
+                                      // 의상 선택 버튼
                                       child: TextButton(
-                                        onPressed: (){},
+                                        onPressed: (){
+
+                                        },
                                         style: ButtonStyle(
                                           overlayColor: MaterialStateProperty.all(Colors.black12), // 터치 효과를 없앰
                                         ),
@@ -426,7 +511,7 @@ class CharacterPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                 child: Text(
-                    '황사가 심해요! 마스크는 필수!',
+                    weatherCast(),
                     style: txtStyle(16),
                   ),
               ),

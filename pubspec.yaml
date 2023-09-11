@@ -51,6 +51,16 @@ flutter:
     - assets/image/
     - assets/weather/
     - assets/character/
+    - assets/character/female/
+    - assets/character/female/상의/
+    - assets/character/female/하의/
+    - assets/character/female/신발/
+    - assets/character/female/외투/
+    - assets/character/male/
+    - assets/character/male/상의/
+    - assets/character/male/하의/
+    - assets/character/male/신발/
+    - assets/character/male/외투/
     - assets/clothes/bottoms/
     - assets/clothes/overcoat/
     - assets/clothes/shoes/
