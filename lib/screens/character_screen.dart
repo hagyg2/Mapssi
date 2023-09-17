@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapssi/main.dart';
+import 'package:path_provider/path_provider.dart';
 
 // 현재 페이지에서 쓰일 TextStyle (글씨체 색상 굵기 고정 / 크기만 조절)
 TextStyle txtStyle (double fs) {
@@ -263,12 +266,6 @@ class ClothesOptions extends StatefulWidget {
   final int depth;
   final List<int> indexes;
 
-  final List topTypes = ['상의', '티셔츠', '스웨터/맨투맨', '셔츠/블라우스', '후드', '레글런', '민소매', '원피스', '크롭티', '스포츠'];
-  final List botTypes = ['하의', '데님', '카고', '조거', '반바지', '트라우저/슬랙스', '치마', '스포츠'];
-  final List outTypes = ['외투', '점퍼', '코트', '야상', '재킷', '조끼', '가디건', '바람막이'];
-  final List shoeTypes = ['신발', '운동화', '스니커즈', '부츠', '구두', '슬리퍼', '샌들'];
-  final List recTypes = ['추천템', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '러블리', '고프코어'];
-
   @override
   State<ClothesOptions> createState() => _ClothesOptionsState();
 }
@@ -276,6 +273,11 @@ class ClothesOptions extends StatefulWidget {
 class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderStateMixin{
   int _currentSheetIndex = 0;
   late AnimationController _animationController;
+  List topTypes = ['상의', '티셔츠', '스웨터/맨투맨', '셔츠/블라우스', '후드', '레글런', '민소매', '원피스', '크롭티', '스포츠'];
+  List botTypes = ['하의', '데님', '카고', '조거', '반바지', '트라우저/슬랙스', '치마', '스포츠'];
+  List outTypes = ['외투', '점퍼', '코트', '야상', '재킷', '조끼', '가디건', '바람막이'];
+  List shoeTypes = ['신발', '운동화', '스니커즈', '부츠', '구두', '슬리퍼', '샌들'];
+  List recTypes = ['추천템', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '러블리', '고프코어'];
   List clothesTypeNum = [10, 8, 8, 7, 6]; // 상 하 신 외 개수
 
   @override
@@ -293,6 +295,13 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     super.dispose();
   }
 
+  // 특정 디렉토리에서 파일 목록을 가져오는 함수
+  Future<List<FileSystemEntity>> getFilesInDirectory(String path) async {
+    Directory directory = Directory(path);
+    List<FileSystemEntity> files = directory.listSync(); // 디렉토리의 파일 및 디렉토리 목록 가져오기
+    return files;
+  }
+
   @override
   Widget build(BuildContext context) {
     setState(() {
@@ -303,11 +312,11 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
 
   StatefulWidget _buildBottomSheet() {
     List clothesList = [
-      widget.topTypes,
-      widget.botTypes,
-      widget.outTypes,
-      widget.shoeTypes,
-      widget.recTypes
+      topTypes,
+      botTypes,
+      outTypes,
+      shoeTypes,
+      recTypes
     ];
     return BottomSheet(
       onClosing: () {},
@@ -446,6 +455,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
       // 첫 번째 bottom sheet 의 위젯 구현
     );
   }
+
 }
 
 
