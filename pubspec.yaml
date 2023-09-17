@@ -14,7 +14,6 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
-
   #추가
   flutter_svg: ^1.0.0
 
@@ -51,20 +50,64 @@ flutter:
     - assets/image/
     - assets/weather/
     - assets/character/
-    - assets/character/female/
-    - assets/character/female/상의/
-    - assets/character/female/하의/
-    - assets/character/female/신발/
-    - assets/character/female/외투/
-    - assets/character/male/
-    - assets/character/male/상의/
-    - assets/character/male/하의/
-    - assets/character/male/신발/
-    - assets/character/male/외투/
-    - assets/clothes/bottoms/
-    - assets/clothes/overcoat/
-    - assets/clothes/shoes/
-    - assets/clothes/tops/
+    - assets/character/female/상의/croptop/
+    - assets/character/female/상의/hoodie/
+    - assets/character/female/상의/onepiece/
+    - assets/character/female/상의/reglan/
+    - assets/character/female/상의/shirts/
+    - assets/character/female/상의/sleeveless/
+    - assets/character/female/상의/sports/
+    - assets/character/female/상의/sweatshirts/
+    - assets/character/female/상의/tshirts/
+    - assets/character/female/하의/cargo/
+    - assets/character/female/하의/denim/
+    - assets/character/female/하의/jogger/
+    - assets/character/female/하의/shorts/
+    - assets/character/female/하의/skirt/
+    - assets/character/female/하의/sports/
+    - assets/character/female/하의/trouser/
+    - assets/character/female/신발/boots/
+    - assets/character/female/신발/dress/
+    - assets/character/female/신발/sandal/
+    - assets/character/female/신발/slipper/
+    - assets/character/female/신발/sneakers/
+    - assets/character/female/신발/sports/
+    - assets/character/female/외투/cardigan/
+    - assets/character/female/외투/coat/
+    - assets/character/female/외투/field/
+    - assets/character/female/외투/jacket/
+    - assets/character/female/외투/jumper/
+    - assets/character/female/외투/vest/
+    - assets/character/female/외투/windshield/
+    - assets/character/male/상의/croptop/
+    - assets/character/male/상의/hoodie/
+    - assets/character/male/상의/onepiece/
+    - assets/character/male/상의/reglan/
+    - assets/character/male/상의/shirts/
+    - assets/character/male/상의/sleeveless/
+    - assets/character/male/상의/sports/
+    - assets/character/male/상의/sweatshirts/
+    - assets/character/male/상의/tshirts/
+    - assets/character/male/하의/cargo/
+    - assets/character/male/하의/denim/
+    - assets/character/male/하의/jogger/
+    - assets/character/male/하의/shorts/
+    - assets/character/male/하의/skirt/
+    - assets/character/male/하의/sports/
+    - assets/character/male/하의/trouser/
+    - assets/character/male/신발/boots/
+    - assets/character/male/신발/dress/
+    - assets/character/male/신발/sandal/
+    - assets/character/male/신발/slipper/
+    - assets/character/male/신발/sneakers/
+    - assets/character/male/신발/sports/
+    - assets/character/male/외투/cardigan/
+    - assets/character/male/외투/coat/
+    - assets/character/male/외투/field/
+    - assets/character/male/외투/jacket/
+    - assets/character/male/외투/jumper/
+    - assets/character/male/외투/vest/
+    - assets/character/male/외투/windshield/
 
   fonts:
     - family: CoordiIcons

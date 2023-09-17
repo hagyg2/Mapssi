@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mapssi/main.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,6 +35,7 @@ Positioned clothesPosition (double x, double y,Image img) {
   );
 }
 
+// 날씨 관련 조언 멘트 알고리즘
 String weatherCast () {
   double airDust = Get.find<WeatherJasonData>().getData()[7];
   String recMent = '';
@@ -73,10 +76,12 @@ String weatherCast () {
   return recMent;
 }
 
-var topImage = setImage('assets/character/female/상의/beige_offshoulder_002.png', 365, 175); // 상의
-var outImage = setImage('assets/character/female/상의/beige_offshoulder_002.png', 450, 100); // 아우터
-var botImage = setImage('assets/character/female/하의/blue_wide_denim.png', 145, 263);   // 하의
-var shoeImage = setImage('assets/character/female/신발/white_airforce.png', 350, 70);  // 신발
+// 변수 초기화 (옷 이미지, 성별)
+var topImage = setImage('assets/character/female/상의/tshirts/offshoulder_beige_001.png', 365, 175); // 상의
+var outImage = setImage('assets/character/female/상의/tshirts/offshoulder_beige_001.png', 450, 100); // 아우터
+var botImage = setImage('assets/character/female/하의/denim/blue_wide_denim.png', 145, 263);   // 하의
+var shoeImage = setImage('assets/character/female/신발/sports/white_airforce.png', 350, 70);  // 신발
+String gender = Get.find<UserDataFromServer>().getUserGender()==0 ? 'female' : 'male';
 
 //화면 중앙 (현재 기온, 캐릭터)
 class CharAndTemp extends StatefulWidget {
@@ -92,7 +97,6 @@ class _CharAndTempState extends State<CharAndTemp> {
   // var weight=80.0;
 
   int? curTemp;
-  String gender = 'female';
 
   late List<Widget> clothesStack;
 
@@ -272,6 +276,7 @@ class ClothesOptions extends StatefulWidget {
 
 class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderStateMixin{
   int _currentSheetIndex = 0;
+  int _currentClothesIndex = 0;
   late AnimationController _animationController;
   List topTypes = ['상의', '티셔츠', '스웨터/맨투맨', '셔츠/블라우스', '후드', '레글런', '민소매', '원피스', '크롭티', '스포츠'];
   List botTypes = ['하의', '데님', '카고', '조거', '반바지', '트라우저/슬랙스', '치마', '스포츠'];
@@ -279,6 +284,8 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   List shoeTypes = ['신발', '운동화', '스니커즈', '부츠', '구두', '슬리퍼', '샌들'];
   List recTypes = ['추천템', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '러블리', '고프코어'];
   List clothesTypeNum = [10, 8, 8, 7, 6]; // 상 하 신 외 개수
+  List clothesList = [];
+  List<String> loadFiles = [];
 
   @override
   void initState() {
@@ -296,28 +303,131 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   }
 
   // 특정 디렉토리에서 파일 목록을 가져오는 함수
-  Future<List<FileSystemEntity>> getFilesInDirectory(String path) async {
-    Directory directory = Directory(path);
-    List<FileSystemEntity> files = directory.listSync(); // 디렉토리의 파일 및 디렉토리 목록 가져오기
+  Future<List<String>> getFilesInDirectory(String path) async {
+    final assetManifest = await rootBundle.loadString('AssetManifest.json');
+    final Map<String, dynamic> manifestMap = json.decode(assetManifest);
+
+    // 'assets' 디렉토리 내의 파일 목록 가져오기
+    var files = manifestMap.keys.where((String key) => key.startsWith(path)).toList();
+    print(files);
     return files;
   }
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      _currentSheetIndex = widget.indexes[0];
-    });
-    return _buildBottomSheet();
-  }
-
-  StatefulWidget _buildBottomSheet() {
-    List clothesList = [
+    var chosenType;
+    clothesList = [
       topTypes,
       botTypes,
       outTypes,
       shoeTypes,
       recTypes
     ];
+    setState(()  {
+      _currentSheetIndex = widget.indexes[0];
+      _currentClothesIndex = widget.indexes[1];
+      if (widget.depth>0) {
+        if (_currentSheetIndex == 0) {
+          switch (clothesList[_currentSheetIndex][_currentClothesIndex]) {
+            case '티셔츠':
+              chosenType = 'tshirts';
+              break;
+            case '스웨터/맨투맨':
+              chosenType = 'sweatshirts';
+              break;
+            case '셔츠/블라우스':
+              chosenType = 'shirts';
+              break;
+            case '후드':
+              chosenType = 'hoodie';
+              break;
+            case '레글런':
+              chosenType = 'reglan';
+              break;
+            case '민소매':
+              chosenType = 'sleeveless';
+              break;
+            case '원피스':
+              chosenType = 'onepiece';
+              break;
+            case '크롭티':
+              chosenType = 'croptop';
+              break;
+            default :
+              chosenType = 'sports';
+          }
+        } else if (_currentSheetIndex == 1) {
+          switch (clothesList[_currentSheetIndex][_currentClothesIndex]) {
+            case '데님':
+              chosenType = 'denim';
+              break;
+            case '카고':
+              chosenType = 'cargo';
+              break;
+            case '조거':
+              chosenType = 'jogger';
+              break;
+            case '반바지':
+              chosenType = 'shorts';
+              break;
+            case '트라우저/슬랙스':
+              chosenType = 'trouser';
+              break;
+            case '치마':
+              chosenType = 'skirt';
+              break;
+            default :
+              chosenType = 'sports';
+          }
+        } else if (_currentSheetIndex == 2) {
+          switch (clothesList[_currentSheetIndex][_currentClothesIndex]) {
+            case '코트':
+              chosenType = 'coat';
+              break;
+            case '야상':
+              chosenType = 'field';
+              break;
+            case '재킷':
+              chosenType = 'jacket';
+              break;
+            case '조끼':
+              chosenType = 'vest';
+              break;
+            case '가디건':
+              chosenType = 'cardigan';
+              break;
+            case '바람막이':
+              chosenType = 'windshield';
+              break;
+            default:
+              chosenType = 'jumper';
+              break;
+          }
+        } else if (_currentSheetIndex == 3) {
+          switch (clothesList[_currentSheetIndex][_currentClothesIndex]) {
+            case '스니커즈':
+              chosenType = 'sneakers';
+              break;
+            case '부츠':
+              chosenType = 'boots';
+              break;
+            case '구두':
+              chosenType = 'dress';
+              break;
+            case '슬리퍼':
+              chosenType = 'slipper';
+              break;
+            case '샌들':
+              chosenType = 'sandal';
+              break;
+            default :
+              chosenType = 'sports';
+          }
+        }
+      }
+    });
+
+
     return BottomSheet(
       onClosing: () {},
       shape: const RoundedRectangleBorder(
@@ -346,25 +456,25 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                             (widget.depth == 0) ?
                                 (){Navigator.pop(context);} :
                                 (){
-                                Navigator.pop(context);
-                                showModalBottomSheet(context: context,
-                                    isScrollControlled: true,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                                    ),
-                                    builder: (BuildContext context) {
-                                      return SizedBox(
-                                          height: MediaQuery.of(context).size.height*0.77,
-                                          child: ClothesOptions(depth: 0, indexes: [_currentSheetIndex,0])
-                                      );
-                                    }
-                                );
-                              },
+                                  Navigator.pop(context);
+                                  showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                                      ),
+                                      builder: (BuildContext context) {
+                                        return SizedBox(
+                                            height: MediaQuery.of(context).size.height*0.77,
+                                            child: ClothesOptions(depth: 0, indexes: [_currentSheetIndex,0])
+                                        );
+                                      }
+                                  );
+                                },
                             icon: (widget.depth == 0) ? const Icon(Icons.close_rounded) : const Icon(Icons.arrow_back_ios_rounded),
                             iconSize: (widget.depth == 0) ? 40 : 27,
                             style: IconButton.styleFrom(
-                              elevation: 0,
-                              focusColor: Colors.transparent
+                                elevation: 0,
+                                focusColor: Colors.transparent
                             )
                         ),
                       ),
@@ -381,22 +491,28 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                     shrinkWrap: true,
                     // 의상 종류 리스트
                     children: List.generate(
-                      clothesTypeNum[_currentSheetIndex]-1, (index) {
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 25),
-                              child: Row(
-                                children: [
-                                  Expanded(flex: 2,
-                                      // 대표 의상 이미지
-                                      child: Image.asset('assets/clothes/tops/sweat_shirt.png', width: MediaQuery.of(context).size.width*0.2, fit: BoxFit.cover)
-                                  ),
-                                  Expanded(flex: 4,
-                                      // 의상 선택 버튼
-                                      child: TextButton(
-                                        onPressed: (){
-                                          Navigator.pop(context);
+                        (widget.depth < 2) ? clothesTypeNum[_currentSheetIndex]-1 : loadFiles.length, (index) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 25),
+                            child: Row(
+                              children: [
+                                Expanded(flex: 2,
+                                    // 대표 의상 이미지
+                                    child: (widget.depth < 2) ?
+                                    Image.asset('assets/character/female/상의/tshirts/tshirt_white_001.png', width: MediaQuery.of(context).size.width*0.2, fit: BoxFit.cover):
+                                    Image.asset(loadFiles[index])
+                                ),
+                                Expanded(flex: 4,
+                                    // 의상 선택 버튼
+                                    child: TextButton(
+                                      onPressed: () async {
+                                        if (widget.depth > 1) {
+                                          loadFiles = await getFilesInDirectory("assets/character/$gender/${clothesList[_currentSheetIndex][0]}/$chosenType/");
+                                        }
+                                        if (!mounted) return;
+                                        Navigator.pop(context);
                                           showModalBottomSheet(context: context,
                                               isScrollControlled: true,
                                               shape: const RoundedRectangleBorder(
@@ -408,43 +524,45 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                                     child: ClothesOptions(depth: widget.depth+1, indexes: [_currentSheetIndex,index+1])
                                                 );
                                               }
-                                            );
-                                        },
-                                        style: ButtonStyle(
-                                          overlayColor: MaterialStateProperty.all(Colors.black12), // 터치 효과를 없앰
-                                        ),
-                                        child: Text(clothesList[_currentSheetIndex][index+1], style: txtStyle(20)
-                                        ), // 텍스트 색상 변경),
-                                      )
-                                  ),
-                                  Expanded(flex: 1, child: IconButton(onPressed: (){
-                                    Navigator.pop(context);
-                                    showModalBottomSheet(context: context,
-                                        isScrollControlled: true,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                                        ),
-                                        builder: (BuildContext context) {
-                                          return SizedBox(
-                                              height: MediaQuery.of(context).size.height*0.77,
-                                              child: ClothesOptions(depth: widget.depth+1, indexes: [_currentSheetIndex,index+1])
                                           );
-                                        }
-                                    );
-                                  }, icon: const Icon(Icons.arrow_forward_ios_rounded)))
-                                ],
-                              ),
+                                      },
+                                      style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(Colors.black12), // 터치 효과를 없앰
+                                      ),
+                                      child: (widget.depth < 2) ?
+                                      Text(clothesList[_currentSheetIndex][index+1], style: txtStyle(20)) :
+                                      Text(loadFiles[index].toString())
+                                      , // 텍스트 색상 변경),
+                                    )
+                                ),
+                                Expanded(flex: 1, child: IconButton(onPressed: (){
+                                  Navigator.pop(context);
+                                  showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                                      ),
+                                      builder: (BuildContext context) {
+                                        return SizedBox(
+                                            height: MediaQuery.of(context).size.height*0.77,
+                                            child: ClothesOptions(depth: widget.depth+1, indexes: [_currentSheetIndex,index+1])
+                                        );
+                                      }
+                                  );
+                                }, icon: const Icon(Icons.arrow_forward_ios_rounded)))
+                              ],
                             ),
-                            const Divider(
-                              color: Color(0xFFDEDEDE),
-                              height: 1,
-                              thickness: 2,
-                              indent: 25,
-                              endIndent: 25,
-                            )
-                          ],
-                        );
-                      }
+                          ),
+                          const Divider(
+                            color: Color(0xFFDEDEDE),
+                            height: 1,
+                            thickness: 2,
+                            indent: 25,
+                            endIndent: 25,
+                          )
+                        ],
+                      );
+                    }
                     ),
                   ),
                 ),
