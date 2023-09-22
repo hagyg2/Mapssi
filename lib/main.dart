@@ -30,9 +30,9 @@ class MyApp extends StatelessWidget {
           )
       ),
 
-      home: MyPageView(),
+      home: const MyPageView(pageIndex: 0),
       routes: {
-        '/index': (context) => MyPageView(),
+        '/index': (context) => const MyPageView(pageIndex: 0),
         '/login': (context) => LoginScreen(),
         '/splash': (context) => SplashScreen(),
         '/perinfo': (context) => genderpage(),
@@ -127,7 +127,8 @@ class WeatherJasonData extends GetxController{
 
 // 페이지 좌우 슬라이드로 넘기는 기능
 class MyPageView extends StatelessWidget {
-  const MyPageView({super.key});
+  const MyPageView({super.key, required this.pageIndex});
+  final int pageIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +137,9 @@ class MyPageView extends StatelessWidget {
     Get.put(UserDataFromServer());
     return Scaffold(
       body: PageView.builder(
+        controller: PageController(
+        initialPage: pageIndex, // 두 번째 페이지를 초기 페이지로 설정
+      ),
         itemBuilder: (BuildContext context, int index) {
           if (index==0) { // 날씨 관련 페이지 출력
             return WeatherScreen();
