@@ -15,17 +15,17 @@ TextStyle txtStyle (double fs) {
 }
 
 // 이미지 사이즈 조절 및 설정
-Image setImage(String url, double w, double h) {
-  return Image.asset(
+Rx<Image> setImage(String url, double w, double h) {
+  return Rx<Image>(Image.asset(
     url,
     width: w,
     height: h,
     fit: BoxFit.fill,
-  );
+  ));
 }
 
 // 스택 에서의 이미지 위치 조절
-Positioned clothesPosition (double x, double y,Image img) {
+Positioned clothesPosition (double x, double y,var img) {
   return Positioned(
     top: x,
     left: y,
@@ -74,15 +74,46 @@ String weatherCast () {
   return recMent;
 }
 
-// 변수 초기화 (옷 이미지, 성별)
-var topImage = setImage('assets/character/female/상의/tshirts/offshoulder_beige_001.png', 365, 175); // 상의
-var botImage = setImage('assets/character/female/하의/denim/blue_wide_denim.png', 145, 263);   // 하의
-var outImage = setImage('assets/character/female/상의/tshirts/offshoulder_beige_001.png', 450, 100); // 아우터
-var shoeImage = setImage('assets/character/female/신발/sports/white_airforce.png', 350, 70);  // 신발
-String gender = Get.find<UserDataFromServer>().getUserGender()==0 ? 'female' : 'male';
+// 의상 이미지 전역변수화
+class ClothesImageController extends GetxController {
+  Rx<Image> topImage = setImage('assets/character/initialImage.png', 365, 175); // 상의
+  Rx<Image> botImage = setImage('assets/character/initialImage.png', 145, 263); // 하의
+  Rx<Image> outImage = setImage('assets/character/initialImage.png', 365, 175); // 아우터
+  Rx<Image> shoeImage = setImage('assets/character/initialImage.png', 350, 70); // 신발
+
+  resetImages() {
+    topImage = setImage('assets/character/initialImage.png', 365, 175);
+    botImage = setImage('assets/character/initialImage.png', 145, 263);
+    outImage = setImage('assets/character/initialImage.png', 365, 175);
+    shoeImage = setImage('assets/character/initialImage.png', 350, 70);
+  }
+
+  setTopImage(String path) {
+    topImage = setImage(path, 365, 175);
+  }
+
+  setBotImage(String path) {
+    botImage = setImage(path, 145, 263);
+  }
+
+  setOutImage(String path) {
+    outImage = setImage(path, 365, 175);
+  }
+
+  setShoeImage(String path) {
+    shoeImage = setImage(path, 350, 70);
+  }
+
+  getImage() {
+    return [shoeImage, topImage, botImage, outImage];
+  } // 신발
+}
+
+String gender = Get.find<UserDataFromServer>().getUserGender() == 0
+    ? 'female'
+    : 'male';
 String assetManifest = '';
 bool gotManifest = false;
-
 
 //화면 중앙 (현재 기온, 캐릭터)
 class CharAndTemp extends StatefulWidget {
@@ -98,18 +129,31 @@ class _CharAndTempState extends State<CharAndTemp> {
   // var weight=80.0;
 
   int? curTemp;
-
   late List<Widget> clothesStack;
+  var clothesImages = Get.find<ClothesImageController>().getImage();
 
   @override
   Widget build(BuildContext context) {
     curTemp = Get.find<WeatherJasonData>().getData()[0];
     clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
-      clothesPosition(490, 5, shoeImage),  // 신발
-      clothesPosition(120, 0, topImage),    // 상의
-      clothesPosition(225, 100, botImage),   // 하의
-      //clothesPosition(50, 30, outImage)    // 아우터
+      clothesPosition(490, 5, clothesImages[0].value),  // 신발
+      clothesPosition(120, 0, clothesImages[1].value),    // 상의
+      clothesPosition(225, 100, clothesImages[2].value),   // 하의
+      clothesPosition(120, 0, clothesImages[3].value)    // 아우터
     ];
+    var resetButton = clothesPosition(5, 300, IconButton(
+        onPressed: (){
+          Get.find<ClothesImageController>().resetImages();
+          Navigator.pushAndRemoveUntil(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration.zero,
+                pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
+              ),
+              (route) => false);
+          },
+        icon: const Icon(Icons.refresh,color: Colors.white,))
+    );
     return Column(
       children: [
         Row(
@@ -168,6 +212,7 @@ class _CharAndTempState extends State<CharAndTemp> {
                   ),
                   // 위에 의상
                   ...clothesStack,
+                  resetButton
                 ],
               ),
             ),
@@ -235,23 +280,14 @@ class _CharAndTempState extends State<CharAndTemp> {
     );
   }
 
+
 }
 
-
-// 메뉴 열리면 나오는 옷 정보
-class ClothesInfo {
-  AssetImage? clothesImage;
-  String? clothesName;
-  ClothesInfo (img, name) {
-    clothesImage = img;
-    clothesName = name;
-  }
-}
 
 
 // 옷 고르기
 class ClothesOptions extends StatefulWidget {
-  ClothesOptions({Key? key, required this.depth, required this.indexes}) : super(key: key);
+  const ClothesOptions({Key? key, required this.depth, required this.indexes}) : super(key: key);
   final int depth;
   final List<int> indexes;
 
@@ -298,7 +334,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   }
 
   String typeKorToEng (int selected) {
-    print(selected);
     String chosenType='';
     if (_currentSheetIndex == 0) {
       switch (clothesList[_currentSheetIndex][selected]) {
@@ -543,25 +578,34 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                               onTap: () {
                                 switch (_currentSheetIndex) {
                                   case 0: // 상의
-                                    topImage =
-                                        setImage(loadFiles[index], 365, 175);
+                                    Get.find<ClothesImageController>().setTopImage(loadFiles[index]); // 상의
                                     break;
                                   case 1:
-                                    botImage = setImage(
-                                        loadFiles[index], 145, 263); // 하의
+                                    Get.find<ClothesImageController>().setBotImage(loadFiles[index]); // 하의
                                     break;
                                   case 2:
-                                    outImage = setImage(
-                                        loadFiles[index], 450, 100); // 아우터
+                                    Get.find<ClothesImageController>().setOutImage(loadFiles[index]); // 아우터
                                     break;
                                   case 3:
-                                    shoeImage = setImage(
-                                        loadFiles[index], 350, 70); // 신발
+                                    Get.find<ClothesImageController>().setShoeImage(loadFiles[index]); // 신발
                                     break;
                                   default: // AI추천
                                     break;
                                 }
-                                Navigator.pop(context);
+                                Navigator.pushAndRemoveUntil(context,
+                                    PageRouteBuilder(
+                                        transitionDuration: Duration(milliseconds: 200),
+                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                          return Align(
+                                            child: SizeTransition(
+                                              sizeFactor: animation,
+                                              child: child,
+                                            ),
+                                          );
+                                        },
+                                        pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
+                                    ),
+                                    (route) => false);
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(5.0),
@@ -592,7 +636,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                       );
                     } else {
                       // 데이터 없음
-                      return Text('데이터 없음');
+                      return const Text('데이터 없음');
                     }
                   },
                 ),
@@ -676,6 +720,7 @@ class CharacterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ClothesImageController());
     // 메뉴 옵션들 간에 벽(divider)
     var divider = const VerticalDivider(
       color: Color(0xFFBCBCBC),
@@ -733,7 +778,7 @@ class CharacterPage extends StatelessWidget {
               ),
 
               // 중간부 (체크 박스와 슬라이더, 캐릭터)
-              const Expanded(flex:8, child: CharAndTemp()),
+              Expanded(flex:8, child: CharAndTemp()),
 
               // 하단부 (옷 메뉴)
               Expanded(

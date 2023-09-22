@@ -191,6 +191,6 @@ class LoginScreen extends StatelessWidget {
     }
     else {  // 등록된 유저의 경우 바로 화면 전환
       print('로그인 성공');
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MyPageView()), (route) => false);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MyPageView(pageIndex: 0)), (route) => false);
     }
   }
