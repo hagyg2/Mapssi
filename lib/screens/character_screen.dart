@@ -76,12 +76,13 @@ String weatherCast () {
 
 // 변수 초기화 (옷 이미지, 성별)
 var topImage = setImage('assets/character/female/상의/tshirts/offshoulder_beige_001.png', 365, 175); // 상의
-var outImage = setImage('assets/character/female/상의/tshirts/offshoulder_beige_001.png', 450, 100); // 아우터
 var botImage = setImage('assets/character/female/하의/denim/blue_wide_denim.png', 145, 263);   // 하의
+var outImage = setImage('assets/character/female/상의/tshirts/offshoulder_beige_001.png', 450, 100); // 아우터
 var shoeImage = setImage('assets/character/female/신발/sports/white_airforce.png', 350, 70);  // 신발
 String gender = Get.find<UserDataFromServer>().getUserGender()==0 ? 'female' : 'male';
 String assetManifest = '';
 bool gotManifest = false;
+
 
 //화면 중앙 (현재 기온, 캐릭터)
 class CharAndTemp extends StatefulWidget {
@@ -234,18 +235,6 @@ class _CharAndTempState extends State<CharAndTemp> {
     );
   }
 
-  void addWidget() {
-    setState(() {
-    });
-  }
-
-  void removeWidget() {
-    if (clothesStack.isNotEmpty) {
-      setState(() {
-      });
-    }
-  }
-
 }
 
 
@@ -302,7 +291,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     String assetManifest = await rootBundle.loadString('AssetManifest.json');
     final Map<String, dynamic> manifestMap = json.decode(assetManifest);
     print(path);
-    print(manifestMap);
     // 디렉토리 내의 파일 목록 가져오기
     var files = manifestMap.keys.where((String key) => key.startsWith(path)).toList();
     print(files);
@@ -542,52 +530,65 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                       List<String> loadFiles = snapshot.data!;
                       return SizedBox(
                         height: MediaQuery.of(context).size.height*0.68,
-                        child: ListView(
-                          shrinkWrap: true,
-                          // 의상 종류 리스트
-                          children: List.generate(loadFiles.length, (index) {
-                            List data = loadFiles[index].split('/')[5].split('_');
-                            String color = data[1];
-                            String type = data[0];
-                            String clothesInfo = "$color $type";
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 25),
-                                  child: Row(
-                                    children: [
-                                      Expanded(flex: 2,
-                                          // 대표 의상 이미지
-                                          child: Image.asset(loadFiles[index])
-                                      ),
-                                      Expanded(flex: 4,
-                                          // 의상 선택 버튼
-                                          child: TextButton(
-                                            onPressed: () {
-
-                                            },
-                                            style: ButtonStyle(
-                                              overlayColor: MaterialStateProperty.all(Colors.black12), // 터치 효과를 없앰
-                                            ),
-                                            child: Text(clothesInfo, style: txtStyle(20)),
-                                          )
-                                      ) ,
-                                      Expanded(flex: 1, child: IconButton(onPressed: (){nextStep(context, index);}, icon: const Icon(Icons.arrow_forward_ios_rounded)))
-                                    ],
+                        child: GridView.builder(
+                          itemCount: loadFiles.length,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, // 한 줄에 3개의 이미지 버튼을 배치
+                          ),
+                          padding: const EdgeInsets.all(5),
+                          itemBuilder: (BuildContext context, int index) {
+                            return InkWell(
+                              highlightColor: Colors.transparent, // 터치 시 강조 효과를 숨김
+                              splashColor: Colors.transparent,     // 터치 시 스플래시 효과를 숨김
+                              onTap: () {
+                                switch (_currentSheetIndex) {
+                                  case 0: // 상의
+                                    topImage =
+                                        setImage(loadFiles[index], 365, 175);
+                                    break;
+                                  case 1:
+                                    botImage = setImage(
+                                        loadFiles[index], 145, 263); // 하의
+                                    break;
+                                  case 2:
+                                    outImage = setImage(
+                                        loadFiles[index], 450, 100); // 아우터
+                                    break;
+                                  case 3:
+                                    shoeImage = setImage(
+                                        loadFiles[index], 350, 70); // 신발
+                                    break;
+                                  default: // AI추천
+                                    break;
+                                }
+                                Navigator.pop(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(22)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.3),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 1), // 그림자 의 위치 조정
+                                      )
+                                    ]
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(22.0), // 모서리를 둥글게 하는 정도를 지정합니다.
+                                    child: Image.asset(
+                                      loadFiles[index],
+                                      fit: BoxFit.cover,
+                                    ), // 이미지를 불러옵니다. 이미지 경로에 맞게 수정하세요.
                                   ),
                                 ),
-                                const Divider(
-                                  color: Color(0xFFDEDEDE),
-                                  height: 1,
-                                  thickness: 2,
-                                  indent: 25,
-                                  endIndent: 25,
-                                )
-                              ],
+                              ),
                             );
-                          }
-                          ),
-                        ),
+                          },
+                        )
                       );
                     } else {
                       // 데이터 없음
