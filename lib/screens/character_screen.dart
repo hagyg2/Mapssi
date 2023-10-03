@@ -144,10 +144,10 @@ class _CharAndTempState extends State<CharAndTemp> {
   Widget build(BuildContext context) {
     curTemp = Get.find<WeatherJasonData>().getData()[0];
     clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
-      clothesPosition(MediaQuery.of(context).size.height*0.55, MediaQuery.of(context).size.width*0.325, clothesImages[0].value),  // 신발
-      clothesPosition(MediaQuery.of(context).size.height*0.13, MediaQuery.of(context).size.width*0.185, clothesImages[1].value),    // 상의
-      clothesPosition(225, 100, clothesImages[2].value),   // 하의
-      clothesPosition(120, 0, clothesImages[3].value)    // 아우터
+      clothesPosition(MediaQuery.of(context).size.height*0.55, MediaQuery.of(context).size.width*0.245, clothesImages[0].value),  // 신발
+      clothesPosition(MediaQuery.of(context).size.height*0.13, MediaQuery.of(context).size.width*0.195, clothesImages[1].value),    // 상의
+      clothesPosition(MediaQuery.of(context).size.height*0.255, MediaQuery.of(context).size.width*0.2, clothesImages[2].value),   // 하의
+      clothesPosition(MediaQuery.of(context).size.height*0.13, MediaQuery.of(context).size.width*0.185, clothesImages[3].value)    // 아우터
     ];
     var resetButton = clothesPosition(5, 300, IconButton(
         onPressed: (){
@@ -600,7 +600,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                   },
                 )
 
-                
+
                 // 저장된 의상 사진들 불러와서 리스트 출력
                 : FutureBuilder<List<String>>(
                   future: getFilesInDirectory("assets/character/$gender/${clothesList[_currentSheetIndex][0]}_${typeKorToEng(widget.indexes[1])}"),
@@ -772,14 +772,14 @@ class CharacterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    topImageWidth = MediaQuery.of(context).size.width*0.43;  //done
-    topImageHeight = MediaQuery.of(context).size.height*0.2;  //done
-    botImageWidth = MediaQuery.of(context).size.width*0.2;
-    botImageHeight = MediaQuery.of(context).size.height*0.24;
-    outImageWidth = MediaQuery.of(context).size.width*0.2;
-    outImageHeight = MediaQuery.of(context).size.height*0.24;
-    shoeImageWidth = MediaQuery.of(context).size.width*0.215;  // half
-    shoeImageHeight = MediaQuery.of(context).size.height*0.07; // half
+    topImageWidth = MediaQuery.of(context).size.width*0.4;
+    topImageHeight = MediaQuery.of(context).size.height*0.2;
+    botImageWidth = MediaQuery.of(context).size.width*0.385;
+    botImageHeight = MediaQuery.of(context).size.height*0.31;
+    outImageWidth = MediaQuery.of(context).size.width*0.2;    //not done
+    outImageHeight = MediaQuery.of(context).size.height*0.24; //not done
+    shoeImageWidth = MediaQuery.of(context).size.width*0.37;
+    shoeImageHeight = MediaQuery.of(context).size.height*0.09;
 
     Get.put(ClothesImageController());
     // 메뉴 옵션들 간에 벽(divider)
