@@ -36,7 +36,9 @@ class LoginScreen extends StatelessWidget {
           children: [
             Text('Mapssi', style: TextStyle(fontSize: 70, fontFamily: 'Dovemayo_gothic', fontWeight: FontWeight.w700),),
             Text('맵씨로 맵시있게', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic'),),
-            SizedBox(height: 250,),
+            SizedBox(height: 20,),
+            Image.asset('assets/logo.jpg', height: 200, width: 200,),
+            SizedBox(height: 50,),
             Text('SNS계정으로 간편 로그인/회원가입', style: TextStyle(fontSize: 15, fontFamily: 'Dovemayo_gothic'),),
             SizedBox(height: 10,),
 
