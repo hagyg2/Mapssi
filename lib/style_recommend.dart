@@ -5,7 +5,6 @@ var curTemp = Get.find<WeatherJasonData>().getData()[0];
 var perCol = Get.find<UserDataFromServer>().getUserPerCol();
 
 getItem(int index) {
-  print("###getItem###");
   List result = [];
   String coordi = "";
   //['캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '러블리 or 댄디', '고프코어']
