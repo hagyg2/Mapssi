@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mapssi/main.dart';
+import 'package:mapssi/style_recommend.dart';
 
 // 현재 페이지 에서 쓰일 TextStyle (글씨체 색상 굵기 고정 / 크기만 조절)
 TextStyle txtStyle (double fs) {
@@ -15,13 +17,14 @@ TextStyle txtStyle (double fs) {
 }
 
 // 이미지 사이즈 조절 및 설정
-Rx<Image> setImage(String url, double w, double h) {
-  return Rx<Image>(Image.asset(
-    url,
-    width: w,
-    height: h,
-    fit: BoxFit.fill,
-  ));
+ColorFiltered setImage(String url, double w, double h, [Color color=Colors.transparent]) {
+  return ColorFiltered(
+    colorFilter: ColorFilter.mode(
+      color,
+      BlendMode.color,
+    ),
+    child: Image.asset(url, width: w, height: h, fit: BoxFit.fill),
+  );
 }
 
 // 스택 에서의 이미지 위치 조절
@@ -89,10 +92,10 @@ double shoeImageHeight = 0;
 
 // 의상 이미지 전역변수화
 class ClothesImageController extends GetxController {
-  Rx<Image> topImage = setImage('assets/character/initialImage.png', topImageWidth, topImageHeight); // 상의
-  Rx<Image> botImage = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight); // 하의
-  Rx<Image> outImage = setImage('assets/character/initialImage.png', outImageWidth, outImageHeight); // 아우터
-  Rx<Image> shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight); // 신발
+  ColorFiltered topImage = setImage('assets/character/initialImage.png', topImageWidth, topImageHeight); // 상의
+  ColorFiltered botImage = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight); // 하의
+  ColorFiltered outImage = setImage('assets/character/initialImage.png', outImageWidth, outImageHeight); // 아우터
+  ColorFiltered shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight); // 신발
 
   resetImages() {
     topImage = setImage('assets/character/initialImage.png', topImageWidth, topImageHeight);
@@ -101,20 +104,20 @@ class ClothesImageController extends GetxController {
     shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight);
   }
 
-  setTopImage(String path) {
-    topImage = setImage(path, topImageWidth, topImageHeight);
+  setTopImage(String path, {Color? color=Colors.transparent}) {
+      topImage =  setImage(path, topImageWidth, topImageHeight, color!);
   }
 
-  setBotImage(String path) {
-    botImage = setImage(path, botImageWidth, botImageHeight);
+  setBotImage(String path, {Color? color=Colors.transparent}) {
+    botImage = setImage(path, botImageWidth, botImageHeight, color!);
   }
 
-  setOutImage(String path) {
-    outImage = setImage(path, outImageWidth, outImageHeight);
+  setOutImage(String path, {Color? color=Colors.transparent}) {
+    outImage = setImage(path, outImageWidth, outImageHeight, color!);
   }
 
-  setShoeImage(String path) {
-    shoeImage = setImage(path, shoeImageWidth, shoeImageHeight);
+  setShoeImage(String path, {Color? color=Colors.transparent}) {
+    shoeImage = setImage(path, shoeImageWidth, shoeImageHeight, color!);
   }
 
   getImage() {
@@ -144,10 +147,10 @@ class _CharAndTempState extends State<CharAndTemp> {
   Widget build(BuildContext context) {
     curTemp = Get.find<WeatherJasonData>().getData()[0];
     clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
-      clothesPosition(MediaQuery.of(context).size.height*0.55, MediaQuery.of(context).size.width*0.245, clothesImages[0].value),  // 신발
-      clothesPosition(MediaQuery.of(context).size.height*0.13, MediaQuery.of(context).size.width*0.195, clothesImages[1].value),    // 상의
-      clothesPosition(MediaQuery.of(context).size.height*0.255, MediaQuery.of(context).size.width*0.2, clothesImages[2].value),   // 하의
-      clothesPosition(MediaQuery.of(context).size.height*0.13, MediaQuery.of(context).size.width*0.185, clothesImages[3].value)    // 아우터
+      clothesPosition(MediaQuery.of(context).size.height*0.55, MediaQuery.of(context).size.width*0.245, clothesImages[0]),  // 신발
+      clothesPosition(MediaQuery.of(context).size.height*0.13, MediaQuery.of(context).size.width*0.195, clothesImages[1]),    // 상의
+      clothesPosition(MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.2, clothesImages[2]),   // 하의
+      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.2, clothesImages[3])    // 아우터
     ];
     var resetButton = clothesPosition(5, 300, IconButton(
         onPressed: (){
@@ -357,6 +360,21 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     return files;
   }
 
+  Future<String> getRandomImages(String path) async {
+    String assetManifest = await rootBundle.loadString('AssetManifest.json');
+    final Map<String, dynamic> manifestMap = json.decode(assetManifest);
+    String file = "assets/character/initialImage.png";
+    var random = Random();
+    path = "assets/character/$gender/$path";
+    var result = manifestMap.keys.where((String key) => key.startsWith(path));
+    if (result.isNotEmpty) {
+      int randomNumber = random.nextInt(result.length);
+      file= result.toList()[randomNumber];
+    }
+
+    return file;
+  }
+
   String typeKorToEng (int selected) {
     String chosenType='';
     if (_currentSheetIndex == 0) {
@@ -459,6 +477,17 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     return chosenType;
   }
 
+  Future<List<List>> recommendClothes(int style) async {
+    var items = getItem(style);
+    print(items);
+    var top = [await getRandomImages("상의_${items[0][0]}"), Color(int.parse(items[0][1]))];
+    var bot = [await getRandomImages("하의_${items[1][0]}"), Color(int.parse(items[1][1]))];
+    var shoe = [await getRandomImages("신발_${items[2][0]}"), Color(int.parse(items[2][1]))];
+    var out = [await getRandomImages("외투_${items[3][0]}"), Color(int.parse(items[3][1]))];
+    var clothes = [top,bot,shoe,out];
+    return clothes;
+  }
+
   @override
   Widget build(BuildContext context) {
     clothesList = [
@@ -543,55 +572,58 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                       List loadFiles = snapshot.data!;
                       return SizedBox(
                         height: MediaQuery.of(context).size.height*0.68,
-                        child: ListView(
-                          shrinkWrap: true,
-                          // 의상 종류 리스트
-                          children: List.generate(clothesTypeNum[_currentSheetIndex]-1, (index) {
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 25),
-                                  child: Row(
-                                    children: [
-                                      Expanded(flex: 2,
-                                          // 대표 의상 이미지
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(22),
-                                            child: Image.asset(
-                                                loadFiles[index],
-                                                height: MediaQuery.of(context).size.width*0.25,
-                                                fit: BoxFit.cover
-                                            ),
-                                          )
-                                      ),
-                                      Expanded(flex: 4,
-                                          // 의상 선택 버튼
-                                          child: TextButton(
-                                              onPressed: () {
-                                                nextStep(context, index);
-                                              },
-                                              style: ButtonStyle(
-                                                overlayColor: MaterialStateProperty.all(Colors.black12), // 터치 효과를 없앰
+                        child: ScrollConfiguration(
+                          behavior: const ScrollBehavior().copyWith(overscroll: false), // 맥스 스크롤 효과 없애기
+                          child: ListView(
+                            shrinkWrap: true,
+                            // 의상 종류 리스트
+                            children: List.generate(clothesTypeNum[_currentSheetIndex]-1, (index) {
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 25),
+                                    child: Row(
+                                      children: [
+                                        Expanded(flex: 2,
+                                            // 대표 의상 이미지
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(22),
+                                              child: Image.asset(
+                                                  loadFiles[index],
+                                                  height: MediaQuery.of(context).size.width*0.25,
+                                                  fit: BoxFit.cover
                                               ),
-                                              child: Text(clothesList[_currentSheetIndex][index+1], style: txtStyle(20))
-                                          )
-                                      ) ,
-                                      Expanded(flex: 1, child: IconButton(onPressed: (){nextStep(context, index);}, icon: const Icon(Icons.arrow_forward_ios_rounded)))
-                                    ],
+                                            )
+                                        ),
+                                        Expanded(flex: 4,
+                                            // 의상 선택 버튼
+                                            child: TextButton(
+                                                onPressed: () {
+                                                  nextStep(context, index);
+                                                },
+                                                style: ButtonStyle(
+                                                  overlayColor: MaterialStateProperty.all(Colors.black12), // 터치 효과를 없앰
+                                                ),
+                                                child: Text(clothesList[_currentSheetIndex][index+1], style: txtStyle(20))
+                                            )
+                                        ) ,
+                                        Expanded(flex: 1, child: IconButton(onPressed: (){nextStep(context, index);}, icon: const Icon(Icons.arrow_forward_ios_rounded)))
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const Divider(
-                                  color: Color(0xFFDEDEDE),
-                                  height: 1,
-                                  thickness: 2,
-                                  indent: 40,
-                                  endIndent: 40,
-                                )
-                              ],
-                            );
-                          }
+                                  const Divider(
+                                    color: Color(0xFFDEDEDE),
+                                    height: 1,
+                                    thickness: 2,
+                                    indent: 40,
+                                    endIndent: 40,
+                                  )
+                                ],
+                              );
+                            }
+                            ),
                           ),
-                        ),
+                        )
                       );
                     } else {
                       // 데이터 없음
@@ -616,74 +648,77 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                       List<String> loadFiles = snapshot.data!;
                       return SizedBox(
                         height: MediaQuery.of(context).size.height*0.68,
-                        child: GridView.builder(
-                          itemCount: loadFiles.length,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, // 한 줄에 3개의 이미지 버튼을 배치
-                          ),
-                          padding: const EdgeInsets.all(5),
-                          itemBuilder: (BuildContext context, int index) {
-                            return InkWell(
-                              highlightColor: Colors.transparent, // 터치 시 강조 효과를 숨김
-                              splashColor: Colors.transparent,     // 터치 시 스플래시 효과를 숨김
-                              onTap: () {
-                                switch (_currentSheetIndex) {
-                                  case 0: // 상의
-                                    Get.find<ClothesImageController>().setTopImage(loadFiles[index]); // 상의
-                                    break;
-                                  case 1:
-                                    Get.find<ClothesImageController>().setBotImage(loadFiles[index]); // 하의
-                                    break;
-                                  case 2:
-                                    Get.find<ClothesImageController>().setOutImage(loadFiles[index]); // 아우터
-                                    break;
-                                  case 3:
-                                    Get.find<ClothesImageController>().setShoeImage(loadFiles[index]); // 신발
-                                    break;
-                                  default: // AI추천
-                                    break;
-                                }
-                                Navigator.pushAndRemoveUntil(context,
-                                    PageRouteBuilder(
-                                        transitionDuration: Duration(milliseconds: 200),
-                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                          return Align(
-                                            child: SizeTransition(
-                                              sizeFactor: animation,
-                                              child: child,
-                                            ),
-                                          );
-                                        },
-                                        pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
+                        child: ScrollConfiguration(
+                          behavior: const ScrollBehavior().copyWith(overscroll: false),
+                          child: GridView.builder(
+                            itemCount: loadFiles.length,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3, // 한 줄에 3개의 이미지 버튼을 배치
+                            ),
+                            padding: const EdgeInsets.all(5),
+                            itemBuilder: (BuildContext context, int index) {
+                              return InkWell(
+                                highlightColor: Colors.transparent, // 터치 시 강조 효과를 숨김
+                                splashColor: Colors.transparent,     // 터치 시 스플래시 효과를 숨김
+                                onTap: () {
+                                  switch (_currentSheetIndex) {
+                                    case 0: // 상의
+                                      Get.find<ClothesImageController>().setTopImage(loadFiles[index]); // 상의
+                                      break;
+                                    case 1:
+                                      Get.find<ClothesImageController>().setBotImage(loadFiles[index]); // 하의
+                                      break;
+                                    case 2:
+                                      Get.find<ClothesImageController>().setOutImage(loadFiles[index]); // 아우터
+                                      break;
+                                    case 3:
+                                      Get.find<ClothesImageController>().setShoeImage(loadFiles[index]); // 신발
+                                      break;
+                                    default:
+                                      break;
+                                  }
+                                  Navigator.pushAndRemoveUntil(context,
+                                      PageRouteBuilder(
+                                          transitionDuration: const Duration(milliseconds: 200),
+                                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                            return Align(
+                                              child: SizeTransition(
+                                                sizeFactor: animation,
+                                                child: child,
+                                              ),
+                                            );
+                                          },
+                                          pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
+                                      ),
+                                      (route) => false);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFA69185),
+                                      borderRadius: const BorderRadius.all(Radius.circular(22)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          spreadRadius: 1,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 1), // 그림자 의 위치 조정
+                                        )
+                                      ]
                                     ),
-                                    (route) => false);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFA69185),
-                                    borderRadius: const BorderRadius.all(Radius.circular(22)),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.3),
-                                        spreadRadius: 1,
-                                        blurRadius: 2,
-                                        offset: const Offset(0, 1), // 그림자 의 위치 조정
-                                      )
-                                    ]
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(22.0), // 모서리를 둥글게 하는 정도를 지정합니다.
-                                    child: Image.asset(
-                                      loadFiles[index],
-                                      fit: BoxFit.cover,
-                                    ), // 이미지를 불러옵니다. 이미지 경로에 맞게 수정하세요.
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(22.0), // 모서리를 둥글게 하는 정도를 지정합니다.
+                                      child: Image.asset(
+                                        loadFiles[index],
+                                        fit: BoxFit.cover,
+                                      ), // 이미지를 불러옵니다. 이미지 경로에 맞게 수정하세요.
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          )
                         )
                       );
                     } else {
@@ -701,21 +736,49 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   }
 
   // 의상 상세 카테고리 로 이동
-  nextStep (BuildContext context, ind){
-    Navigator.pop(context);
-    showModalBottomSheet(context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        ),
-        builder: (BuildContext context) {
-          return SizedBox(
-              height: MediaQuery.of(context).size.height*0.77,
-              child: ClothesOptions(depth: widget.depth+1, indexes: [_currentSheetIndex,ind+1])
-          );
-        }
-    );
+  nextStep (BuildContext context, ind) async {
+    if (_currentSheetIndex < 4) {
+      Navigator.pop(context);
+      showModalBottomSheet(context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+          ),
+          builder: (BuildContext context) {
+            return SizedBox(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.77,
+                child: ClothesOptions(depth: widget.depth + 1,
+                    indexes: [_currentSheetIndex, ind + 1])
+            );
+          }
+      );
+    } else {
+      var recClothes = await recommendClothes(ind); //함수
+      Get.find<ClothesImageController>().setTopImage(recClothes[0][0],color:recClothes[0][1]);
+      Get.find<ClothesImageController>().setBotImage(recClothes[1][0],color:recClothes[1][1]);
+      Get.find<ClothesImageController>().setShoeImage(recClothes[2][0],color:recClothes[2][1]);
+      Get.find<ClothesImageController>().setOutImage(recClothes[3][0],color:recClothes[3][1]);
+      if (!mounted) return;
+      Navigator.pushAndRemoveUntil(context,
+          PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 200),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return Align(
+                  child: SizeTransition(
+                    sizeFactor: animation,
+                    child: child,
+                  ),
+                );
+              },
+              pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
+          ),
+              (route) => false);
+    }
   }
+
 
 }
 
@@ -774,10 +837,10 @@ class CharacterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     topImageWidth = MediaQuery.of(context).size.width*0.4;
     topImageHeight = MediaQuery.of(context).size.height*0.2;
-    botImageWidth = MediaQuery.of(context).size.width*0.385;
-    botImageHeight = MediaQuery.of(context).size.height*0.31;
-    outImageWidth = MediaQuery.of(context).size.width*0.2;    //not done
-    outImageHeight = MediaQuery.of(context).size.height*0.24; //not done
+    botImageWidth = MediaQuery.of(context).size.width*0.39;
+    botImageHeight = MediaQuery.of(context).size.height*0.33;
+    outImageWidth = MediaQuery.of(context).size.width*0.39;
+    outImageHeight = MediaQuery.of(context).size.height*0.22;
     shoeImageWidth = MediaQuery.of(context).size.width*0.37;
     shoeImageHeight = MediaQuery.of(context).size.height*0.09;
 
@@ -839,7 +902,7 @@ class CharacterPage extends StatelessWidget {
               ),
 
               // 중간부 (체크 박스와 슬라이더, 캐릭터)
-              Expanded(flex:8, child: CharAndTemp()),
+              const Expanded(flex:8, child: CharAndTemp()),
 
               // 하단부 (옷 메뉴)
               Expanded(
