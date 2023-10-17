@@ -309,12 +309,12 @@ class ClothesOptions extends StatefulWidget {
 class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderStateMixin{
   int _currentSheetIndex = 0;
   late AnimationController _animationController;
-  List topTypes = ['상의', '티셔츠', '스웨터/맨투맨', '셔츠/블라우스', '후드', '레글런', '민소매/조끼', '원피스', '크롭티', '스포츠'];
+  List topTypes = ['상의', '티셔츠', '스웨터/맨투맨', '셔츠/블라우스', '후드', '민소매/조끼', '원피스', '크롭티', '스포츠'];
   List botTypes = ['하의', '데님', '카고', '조거', '반바지', '트라우저/슬랙스', '치마', '스포츠'];
   List outTypes = ['외투', '점퍼', '코트', '야상', '재킷', '조끼', '가디건', '바람막이'];
   List shoeTypes = ['신발', '운동화', '스니커즈', '부츠', '구두', '슬리퍼', '샌들'];
   List recTypes = ['추천템', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '러블리', '고프코어'];
-  List clothesTypeNum = [10, 8, 8, 7, 6]; // 상 하 신 외 개수
+  List clothesTypeNum = [9, 8, 8, 7, 6]; // 상 하 신 외 개수
   List clothesList = [];
   List<String> loadFiles = [];
 
@@ -390,9 +390,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
           break;
         case '후드':
           chosenType = 'hoodie';
-          break;
-        case '레글런':
-          chosenType = 'reglan';
           break;
         case '민소매/조끼':
           chosenType = 'sleeveless';
