@@ -17,13 +17,13 @@ TextStyle txtStyle (double fs) {
 }
 
 // 이미지 사이즈 조절 및 설정
-ColorFiltered setImage(String url, double w, double h, [Color color=Colors.transparent]) {
+ColorFiltered setImage(String url, double w,[Color color=Colors.transparent]) {
   return ColorFiltered(
     colorFilter: ColorFilter.mode(
       color,
       BlendMode.color,
     ),
-    child: Image.asset(url, width: w, height: h, fit: BoxFit.fill),
+    child: Image.asset(url, width: w, fit: BoxFit.cover),
   );
 }
 
@@ -88,53 +88,49 @@ String gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' :
 String assetManifest = '';
 bool gotManifest = false;
 double topImageWidth = 0;
-double topImageHeight = 0;
 double botImageWidth = 0;
-double botImageHeight = 0;
 double outImageWidth = 0;
-double outImageHeight = 0;
 double shoeImageWidth = 0;
-double shoeImageHeight = 0;
 
 
 // 의상 이미지 전역변수화
 class ClothesImageController extends GetxController {
-  ColorFiltered topImage = setImage('assets/character/initialImage.png', topImageWidth, topImageHeight); // 상의
-  ColorFiltered botBg = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight);    // 하의 배경
-  ColorFiltered botImage = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight); // 하의
-  ColorFiltered outImage = setImage('assets/character/initialImage.png', outImageWidth, outImageHeight); // 아우터
-  ColorFiltered shoeBg = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight);    // 신발 배경
-  ColorFiltered shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight); // 신발
+  ColorFiltered topImage = setImage('assets/character/initialImage.png', topImageWidth); // 상의
+  ColorFiltered botBg = setImage('assets/character/initialImage.png', botImageWidth);    // 하의 배경
+  ColorFiltered botImage = setImage('assets/character/initialImage.png', botImageWidth); // 하의
+  ColorFiltered outImage = setImage('assets/character/initialImage.png', outImageWidth); // 아우터
+  ColorFiltered shoeBg = setImage('assets/character/initialImage.png', shoeImageWidth);    // 신발 배경
+  ColorFiltered shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth); // 신발
 
   resetImages() {
-    topImage = setImage('assets/character/initialImage.png', topImageWidth, topImageHeight);
-    botBg = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight);
-    botImage = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight);
-    outImage = setImage('assets/character/initialImage.png', outImageWidth, outImageHeight);
-    shoeBg = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight);
-    shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight);
+    topImage = setImage('assets/character/initialImage.png', topImageWidth);
+    botBg = setImage('assets/character/initialImage.png', botImageWidth);
+    botImage = setImage('assets/character/initialImage.png', botImageWidth);
+    outImage = setImage('assets/character/initialImage.png', outImageWidth);
+    shoeBg = setImage('assets/character/initialImage.png', shoeImageWidth);
+    shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth);
   }
 
   setTopImage(String path, {Color? color=Colors.transparent}) {
-    topImage =  setImage(path, topImageWidth, topImageHeight, color!);
+    topImage =  setImage(path, topImageWidth, color!);
   }
 
   setBotImage(String path, {Color? color=Colors.transparent}) {
     var length = path.split("_").last;
     if (length =="long.png") {
-      botBg = setImage('assets/character/$gender/botBgLong.png', botImageWidth*0.4, botImageHeight*0.68);
+      botBg = setImage('assets/character/$gender/botBgLong.png', botImageWidth*0.4);
     } else if (length == "short.png") {
-      botBg = setImage('assets/character/$gender/botBgShort.png', botImageWidth*0.4, botImageHeight*0.68);
+      botBg = setImage('assets/character/$gender/botBgShort.png', botImageWidth*0.4);
     }
-    botImage = setImage(path, botImageWidth, botImageHeight, color!);
+    botImage = setImage(path, botImageWidth, color!);
   }
 
   setOutImage(String path, {Color? color=Colors.transparent}) {
-    outImage = setImage(path, outImageWidth, outImageHeight, color!);
+    outImage = setImage(path, outImageWidth, color!);
   }
 
   setShoeImage(String path, {Color? color=Colors.transparent}) {
-    shoeImage = setImage(path, shoeImageWidth, shoeImageHeight, color!);
+    shoeImage = setImage(path, shoeImageWidth, color!);
   }
 
   getImage() {
@@ -165,11 +161,11 @@ class _CharAndTempState extends State<CharAndTemp> {
     curTemp = Get.find<WeatherJasonData>().getData()[0];
     clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
       clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244, clothesImages[0]),  // 신발 배경
-      clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.233, clothesImages[1]),  // 신발
-      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.195, clothesImages[2]),    // 상의
+      clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.22, clothesImages[1]),  // 신발
+      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19, clothesImages[2]),    // 상의
       clothesPosition(MediaQuery.of(context).size.height*0.31, MediaQuery.of(context).size.width*0.32, clothesImages[3]),   // 하의 배경
       clothesPosition(MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.2, clothesImages[4]),   // 하의
-      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.2, clothesImages[5])    // 아우터
+      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19, clothesImages[5])    // 아우터
     ];
     var resetButton = clothesPosition(5, 300, IconButton(
         onPressed: (){
@@ -238,7 +234,7 @@ class _CharAndTempState extends State<CharAndTemp> {
                   // 기본 캐릭터
                   Image.asset(
                     'assets/character/${gender}_default.png',
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                   // 위에 의상
                   ...clothesStack,
@@ -607,7 +603,8 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                               child: Image.asset(
                                                   loadFiles[index],
                                                   height: MediaQuery.of(context).size.width*0.25,
-                                                  fit: BoxFit.cover
+                                                  fit: BoxFit.fitWidth,
+                                                  alignment: Alignment.topCenter,
                                               ),
                                             )
                                         ),
@@ -727,7 +724,8 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                       borderRadius: BorderRadius.circular(22.0), // 모서리를 둥글게 하는 정도를 지정합니다.
                                       child: Image.asset(
                                         loadFiles[index],
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.fitWidth,
+                                        alignment: Alignment.topCenter,
                                       ), // 이미지를 불러옵니다. 이미지 경로에 맞게 수정하세요.
                                     ),
                                   ),
@@ -851,14 +849,10 @@ class CharacterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    topImageWidth = MediaQuery.of(context).size.width*0.392;
-    topImageHeight = MediaQuery.of(context).size.height*0.2;
+    topImageWidth = MediaQuery.of(context).size.width*0.405;
     botImageWidth = MediaQuery.of(context).size.width*0.39;
-    botImageHeight = MediaQuery.of(context).size.height*0.33;
-    outImageWidth = MediaQuery.of(context).size.width*0.39;
-    outImageHeight = MediaQuery.of(context).size.height*0.22;
-    shoeImageWidth = MediaQuery.of(context).size.width*0.39;
-    shoeImageHeight = MediaQuery.of(context).size.height*0.15;
+    outImageWidth = MediaQuery.of(context).size.width*0.405;
+    shoeImageWidth = MediaQuery.of(context).size.width*0.416;
 
     Get.put(ClothesImageController());
     // 메뉴 옵션들 간에 벽(divider)
