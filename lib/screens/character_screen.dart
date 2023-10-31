@@ -35,7 +35,14 @@ Positioned clothesPosition (double x, double y,var img) {
     child: img,
   );
 }
-
+// 스택 에서의 이미지 위치 조절
+Positioned clothesPositionFromBottom (double x, double y,var img) {
+  return Positioned(
+    bottom: x,
+    left: y,
+    child: img,
+  );
+}
 // 날씨 관련 조언 멘트 알고리즘
 String weatherCast () {
   double airDust = Get.find<WeatherJasonData>().getData()[7];
@@ -93,22 +100,32 @@ double shoeImageHeight = 0;
 // 의상 이미지 전역변수화
 class ClothesImageController extends GetxController {
   ColorFiltered topImage = setImage('assets/character/initialImage.png', topImageWidth, topImageHeight); // 상의
+  ColorFiltered botBg = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight);    // 하의 배경
   ColorFiltered botImage = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight); // 하의
   ColorFiltered outImage = setImage('assets/character/initialImage.png', outImageWidth, outImageHeight); // 아우터
+  ColorFiltered shoeBg = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight);    // 신발 배경
   ColorFiltered shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight); // 신발
 
   resetImages() {
     topImage = setImage('assets/character/initialImage.png', topImageWidth, topImageHeight);
+    botBg = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight);
     botImage = setImage('assets/character/initialImage.png', botImageWidth, botImageHeight);
     outImage = setImage('assets/character/initialImage.png', outImageWidth, outImageHeight);
+    shoeBg = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight);
     shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth, shoeImageHeight);
   }
 
   setTopImage(String path, {Color? color=Colors.transparent}) {
-      topImage =  setImage(path, topImageWidth, topImageHeight, color!);
+    topImage =  setImage(path, topImageWidth, topImageHeight, color!);
   }
 
   setBotImage(String path, {Color? color=Colors.transparent}) {
+    var length = path.split("_").last;
+    if (length =="long.png") {
+      botBg = setImage('assets/character/$gender/botBgLong.png', botImageWidth*0.4, botImageHeight*0.68);
+    } else if (length == "short.png") {
+      botBg = setImage('assets/character/$gender/botBgShort.png', botImageWidth*0.4, botImageHeight*0.68);
+    }
     botImage = setImage(path, botImageWidth, botImageHeight, color!);
   }
 
@@ -121,7 +138,7 @@ class ClothesImageController extends GetxController {
   }
 
   getImage() {
-    return [shoeImage, topImage, botImage, outImage];
+    return [shoeBg, shoeImage, topImage, botBg, botImage, outImage];
   } // 신발
 }
 
@@ -147,10 +164,12 @@ class _CharAndTempState extends State<CharAndTemp> {
   Widget build(BuildContext context) {
     curTemp = Get.find<WeatherJasonData>().getData()[0];
     clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
-      clothesPosition(MediaQuery.of(context).size.height*0.55, MediaQuery.of(context).size.width*0.245, clothesImages[0]),  // 신발
-      clothesPosition(MediaQuery.of(context).size.height*0.13, MediaQuery.of(context).size.width*0.195, clothesImages[1]),    // 상의
-      clothesPosition(MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.2, clothesImages[2]),   // 하의
-      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.2, clothesImages[3])    // 아우터
+      clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244, clothesImages[0]),  // 신발 배경
+      clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.233, clothesImages[1]),  // 신발
+      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.195, clothesImages[2]),    // 상의
+      clothesPosition(MediaQuery.of(context).size.height*0.31, MediaQuery.of(context).size.width*0.32, clothesImages[3]),   // 하의 배경
+      clothesPosition(MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.2, clothesImages[4]),   // 하의
+      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.2, clothesImages[5])    // 아우터
     ];
     var resetButton = clothesPosition(5, 300, IconButton(
         onPressed: (){
@@ -832,14 +851,14 @@ class CharacterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    topImageWidth = MediaQuery.of(context).size.width*0.4;
+    topImageWidth = MediaQuery.of(context).size.width*0.392;
     topImageHeight = MediaQuery.of(context).size.height*0.2;
     botImageWidth = MediaQuery.of(context).size.width*0.39;
     botImageHeight = MediaQuery.of(context).size.height*0.33;
     outImageWidth = MediaQuery.of(context).size.width*0.39;
     outImageHeight = MediaQuery.of(context).size.height*0.22;
-    shoeImageWidth = MediaQuery.of(context).size.width*0.37;
-    shoeImageHeight = MediaQuery.of(context).size.height*0.09;
+    shoeImageWidth = MediaQuery.of(context).size.width*0.39;
+    shoeImageHeight = MediaQuery.of(context).size.height*0.15;
 
     Get.put(ClothesImageController());
     // 메뉴 옵션들 간에 벽(divider)
