@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:mapssi/screens/search_area_screen.dart';
+import '../area_controller.dart';
 import '../main.dart';
 import '../my_location.dart';
 import '../network.dart';
 import 'menu_bar_draw.dart';
 import 'model.dart';
 const apiKey = "122328b0a95baa0ce0c0a7697d3a30c7";
+
+// 현재 페이지 에서 쓰일 TextStyle (글씨체,색상 고정 / 크기,굵기 조절)
+TextStyle myTextStyle(double fs, {FontWeight fontWeight = FontWeight.w600}) {
+  return TextStyle(
+    fontSize: fs,
+    color: Colors.black,
+    fontFamily: 'SUITE',
+    fontWeight: fontWeight,
+  );
+}
+
 
 class WeatherScreen extends StatefulWidget {
 
@@ -84,6 +97,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
     }
   }
 
+
+
+
   //사용자 위치 불러오기 -위경도 값f
   void getLocation() async {
     MyLocation myLocation = MyLocation();
@@ -97,6 +113,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
     addresNameSi = myLocation.addressSi;
     print(addresNameDo);
     print(addresNameSi);
+
+
     // network.dart 에서 getJsonData()불러오기 위해 network인스턴스 생성
     String currentWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apiKey&units=metric';
     String dailyWeather = 'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude3&lon=$longitude3&appid=$apiKey&units=metric';
@@ -326,6 +344,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
     String text1= "$addresNameSi";
     String text2 =" $addresNameDo";
 
+
+
+
     return Scaffold(
 
       appBar: AppBar(
@@ -356,18 +377,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ],
                 ),
               ),
-          //     GestureDetector(
-          //       onTap: () {
-          //         // 아이콘 클릭 시 동작할 내용을 여기에 추가
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(builder: (context) => CityDropdown()),
-          //         );
-          //       },
-          //       child: Icon(Icons.search), // 아이콘을 GestureDetector로 감싸서 클릭 이벤트 추가
-          //     ),
-          //   ],
-          // ),
+
 
         ),
 
@@ -420,12 +430,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 
 
-      drawer: const Drawer( //햄버거 바
+      drawer: Drawer( //햄버거 바
         child: MenuBarDraw(),
       ),
 
 
       body: Container(
+        // 배경 이미지 고정(배경 이미지도 스크롤하려면 SingleChild를 body에 두고 Container를 child에
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/background_image.png'),
@@ -433,17 +444,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
           )
     ),
       child: SingleChildScrollView(
-
-        // child: GestureDetector(
-        // onHorizontalDragEnd: (DragEndDetails details) {
-        // if (details.primaryVelocity! < 0) {
-        // Navigator.pushReplacement(
-        // context,
-        // MaterialPageRoute(builder: (context) =>
-        // CharacterPage(),),);}},//전체적인 화면을 위아래로 스크롤
         child: maxTemperature != 100
-            ? Column(
-
+        ? Column(
           children: [
             //상단
             SizedBox(height: 20.0),
@@ -456,27 +458,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center, // 가로 방향으로 중앙 배치
                 children: [
-                  //아이콘이랑 날씨상태, 강수량
+                  //Expanded1. 아이콘이랑 날씨상태, 강수량
                   Expanded(
-                    //width: 100.0, //height: 80.0,
-                    // margin: EdgeInsets.all(25.0),
-                    // padding: EdgeInsets.all(5.0),
-
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 25.0,),
-                        //icon,
-                        // Icon(
-                        //   Icons.sunny,
-                        //   size: 100.0,
-                        //   color: Colors.black,
-                        // ),
+
                         WeatherIconWidget(
                           image: model.getWeatherIcon(condition), // condition 값에 따른 이미지 가져오기
                           size: 100,
                           color: Colors.black54),
-
 
                         SizedBox(height: 20),
                         Text('$koreanDes', style: TextStyle(
@@ -497,7 +489,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ),
 
 
-                  //요일, 미세먼지 실황
+                  //Expanded2. 요일, 미세먼지 실황
                   SizedBox(width: 5),
                   Expanded(
                     child: Column(
@@ -675,6 +667,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                         size: 50,
                                         color: Colors.black54),
 
+                                      SizedBox(height: 5.0,),
+                                      Text(koreanDes, style:
+                                      TextStyle(fontSize: 15,
+                                          color: Colors.black,
+                                          fontFamily: 'SUITE',
+                                          fontWeight: FontWeight.w600),),
 
                                       SizedBox(height: 5.0,),
                                       Text('$rainfall(mm)', style: TextStyle(
@@ -745,10 +743,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 int dailyMaxTemp = maxTemperatures[dailyForecasts.indexOf(forecast) + 1].ceil();
                                 int dailyMinTemp = minTemperatures[dailyForecasts.indexOf(forecast) + 1].floor();
 
+                                //가로로 하루의 날씨 정보를 나타냄
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween, //요일과 날씨 정보 간격
                                   children: [
-
+                                    //날짜+요일 세로로 배치
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
@@ -774,30 +773,28 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                       ],
                                     ),
 
-                                      //세로로 아이콘, 최고 최저 기온
+                                    //세로로 아이콘, 최고 최저 기온
                                     Row(
                                       children: [
+                                        //날씨 글씨로 + 아이콘
                                         Container(
                                             margin: EdgeInsets.symmetric(vertical: 30.0),
                                             child:
-                                                /*
-                                            //  icons,
-                                            Icon(
-                                              Icons.wb_sunny_sharp, // 사용할 아이콘
-                                              size: 30.0,
-                                              color: Colors.black,
-                                            )
-                                                 */
-                                            WeatherIconWidget(
-                                                image: model.getWeatherIcon(condition), // condition 값에 따른 이미지 가져오기
-                                                size: 30,
-                                                color: Colors.black54),
-
-
-
+                                               Text(koreanDes,
+                                                 style: TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w800,),
+                                               ) ,
                                           ),
+                                        Container(
+                                            child: WeatherIconWidget(
+                                                    image: model.getWeatherIcon(condition), // condition 값에 따른 이미지 가져오기
+                                                    size: 30,
+                                                    color: Colors.black54),
+                                        ),
+
+
                                         SizedBox(width: 18.0,),
 
+                                        //최고,최저 기온
                                         Container(
                                             margin: EdgeInsets.symmetric(vertical: 30.0),
                                             child: Text(
@@ -835,11 +832,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
               ),
             ),
             ],
-        ) : Container(
-
-
-
-          child: Center(
+        )
+        // maxTemperature ==100
+            : Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -854,13 +849,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   'Loading...',
                   style: TextStyle(fontSize: 20),
                 ),
+
+                SizedBox(height: 250 ,)
               ],
 
             ),
           ),
         ),
       ),
-    ),);
+    );
   }
 
 
