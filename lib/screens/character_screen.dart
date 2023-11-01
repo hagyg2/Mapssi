@@ -89,6 +89,7 @@ String assetManifest = '';
 bool gotManifest = false;
 double topImageWidth = 0;
 double botImageWidth = 0;
+double botImageHeight = 0;
 double outImageWidth = 0;
 double shoeImageWidth = 0;
 
@@ -118,7 +119,13 @@ class ClothesImageController extends GetxController {
   setBotImage(String path, {Color? color=Colors.transparent}) {
     var length = path.split("_").last;
     if (length =="long.png") {
-      botBg = setImage('assets/character/$gender/botBgLong.png', botImageWidth*0.4);
+      botBg = ColorFiltered(
+        colorFilter: const ColorFilter.mode(
+          Colors.transparent,
+          BlendMode.color,
+        ),
+        child: Image.asset(path, width: botImageWidth*0.4, height: botImageHeight, fit: BoxFit.cover),
+      );
     } else if (length == "short.png") {
       botBg = setImage('assets/character/$gender/botBgShort.png', botImageWidth*0.4);
     }
@@ -851,6 +858,7 @@ class CharacterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     topImageWidth = MediaQuery.of(context).size.width*0.405;
     botImageWidth = MediaQuery.of(context).size.width*0.39;
+    botImageHeight = MediaQuery.of(context).size.height*0.4;
     outImageWidth = MediaQuery.of(context).size.width*0.405;
     shoeImageWidth = MediaQuery.of(context).size.width*0.416;
 
