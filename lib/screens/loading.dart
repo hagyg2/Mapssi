@@ -149,42 +149,48 @@ class _LoadingState extends State<Loading> {
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
 
-  //사용자 위치 불러오기 -위경도 값f
-  void getLocation() async {
-    MyLocation myLocation = MyLocation();
-    await myLocation.getMyCurrentLongilati();
-
-    latitude3 = myLocation.latitude2;
-    longtitude3 = myLocation.longtitude2;
-    print(latitude3);
-    print(longtitude3);
-
-    // network.dart 에서 getJsonData()불러오기 위해 network인스턴스 생성
-    String currentWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
-    String dailyWeather = 'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
-    String weeklyWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
-    //   String airCondition = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
-    String airCondition = 'http://api.openweathermap.org/data/2.5/air_pollution?lat=$latitude3&lon=$longtitude3&appid=$apiKey';
-    Network network = Network(
-        currentWeather, dailyWeather, weeklyWeather, airCondition);
-
-    // network.dart에서 파싱된 json data를 출력해주기 위해 weatherData 변수에 getJsonData()의 값을 할당
-    var currentWeatherData = await network.getCurrentWeatherData();
-    var dailyWeatherData = await network.getdailyWeatherData();
-    var weeklyWeatherData = await network.getWeeklyeatherData();
-    var airConditionData = await network.getAirConditionData();
-
-    print(currentWeatherData);
-    print(airConditionData);
-    print(dailyWeatherData);
-
-
-    Navigator.pushReplacement(context, MaterialPageRoute(
-      builder: (context) =>
-          WeatherScreen(),
-    ),
-    );
+  //
+  // //사용자 위치 불러오기 -위경도 값f
+  // void getLocation() async {
+  //   MyLocation myLocation = MyLocation();
+  //   await myLocation.getMyCurrentLongilati();
+  //
+  //   latitude3 = myLocation.latitude2;
+  //   longtitude3 = myLocation.longtitude2;
+  //   print(latitude3);
+  //   print(longtitude3);
+  //
+  //   // network.dart 에서 getJsonData()불러오기 위해 network인스턴스 생성
+  //   String currentWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
+  //   String dailyWeather = 'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
+  //   String weeklyWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
+  //   //   String airCondition = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longtitude3&appid=$apiKey&units=metric';
+  //   String airCondition = 'http://api.openweathermap.org/data/2.5/air_pollution?lat=$latitude3&lon=$longtitude3&appid=$apiKey';
+  //   Network network = Network(
+  //       currentWeather, dailyWeather, weeklyWeather, airCondition);
+  //
+  //   // network.dart에서 파싱된 json data를 출력해주기 위해 weatherData 변수에 getJsonData()의 값을 할당
+  //   var currentWeatherData = await network.getCurrentWeatherData();
+  //   var dailyWeatherData = await network.getdailyWeatherData();
+  //   var weeklyWeatherData = await network.getWeeklyeatherData();
+  //   var airConditionData = await network.getAirConditionData();
+  //
+  //   print(currentWeatherData);
+  //   print(airConditionData);
+  //   print(dailyWeatherData);
+  //
+  //
+  //   Navigator.pushReplacement(context, MaterialPageRoute(
+  //     builder: (context) =>
+  //         WeatherScreen(),
+  //   ),
+  //   );
 
     /*
     // 날씨 화면으로 이동
@@ -239,4 +245,3 @@ class _LoadingState extends State<Loading> {
     );
   }
 
-}
