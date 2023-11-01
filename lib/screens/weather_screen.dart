@@ -342,7 +342,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 
     String text1= "$addresNameSi";
-    String text2 =" $addresNameDo";
+    String text2 ="$addresNameDo";
 
 
 
@@ -361,22 +361,23 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
         title: Center(
           child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: text1,
-                      style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
-                    ),
-                    TextSpan(
-                      text: "\n",
-                    ),
-                    TextSpan(
-                      text: text2,
-                      style: TextStyle(fontSize: 13, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
-                    ),
-                  ],
+            textAlign: TextAlign.center, // 가운데 정렬
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: text1,
+                  style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
                 ),
-              ),
+                TextSpan(
+                  text: "\n",
+                ),
+                TextSpan(
+                  text: text2,
+                  style: TextStyle(fontSize: 13, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
+                ),
+              ],
+            ),
+          ),
 
 
         ),

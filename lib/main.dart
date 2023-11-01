@@ -93,8 +93,8 @@ class WeatherJasonData extends GetxController{
   int? cT = 0; // 현재 기온
   int? mxT = 100; // 최고 기온
   int? mnT = -100; // 최저 기온
-  String? ctDo = "서울특별시"; // 현재 도시
-  String? ctSi = "강남구"; // 현재 도시
+  String? ctDo = ""; // 현재 도시
+  String? ctSi = ""; // 현재 도시
   int? cCondition = 0;
   double? ctRain = 0.0;
   double? ctDust = 0.0;
