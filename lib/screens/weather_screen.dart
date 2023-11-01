@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:mapssi/screens/search_area_screen.dart';
-import '../area_controller.dart';
 import '../main.dart';
 import '../my_location.dart';
 import '../network.dart';

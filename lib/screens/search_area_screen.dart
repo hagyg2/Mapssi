@@ -1,17 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:mapssi/screens/model.dart';
 import 'package:mapssi/screens/weather_screen.dart';
-import 'package:provider/provider.dart';
-
-import '../location_provider.dart';
-import '../my_location.dart';
-import 'character_screen.dart';
-import 'loading.dart';
 import 'menu_bar_draw.dart';
 
 // 현재 페이지 에서 쓰일 TextStyle (글씨체, 색상 고정 / 크기, 굵기 조절)
