@@ -119,15 +119,11 @@ class ClothesImageController extends GetxController {
   setBotImage(String path, {Color? color=Colors.transparent}) {
     var length = path.split("_").last;
     if (length =="long.png") {
-      botBg = ColorFiltered(
-        colorFilter: const ColorFilter.mode(
-          Colors.transparent,
-          BlendMode.color,
-        ),
-        child: Image.asset(path, width: botImageWidth*0.4, height: botImageHeight, fit: BoxFit.cover),
-      );
+      botBg = setImage('assets/character/$gender/botBgLong.png', botImageWidth*0.4);
     } else if (length == "short.png") {
       botBg = setImage('assets/character/$gender/botBgShort.png', botImageWidth*0.4);
+    } else {
+      botBg = setImage('assets/character/initialImage.png', botImageWidth);
     }
     botImage = setImage(path, botImageWidth, color!);
   }
@@ -170,8 +166,8 @@ class _CharAndTempState extends State<CharAndTemp> {
       clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244, clothesImages[0]),  // 신발 배경
       clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.22, clothesImages[1]),  // 신발
       clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19, clothesImages[2]),    // 상의
-      clothesPosition(MediaQuery.of(context).size.height*0.31, MediaQuery.of(context).size.width*0.32, clothesImages[3]),   // 하의 배경
-      clothesPosition(MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.2, clothesImages[4]),   // 하의
+      clothesPosition(MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32, clothesImages[3]),   // 하의 배경
+      clothesPosition(MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.19, clothesImages[4]),   // 하의
       clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19, clothesImages[5])    // 아우터
     ];
     var resetButton = clothesPosition(5, 300, IconButton(
@@ -857,8 +853,7 @@ class CharacterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     topImageWidth = MediaQuery.of(context).size.width*0.405;
-    botImageWidth = MediaQuery.of(context).size.width*0.39;
-    botImageHeight = MediaQuery.of(context).size.height*0.4;
+    botImageWidth = MediaQuery.of(context).size.width*0.41;
     outImageWidth = MediaQuery.of(context).size.width*0.405;
     shoeImageWidth = MediaQuery.of(context).size.width*0.416;
 
