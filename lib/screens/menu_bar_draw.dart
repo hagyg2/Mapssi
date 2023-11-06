@@ -1,12 +1,19 @@
 //weater_screen에 넣으면 너무 복잡할 것 같아서
 //햄버거 바 화면은 일단 여기서 만들어서 weather_screen으로 넘길겁니당
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mapssi/screens/search_area_screen.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/screens/login_screen.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../main.dart';
 
 
 // 현재 페이지 에서 쓰일 TextStyle (글씨체, 색상 고정 / 크기, 굵기 조절)
@@ -410,6 +417,15 @@ class FavoriteArea extends StatelessWidget {
 
 class FavoriteCoordi extends StatelessWidget {
   const FavoriteCoordi({super.key});
+  // 특정 디렉토리 에서 파일 목록을 가져오는 함수
+  Future<List<FileSystemEntity>> getFilesInDirectory() async {
+    String directoryPath = '${(await getApplicationDocumentsDirectory()).path}/favorites/';
+    final directory = Directory(directoryPath);
+    final files = directory.listSync();
+    print(files);
+    return files;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -417,6 +433,88 @@ class FavoriteCoordi extends StatelessWidget {
           backgroundColor: Color(0xFFECE7E0),
           title: Text("즐겨찾는 코디", style: myTextStyle(22.0),),
           iconTheme: IconThemeData(color: Colors.black,) // 뒤로 가는 화살표 색상 설정
+      ),
+      body: FutureBuilder<List<FileSystemEntity>>(
+        future: getFilesInDirectory(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // 데이터 로딩 중
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // 에러 발생
+            return Text('에러: ${snapshot.error}');
+          } else if (snapshot.hasData) {
+            // 데이터 로딩 완료
+            List<FileSystemEntity> loadFiles = snapshot.data!;
+            return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: ScrollConfiguration(
+                    behavior: const ScrollBehavior().copyWith(overscroll: false),
+                    child: GridView.builder(
+                      itemCount: loadFiles.length,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // 한 줄에 2개의 이미지 버튼을 배치
+                        childAspectRatio: 0.8, // 가로세로 비율 조절
+                      ),
+                      padding: const EdgeInsets.all(5),
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                          highlightColor: Colors.transparent, // 터치 시 강조 효과를 숨김
+                          splashColor: Colors.transparent,     // 터치 시 스플래시 효과를 숨김
+                          onTap: () {
+
+                            // !!!! 옷 입히기 코드 추가 필요 !!!!
+
+                            Navigator.pushAndRemoveUntil(context,
+                                PageRouteBuilder(
+                                    transitionDuration: const Duration(milliseconds: 200),
+                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                      return Align(
+                                        child: SizeTransition(
+                                          sizeFactor: animation,
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                    pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
+                                ),
+                                    (route) => false);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: const Color(0xFFA69185),
+                                  borderRadius: const BorderRadius.all(Radius.circular(22)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      spreadRadius: 1,
+                                      blurRadius: 2,
+                                      offset: const Offset(0, 1), // 그림자 의 위치 조정
+                                    )
+                                  ]
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(22.0), // 모서리를 둥글게 하는 정도를 지정합니다.
+                                child: Image.file(
+                                  File(loadFiles[index].path),
+                                  fit: BoxFit.fitWidth,
+                                  alignment: Alignment.center,
+                                ), // 이미지를 불러옵니다. 이미지 경로에 맞게 수정하세요.
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                )
+            );
+          } else {
+            // 데이터 없음
+            return const Text('데이터 없음');
+          }
+        },
       ),
     );
     throw UnimplementedError();
