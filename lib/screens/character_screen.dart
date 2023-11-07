@@ -110,6 +110,7 @@ void chkIsFavorite(String fileName) async {
   for (var file in files) {
     if (file is File && file.path.endsWith(fileName)) {
       isFavorite = true;
+      return;
     }
   }
   isFavorite = false;
@@ -119,7 +120,6 @@ void chkIsFavorite(String fileName) async {
 void captureAndSave(String fileName) async {
   RenderRepaintBoundary boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
   if (boundary.debugNeedsPaint) {
-    print("Waiting for boundary to be painted.");
     await Future.delayed(const Duration(milliseconds: 20));
     return captureAndSave(fileName);
   }
@@ -501,6 +501,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   List clothesList = [];
   List<String> loadFiles = [];
   String bigCategory = "";
+  var curClothes = Get.find<ClothesImageController>().getFileName();
 
   @override
   void initState() {
@@ -877,6 +878,8 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                     default:
                                       break;
                                   }
+                                  curClothes = Get.find<ClothesImageController>().getFileName();
+                                  chkIsFavorite(curClothes);
                                   Navigator.pushAndRemoveUntil(context,
                                       PageRouteBuilder(
                                           transitionDuration: const Duration(milliseconds: 200),
