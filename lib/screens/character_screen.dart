@@ -95,48 +95,22 @@ void createSubDirectory(String dirName) async {
   String appDocPath = appDocDir.path;
   String newDirPath = '$appDocPath/$dirName';
   await Directory(newDirPath).create();
-  print("$dirName 디렉토리가 생성되었습니다.");
 }
 
 // 현재 의상이 즐겨찾기 인지 확인
-void chkIsFavorite(String fileName) async {
+Future<bool> chkIsFavorite(String fileName) async {
   // 디렉토리 경로를 열기
   String directoryPath = '${(await getApplicationDocumentsDirectory()).path}/favorites/';
   final directory = Directory(directoryPath);
   final files = directory.listSync();
-  print(files);
 
   // 파일 목록을 반복하며 원하는 파일 이름과 일치하는지 확인
   for (var file in files) {
     if (file is File && file.path.endsWith(fileName)) {
-      isFavorite = true;
+      return true;
     }
   }
-  isFavorite = false;
-}
-
-// 현재 화면 캡쳐해서 저장
-void captureAndSave(String fileName) async {
-  RenderRepaintBoundary boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-  if (boundary.debugNeedsPaint) {
-    print("Waiting for boundary to be painted.");
-    await Future.delayed(const Duration(milliseconds: 20));
-    return captureAndSave(fileName);
-  }
-
-  createSubDirectory("favorites");
-  ui.Image image = await boundary.toImage(pixelRatio: 1.0); // 해상도 설정
-  ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-  Uint8List uint8List = byteData!.buffer.asUint8List();
-
-  // 저장할 파일 경로 설정
-  final directory = (await getApplicationDocumentsDirectory()).path;
-  String filePath = '$directory/favorites/$fileName';
-
-  // 파일로 저장
-  File(filePath).writeAsBytes(uint8List);
-
-  print('캡쳐 완료: $filePath');
+  return false;
 }
 
 // 파일 삭제
@@ -146,9 +120,6 @@ void deleteFile(String fileName) async {
   File file = File(filePath);
   if (await file.exists()) {
     file.delete();
-    print('파일이 삭제되었습니다.');
-  } else {
-    print('해당 경로에 파일이 존재하지 않습니다.');
   }
 }
 
@@ -165,11 +136,13 @@ void showToast(String content) {
   );
 }
 
+
 GlobalKey key = GlobalKey();
 String gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
 String assetManifest = '';
 bool gotManifest = false;
 bool isFavorite = false;
+bool isFavoriteSaving = false;
 double topImageWidth = 0;
 double botImageWidth = 0;
 double botImageHeight = 0;
@@ -259,10 +232,50 @@ class _CharAndTempState extends State<CharAndTemp> {
   var clothesImages = Get.find<ClothesImageController>().getImage();
   var curClothes = Get.find<ClothesImageController>().getFileName();
 
+  // 현재 화면 캡쳐해서 저장
+  void captureAndSave(String fileName) async {
+    RenderRepaintBoundary boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+    if (boundary.debugNeedsPaint) {
+      await Future.delayed(const Duration(milliseconds: 20));
+      return captureAndSave(fileName);
+    }
+
+    createSubDirectory("favorites");
+    ui.Image image = await boundary.toImage(pixelRatio: 1.0); // 해상도 설정
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List uint8List = byteData!.buffer.asUint8List();
+
+    // 저장할 파일 경로 설정
+    final directory = (await getApplicationDocumentsDirectory()).path;
+    String filePath = '$directory/favorites/$fileName';
+
+    print("$directory : $fileName");
+    // 파일로 저장
+    File(filePath).writeAsBytes(uint8List);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // 현재 옷이 즐겨찾기인지 확인
-    chkIsFavorite(curClothes);
+    if ( !isFavoriteSaving ) {  // 즐겨찾기 저장 중이 아닌 경우에만 (저장하는 비동기 작업 시간차 때문에 chkIsFavorite 결과 이상함)
+      chkIsFavorite(curClothes).then((result) { // 현재 옷이 즐겨찾기 인지 아닌지 확인
+        if (result != isFavorite) {           // 상태가 바뀌었다면 (즐겨찾기 맞음<->즐겨찾기 아님)
+          isFavorite = result;
+          Navigator.pushAndRemoveUntil(   // 화면 다시 빌드
+              context,
+              PageRouteBuilder(
+                  transitionDuration: Duration.zero,
+                  pageBuilder: (context, animation,
+                      secondaryAnimation) => const MyPageView(pageIndex: 1)
+              ),
+                  (route) => false);
+        }
+      }).catchError((error) {
+        print('An error occurred: $error');
+      });
+    }
+    sleep(const Duration(milliseconds: 50));
     // 기온 불러오기
     curTemp = Get.find<WeatherJasonData>().getData()[0];
     clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
@@ -298,6 +311,7 @@ class _CharAndTempState extends State<CharAndTemp> {
               onPressed: (){
                 curClothes = Get.find<ClothesImageController>().getFileName();
                 deleteFile(curClothes);
+                isFavorite = false;
                 Navigator.pushAndRemoveUntil(
                     context,
                     PageRouteBuilder(
@@ -305,7 +319,6 @@ class _CharAndTempState extends State<CharAndTemp> {
                         pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
                     ),
                         (route) => false);
-                isFavorite = false;
                 showToast("즐겨찾기 삭제 되었습니다.");
               },
               style: ButtonStyle(
@@ -324,6 +337,8 @@ class _CharAndTempState extends State<CharAndTemp> {
               onPressed: (){
                 curClothes = Get.find<ClothesImageController>().getFileName();
                 captureAndSave(curClothes);
+                isFavoriteSaving = true;
+                isFavorite = true;
                 Navigator.pushAndRemoveUntil(
                     context,
                     PageRouteBuilder(
@@ -331,7 +346,6 @@ class _CharAndTempState extends State<CharAndTemp> {
                         pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
                     ),
                         (route) => false);
-                isFavorite = true;
                 showToast("즐겨찾기에 등록 되었습니다.");
               },
               style: ButtonStyle(
@@ -349,21 +363,6 @@ class _CharAndTempState extends State<CharAndTemp> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // // 체크 박스
-            // Expanded(
-            //   flex: 1,
-            //   child: Container(
-            //     child: Checkbox(
-            //       value: _isVisible,
-            //       onChanged: (value) {
-            //         setState(() {
-            //           _isVisible = value ?? true;
-            //         });
-            //       },
-            //     ),
-            //   ),
-            // ),
-
             // 현재 기온
             Text(
               style: txtStyle(50),
@@ -412,64 +411,6 @@ class _CharAndTempState extends State<CharAndTemp> {
             ),
           ),
         )
-        // Expanded(
-        //   flex: 4,
-        //   child: Column(
-        //     children: [
-        //       SizedBox(
-        //         child: Image.asset(
-        //           'assets/male_avatar.png',
-        //           fit: BoxFit.fill,
-        //         ),
-        //       ),
-        //       Expanded(
-        //         child: Visibility(       // 아래 쪽 몸무게 슬라이더
-        //           visible: !_isVisible,
-        //           child: Slider(
-        //             min: 40,
-        //             max: 120,
-        //             divisions : 16,
-        //             value: weight,
-        //             onChanged: (newValue) {
-        //               setState(() {
-        //                 weight = newValue;
-        //                 build(context);
-        //               });
-        //             },
-        //             label: '$weight',
-        //           ),
-        //         ),
-        //       )
-        //     ],
-        //   ),
-        // ),
-        // Expanded(               // 오른쪽 키 슬라이더
-        //   flex: 1,
-        //   child: Visibility(
-        //     visible: !_isVisible,
-        //     child: RotatedBox(
-        //       quarterTurns: 3,
-        //       child: Center(
-        //         child: SizedBox(
-        //           width: MediaQuery.of(context).size.height * 0.35,
-        //           child: Slider(
-        //             min: 130,
-        //             max: 200,
-        //             value: height,
-        //             divisions : 14,
-        //             onChanged: (newValue) {
-        //               setState(() {
-        //                 height = newValue;
-        //                 build(context);
-        //               });
-        //             },
-        //             label: '$height',
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
@@ -501,6 +442,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   List clothesList = [];
   List<String> loadFiles = [];
   String bigCategory = "";
+  var curClothes = Get.find<ClothesImageController>().getFileName();
 
   @override
   void initState() {
@@ -521,9 +463,8 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   Future<List<String>> getFilesInDirectory(String path) async {
     String assetManifest = await rootBundle.loadString('AssetManifest.json');
     final Map<String, dynamic> manifestMap = json.decode(assetManifest);
-    print(path);
     var files = manifestMap.keys.where((String key) => key.startsWith(path)).toList();
-    print(files);
+    print("Files in $path = $files");
     return files;
   }
 
@@ -532,7 +473,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     final Map<String, dynamic> manifestMap = json.decode(assetManifest);
     var files = [];
     for (int i=1; i<clothesTypeNum[_currentSheetIndex]; i++) {
-      print(path+typeKorToEng(i));
       var result = manifestMap.keys.where((String key) => key.startsWith(path + typeKorToEng(i)));
       if (result.isNotEmpty) {
         files.add(result.first);
@@ -540,7 +480,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
         files.add("assets/character/initialImage.png");
       }
     }
-    print(files);
     return files;
   }
 
@@ -555,7 +494,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
       int randomNumber = random.nextInt(result.length);
       file= result.toList()[randomNumber];
     }
-
     return file;
   }
 
@@ -661,7 +599,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
 
   Future<List<List>> recommendClothes(int style) async {
     var items = getItem(style);
-    print(items);
+    print("recommend : $items");
     var top = [await getRandomImages("top_${items[0][0]}"), Color(int.parse(items[0][1]))];
     var bot = [await getRandomImages("bot_${items[1][0]}"), Color(int.parse(items[1][1]))];
     var shoe = [await getRandomImages("shoe_${items[2][0]}"), Color(int.parse(items[2][1]))];
@@ -699,8 +637,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
       default :
         bigCategory = "rec";
     }
-    print(bigCategory);
-
 
     return BottomSheet(
       onClosing: () {},
@@ -877,6 +813,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                     default:
                                       break;
                                   }
+                                  isFavoriteSaving = false;
                                   Navigator.pushAndRemoveUntil(context,
                                       PageRouteBuilder(
                                           transitionDuration: const Duration(milliseconds: 200),
@@ -962,6 +899,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
       Get.find<ClothesImageController>().setBotImage(recClothes[1][0],color:recClothes[1][1]);
       Get.find<ClothesImageController>().setShoeImage(recClothes[2][0],color:recClothes[2][1]);
       Get.find<ClothesImageController>().setOutImage(recClothes[3][0],color:recClothes[3][1]);
+      isFavoriteSaving = false;
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(context,
           PageRouteBuilder(

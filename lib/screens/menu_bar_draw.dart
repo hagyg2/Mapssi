@@ -8,12 +8,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:mapssi/screens/search_area_screen.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/screens/login_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../main.dart';
+import 'character_screen.dart';
 
 
 // 현재 페이지 에서 쓰일 TextStyle (글씨체, 색상 고정 / 크기, 굵기 조절)
@@ -428,6 +431,8 @@ class FavoriteCoordi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ClothesImageController());
+    createSubDirectory("favorites");
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Color(0xFFECE7E0),
@@ -454,7 +459,7 @@ class FavoriteCoordi extends StatelessWidget {
                       itemCount: loadFiles.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // 한 줄에 2개의 이미지 버튼을 배치
-                        childAspectRatio: 0.8, // 가로세로 비율 조절
+                        childAspectRatio: 0.66, // 가로세로 비율 조절
                       ),
                       padding: const EdgeInsets.all(5),
                       itemBuilder: (BuildContext context, int index) {
@@ -462,9 +467,33 @@ class FavoriteCoordi extends StatelessWidget {
                           highlightColor: Colors.transparent, // 터치 시 강조 효과를 숨김
                           splashColor: Colors.transparent,     // 터치 시 스플래시 효과를 숨김
                           onTap: () {
-
-                            // !!!! 옷 입히기 코드 추가 필요 !!!!
-
+                            var clothesNotParsed = loadFiles[index].path.split("/").last;
+                            var clothes = clothesNotParsed.split("^");
+                            var path = 'assets/character/$gender/';
+                            if (clothes[0]!="") {
+                              var top = clothes[0].split("@");
+                              Get.find<ClothesImageController>().setTopImage(path + top[0], color: Color(int.parse(top[1]))); // 상의
+                            } else{
+                              Get.find<ClothesImageController>().setTopImage('assets/character/initialImage.png');
+                            }
+                            if (clothes[1]!="") {
+                              var bot = clothes[1].split("@");
+                              Get.find<ClothesImageController>().setBotImage(path + bot[0], color: Color(int.parse(bot[1]))); // 하의
+                            } else{
+                              Get.find<ClothesImageController>().setBotImage('assets/character/initialImage.png');
+                            }
+                            if (clothes[2]!="") {
+                              var out = clothes[2].split("@");
+                              Get.find<ClothesImageController>().setOutImage(path + out[0], color: Color(int.parse(out[1]))); // 아우터
+                            } else{
+                              Get.find<ClothesImageController>().setOutImage('assets/character/initialImage.png');
+                            }
+                            if (clothes[3]!="") {
+                              var shoe = clothes[3].split("@");
+                              Get.find<ClothesImageController>().setShoeImage(path + shoe[0], color: Color(int.parse(shoe[1]))); // 신발
+                            } else{
+                              Get.find<ClothesImageController>().setShoeImage('assets/character/initialImage.png');
+                            }
                             Navigator.pushAndRemoveUntil(context,
                                 PageRouteBuilder(
                                     transitionDuration: const Duration(milliseconds: 200),
