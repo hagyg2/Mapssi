@@ -459,7 +459,7 @@ class FavoriteCoordi extends StatelessWidget {
                       itemCount: loadFiles.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // 한 줄에 2개의 이미지 버튼을 배치
-                        childAspectRatio: 0.8, // 가로세로 비율 조절
+                        childAspectRatio: 0.66, // 가로세로 비율 조절
                       ),
                       padding: const EdgeInsets.all(5),
                       itemBuilder: (BuildContext context, int index) {
