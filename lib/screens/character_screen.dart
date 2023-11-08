@@ -391,23 +391,26 @@ class _CharAndTempState extends State<CharAndTemp> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               // 캐릭터 의상 스택 부분
-              child: RepaintBoundary(
-                key: key,
-                child: Stack(
+              child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    // 기본 캐릭터
-                    Image.asset(
-                      'assets/character/${gender}_default.png',
-                      fit: BoxFit.cover,
+                    RepaintBoundary(
+                      key: key,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [// 기본 캐릭터
+                          Image.asset(
+                            'assets/character/${gender}_default.png',
+                            fit: BoxFit.cover,
+                          ),
+                          // 위에 의상
+                          ...clothesStack]
+                      ),
                     ),
-                    // 위에 의상
-                    ...clothesStack,
                     resetButton,
                     favoriteButton
                   ],
                 ),
-              ),
             ),
           ),
         )
