@@ -441,7 +441,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   List outTypes = ['외투', '점퍼', '코트', '야상', '재킷', '조끼', '가디건', '바람막이'];
   List shoeTypes = ['신발', '운동화', '스니커즈', '부츠', '구두', '슬리퍼', '샌들'];
   List recTypes = ['추천', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '러블리', '고프코어'];
-  List clothesTypeNum = [9, 8, 8, 7, 6]; // 상 하 신 외 개수
+  List clothesTypeNum = [9, 8, 8, 7, 8]; // 상 하 신 외 개수
   List clothesList = [];
   List<String> loadFiles = [];
   String bigCategory = "";
@@ -596,6 +596,29 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
           default :
             chosenType = 'sports';
         }
+    } else {
+      switch (clothesList[_currentSheetIndex][selected]) {
+        case '고프코어':
+          chosenType = 'gofcore';
+          break;
+        case '스트릿':
+          chosenType = 'street';
+          break;
+        case '아메카지':
+          chosenType = 'americanCasual';
+          break;
+        case '스포츠':
+          chosenType = 'spoty';
+          break;
+        case '클래식':
+          chosenType = 'classic';
+          break;
+        case '러블리':
+          chosenType = 'lovely';
+          break;
+        default :
+          chosenType = 'casual';
+      }
     }
     return chosenType;
   }
