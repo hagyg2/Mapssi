@@ -4,7 +4,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 
 import 'package:mapssi/personal_info.dart';
-import 'package:mapssi/screens/character_screen.dart';
+import 'package:mapssi/screens/character/character_screen.dart';
 import 'package:mapssi/screens/splash_screen.dart';
 import 'package:mapssi/screens/weather_screen.dart';
 
