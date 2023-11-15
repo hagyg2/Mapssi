@@ -6,135 +6,11 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mapssi/main.dart';
 import 'package:mapssi/style_recommend.dart';
+import 'package:mapssi/fnc_for_character_screen.dart';
 import 'package:path_provider/path_provider.dart';
-
-// 현재 페이지 에서 쓰일 TextStyle (글씨체 색상 굵기 고정 / 크기만 조절)
-TextStyle txtStyle (double fs) {
-  return TextStyle(fontSize: fs,
-    color: Colors.black,
-    fontFamily: 'SUITE',
-    fontWeight: FontWeight.w800,
-  );
-}
-
-// 이미지 사이즈 조절 및 설정
-ColorFiltered setImage(String url, double w, [Color color=Colors.transparent]) {
-  return ColorFiltered(
-    colorFilter: ColorFilter.mode(
-      color,
-      BlendMode.color,
-    ),
-    child: Image.asset(url, width: w, fit: BoxFit.cover),
-  );
-}
-
-// 스택 에서의 이미지 위치 조절
-Positioned clothesPosition (double x, double y, var img) {
-  return Positioned(
-    top: x,
-    left: y,
-    child: img,
-  );
-}
-// 스택 에서의 이미지 위치 조절
-Positioned clothesPositionFromBottom (double x, double y, var img) {
-  return Positioned(
-    bottom: x,
-    left: y,
-    child: img,
-  );
-}
-// 날씨 관련 조언 멘트 알고리즘
-String weatherCast () {
-  double airDust = Get.find<WeatherJasonData>().getData()[7];
-  String recMent = '';
-  if (airDust>75){
-    recMent = '미세먼지 매우 나쁨! 마스크 꼭 챙기세요!';
-  } else if (airDust>35) {
-    recMent = '미세먼지 나쁨! 마스크 챙기세요!';
-  } else {
-    String description = Get.find<WeatherJasonData>().getData()[8];
-    switch (description) {
-      case '맑음':
-        recMent = '맑고 화창한 날씨! 자외선에 유의해요!';
-        break;
-      case '소나기':
-      case '많은 비':
-      case '천둥번개':
-      case '이슬비':
-        recMent = '비가 내려요! 우산 꼭 챙기세요!';
-        break;
-      case '눈':
-        recMent = '눈이 온대요! 빙판길 조심하세요!';
-        break;
-      case '안개':
-        recMent = '운전자분들은 안개 조심하세요!';
-        break;
-      case '돌풍':
-      case '토네이도(회오리 바람)':
-        recMent = '바람이 거세요! 낙하물에 유의해요!';
-        break;
-      case '구름':
-      case '흐림':
-      case '정보 없음':
-      default:
-        recMent = '행복한 하루되세요!';
-        break;
-    }
-  }
-  return recMent;
-}
-
-// 하위 디렉토리 생성
-void createSubDirectory(String dirName) async {
-  Directory appDocDir = await getApplicationDocumentsDirectory();
-  String appDocPath = appDocDir.path;
-  String newDirPath = '$appDocPath/$dirName';
-  await Directory(newDirPath).create();
-}
-
-// 현재 의상이 즐겨찾기 인지 확인
-Future<bool> chkIsFavorite(String fileName) async {
-  // 디렉토리 경로를 열기
-  String directoryPath = '${(await getApplicationDocumentsDirectory()).path}/favorites/';
-  final directory = Directory(directoryPath);
-  final files = directory.listSync();
-
-  // 파일 목록을 반복하며 원하는 파일 이름과 일치하는지 확인
-  for (var file in files) {
-    if (file is File && file.path.endsWith(fileName)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-// 파일 삭제
-void deleteFile(String fileName) async {
-  final directory = (await getApplicationDocumentsDirectory()).path;
-  String filePath = '$directory/favorites/$fileName';
-  File file = File(filePath);
-  if (await file.exists()) {
-    file.delete();
-  }
-}
-
-// 토스트 알림 띄우기
-void showToast(String content) {
-  Fluttertoast.showToast(
-    msg: content,
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.BOTTOM,
-    timeInSecForIosWeb: 1,
-    backgroundColor: Colors.grey,
-    textColor: Colors.white,
-    fontSize: 16.0,
-  );
-}
 
 
 GlobalKey key = GlobalKey();
@@ -150,7 +26,7 @@ double outImageWidth = 0;
 double shoeImageWidth = 0;
 
 
-// 의상 이미지 전역변수화
+// 의상 이미지 전역변수화 (여러 클래스에서 사용하기 위함)
 class ClothesImageController extends GetxController {
   String top='';
   String bot='';
@@ -214,6 +90,120 @@ class ClothesImageController extends GetxController {
 }
 
 
+
+// 메뉴가 올라 오지 않은 캐릭터 페이지 전체
+class CharacterPage extends StatelessWidget {
+  const CharacterPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    topImageWidth = MediaQuery.of(context).size.width*0.405;
+    botImageWidth = MediaQuery.of(context).size.width*0.41;
+    outImageWidth = MediaQuery.of(context).size.width*0.405;
+    shoeImageWidth = MediaQuery.of(context).size.width*0.416;
+
+    Get.put(ClothesImageController());
+    // 메뉴 옵션들 간에 벽(divider)
+    var divider = const VerticalDivider(
+      color: Color(0xFFBCBCBC),
+      width: 2,
+      thickness: 1.5,
+    );
+
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/background_image.png'),
+              fit: BoxFit.cover,
+            )
+        ),
+        child: Padding( // 양 옆 간격
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // 페이지 인디케이터
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0,50,0,20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 15,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(width: 10), // 회색 동그라미와 검정색 동그라미 사이 간격
+                    Container(
+                      width: 15,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // 조언 멘트
+              Container(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                child: Text(
+                  weatherCast(),
+                  style: txtStyle(16),
+                ),
+              ),
+
+              // 중간부 (체크 박스와 슬라이더, 캐릭터) (상세한건 바로 아래 CharAndTemp 클래스에서 구현)
+              const Expanded(flex:8, child: CharAndTemp()),
+
+              // 하단부 (옷 메뉴)
+              Expanded(
+                flex: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFFFFDF9),
+                      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(0),top: Radius.circular(20)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 3,
+                          offset: const Offset(0, 1), // 그림자 의 위치 조정
+                        )
+                      ]
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      BottomMenu(index: 0),
+                      divider,
+                      BottomMenu(index: 1),
+                      divider,
+                      BottomMenu(index: 2),
+                      divider,
+                      BottomMenu(index: 3),
+                      divider,
+                      BottomMenu(index: 4)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
 //화면 중앙 (현재 기온, 캐릭터)
 class CharAndTemp extends StatefulWidget {
   const CharAndTemp({super.key});
@@ -254,7 +244,6 @@ class _CharAndTempState extends State<CharAndTemp> {
     File(filePath).writeAsBytes(uint8List);
   }
 
-
   @override
   Widget build(BuildContext context) {
     // 현재 옷이 즐겨찾기인지 확인
@@ -287,6 +276,7 @@ class _CharAndTempState extends State<CharAndTemp> {
       clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19, clothesImages[5])    // 아우터
     ];
 
+    // 새로고침 버튼
     var resetButton = clothesPosition(5, 300, IconButton(
         onPressed: (){
           Get.find<ClothesImageController>().resetImages();
@@ -301,9 +291,10 @@ class _CharAndTempState extends State<CharAndTemp> {
         icon: const Icon(Icons.refresh,color: Colors.black,))
     );
 
+    // 즐겨찾기 버튼
     var favoriteButton = clothesPosition(5, 10,
-        isFavorite == true ?
-        // 즐겨찾기 삭제
+        isFavorite == true ? // 현재 옷이 즐겨찾기 인가?
+        // YES -> 즐겨찾기 삭제
         SizedBox(
           height: 55,
           width: 55,
@@ -329,7 +320,7 @@ class _CharAndTempState extends State<CharAndTemp> {
               child: Image.asset('assets/favorite_selected.png'),
           ),
         )
-        // 즐겨찾기 등록
+        // NO -> 즐겨찾기 등록
         : SizedBox(
           height: 55,
           width: 55,
@@ -358,6 +349,7 @@ class _CharAndTempState extends State<CharAndTemp> {
         )
     );
 
+    // 실제 화면이 나타나는 부분
     return Column(
       children: [
         Row(
@@ -407,6 +399,7 @@ class _CharAndTempState extends State<CharAndTemp> {
                           ...clothesStack]
                       ),
                     ),
+                    // 기타 버튼들
                     resetButton,
                     favoriteButton
                   ],
@@ -417,8 +410,53 @@ class _CharAndTempState extends State<CharAndTemp> {
       ],
     );
   }
+}
 
 
+
+// 위로 올라오는 메뉴
+class BottomMenu extends StatelessWidget {
+  BottomMenu({Key? key, required this.index}) : super(key: key);
+  final int index;
+  final List<String> categories = ["상의", "하의", "외투", "신발", "추천"];
+
+  @override
+  Widget build(BuildContext context) {
+    Color txtColor;
+    if (index<4) {
+      txtColor = Colors.black;
+    } else {
+      txtColor = Colors.red;
+    }
+    return TextButton(
+      child: Text(categories[index], style: TextStyle(color: txtColor,
+          fontFamily: 'SUITE',
+          fontWeight: FontWeight.w800,
+          fontSize: 20)
+      ),
+      onPressed: () {
+        showCoordiBottomSheet(context, index);
+      },
+    );
+  }
+
+  // 눌렀을 때 메뉴가 위로 올라오게 함 (상세한 부분은 아래 ClothesOption 클래스에서 구현)
+  showCoordiBottomSheet (BuildContext context, int ind) {
+    // BuildContext temp;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      ),
+      builder: (BuildContext context) {
+        return SizedBox(
+            height: MediaQuery.of(context).size.height*0.77,
+            child: ClothesOptions(depth: 0, indexes: [ind, 0])
+        );
+      },
+    );
+  }
 }
 
 
@@ -462,15 +500,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     super.dispose();
   }
 
-  // 특정 디렉토리 에서 파일 목록을 가져오는 함수
-  Future<List<String>> getFilesInDirectory(String path) async {
-    String assetManifest = await rootBundle.loadString('AssetManifest.json');
-    final Map<String, dynamic> manifestMap = json.decode(assetManifest);
-    var files = manifestMap.keys.where((String key) => key.startsWith(path)).toList();
-    print("Files in $path = $files");
-    return files;
-  }
-
+  // 각 의상별 대표 이미지 썸네일 추출
   Future<List> getThumbnails(String path) async {
     String assetManifest = await rootBundle.loadString('AssetManifest.json');
     final Map<String, dynamic> manifestMap = json.decode(assetManifest);
@@ -486,6 +516,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     return files;
   }
 
+  // 특정 의상들 중 한개 램덤으로 가져오기(의상 추천에 사용)
   Future<String> getRandomImages(String path) async {
     String assetManifest = await rootBundle.loadString('AssetManifest.json');
     final Map<String, dynamic> manifestMap = json.decode(assetManifest);
@@ -500,6 +531,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     return file;
   }
 
+  // 의상 이름 한영 변환
   String typeKorToEng (int selected) {
     String chosenType='';
     if (_currentSheetIndex == 0) {
@@ -623,9 +655,11 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     return chosenType;
   }
 
+  // 의상 추천 함수
   Future<List<List>> recommendClothes(int style) async {
-    var items = getItem(style);
+    var items = getItem(style);  // style_recommend.dart 파일
     print("recommend : $items");
+    // getItem에서 얻은 의상 종류 중 구체적인 한 이미지를 선택해서 가져온 후 배열에 담아 반환
     var top = [await getRandomImages("top_${items[0][0]}"), Color(int.parse(items[0][1]))];
     var bot = [await getRandomImages("bot_${items[1][0]}"), Color(int.parse(items[1][1]))];
     var shoe = [await getRandomImages("shoe_${items[2][0]}"), Color(int.parse(items[2][1]))];
@@ -689,9 +723,9 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                         padding: (widget.depth == 0) ? const EdgeInsets.only(right: 5.0) : const EdgeInsets.symmetric(horizontal: 5.0),
                         child: IconButton(
                             onPressed:
-                            (widget.depth == 0) ?
-                                (){Navigator.pop(context);} :
-                                (){
+                            (widget.depth == 0) ? // 큰 카테고리인가?
+                                (){Navigator.pop(context);} : // YES -> 메뉴 닫기
+                                (){                           // NO -> 뒤로가기 (큰 카테고리로 이동)
                                   Navigator.pop(context);
                                   showModalBottomSheet(context: context,
                                       isScrollControlled: true,
@@ -706,6 +740,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                       }
                                   );
                                 },
+                            // 카테고리에 따라 아이콘 변경
                             icon: (widget.depth == 0) ? const Icon(Icons.close_rounded) : const Icon(Icons.arrow_back_ios_rounded),
                             iconSize: (widget.depth == 0) ? 40 : 27,
                             style: IconButton.styleFrom(
@@ -720,9 +755,9 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                   ),
                 ),
                 // 의상 선택 옵션들
-                (widget.depth == 0) ?
-                FutureBuilder<List>(
-                  future: getThumbnails("assets/character/$gender/${bigCategory}_"),
+                (widget.depth == 0) ?  // 큰 카테고리인가?
+                FutureBuilder<List>(   // YES -> 각 의상 카테고리별 썸네일 불러와서 출력
+                  future: getThumbnails("assets/character/$gender/${bigCategory}_"),  // 썸네일 불러오는 비동기 작업
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // 데이터 로딩 중
@@ -739,7 +774,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                           behavior: const ScrollBehavior().copyWith(overscroll: false), // 맥스 스크롤 효과 없애기
                           child: ListView(
                             shrinkWrap: true,
-                            // 의상 종류 리스트
+                            // 의상 종류 리스트 출력
                             children: List.generate(clothesTypeNum[_currentSheetIndex]-1, (index) {
                               return Column(
                                 children: [
@@ -748,7 +783,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                     child: Row(
                                       children: [
                                         Expanded(flex: 2,
-                                            // 대표 의상 이미지
+                                            // 대표 의상 이미지 버튼
                                             child: ClipRRect(
                                               borderRadius: BorderRadius.circular(22),
                                               child: Image.asset(
@@ -763,6 +798,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                             // 의상 선택 버튼
                                             child: TextButton(
                                                 onPressed: () {
+                                                  // 세부 카테고리로 이동
                                                   nextStep(context, index);
                                                 },
                                                 style: ButtonStyle(
@@ -795,8 +831,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                     }
                   },
                 )
-                // 저장된 의상 사진들 불러와서 리스트 출력
-                : FutureBuilder<List<String>>(
+                : FutureBuilder<List<String>>(  // NO -> 저장된 의상 사진들 불러와서 리스트 출력
                   future: getFilesInDirectory("assets/character/$gender/${bigCategory}_${typeKorToEng(widget.indexes[1])}"),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -823,23 +858,24 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                 highlightColor: Colors.transparent, // 터치 시 강조 효과를 숨김
                                 splashColor: Colors.transparent,     // 터치 시 스플래시 효과를 숨김
                                 onTap: () {
-                                  switch (_currentSheetIndex) {
-                                    case 0: // 상의
-                                      Get.find<ClothesImageController>().setTopImage(loadFiles[index]); // 상의
+                                  switch (_currentSheetIndex) {     // 현재 열려있는 메뉴에 따라
+                                    case 0: // 상의 라면
+                                      Get.find<ClothesImageController>().setTopImage(loadFiles[index]); // 상의 설정
                                       break;
                                     case 1:
-                                      Get.find<ClothesImageController>().setBotImage(loadFiles[index]); // 하의
+                                      Get.find<ClothesImageController>().setBotImage(loadFiles[index]); // 하의 설정
                                       break;
                                     case 2:
-                                      Get.find<ClothesImageController>().setOutImage(loadFiles[index]); // 아우터
+                                      Get.find<ClothesImageController>().setOutImage(loadFiles[index]); // 아우터 설정
                                       break;
                                     case 3:
-                                      Get.find<ClothesImageController>().setShoeImage(loadFiles[index]); // 신발
+                                      Get.find<ClothesImageController>().setShoeImage(loadFiles[index]); // 신발 설정
                                       break;
                                     default:
                                       break;
                                   }
                                   isFavoriteSaving = false;
+                                  // 화면 새로 고침 -> 옷 입혀짐
                                   Navigator.pushAndRemoveUntil(context,
                                       PageRouteBuilder(
                                           transitionDuration: const Duration(milliseconds: 200),
@@ -901,7 +937,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
 
   // 의상 상세 카테고리 로 이동
   nextStep (BuildContext context, ind) async {
-    if (_currentSheetIndex < 4) {
+    if (_currentSheetIndex < 4) {  // 큰 카테고리가 "추천"이 아닐때 (=상의,하의,외투,신발일 때)
       Navigator.pop(context);
       showModalBottomSheet(context: context,
           isScrollControlled: true,
@@ -919,14 +955,15 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
             );
           }
       );
-    } else {
-      var recClothes = await recommendClothes(ind); //함수
-      Get.find<ClothesImageController>().setTopImage(recClothes[0][0],color:recClothes[0][1]);
-      Get.find<ClothesImageController>().setBotImage(recClothes[1][0],color:recClothes[1][1]);
-      Get.find<ClothesImageController>().setShoeImage(recClothes[2][0],color:recClothes[2][1]);
-      Get.find<ClothesImageController>().setOutImage(recClothes[3][0],color:recClothes[3][1]);
+    } else {  // 큰 카테고리가 추천일 때
+      var recClothes = await recommendClothes(ind); // recommendClothes 함수 사용해서 받아온 결과
+      Get.find<ClothesImageController>().setTopImage(recClothes[0][0],color:recClothes[0][1]); //상의로 설정
+      Get.find<ClothesImageController>().setBotImage(recClothes[1][0],color:recClothes[1][1]); //하의로 설정
+      Get.find<ClothesImageController>().setShoeImage(recClothes[2][0],color:recClothes[2][1]); //신발로 설정
+      Get.find<ClothesImageController>().setOutImage(recClothes[3][0],color:recClothes[3][1]); //외투로 설정
       isFavoriteSaving = false;
       if (!mounted) return;
+      // 화면 새로고침
       Navigator.pushAndRemoveUntil(context,
           PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 200),
@@ -942,164 +979,5 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
           ),
               (route) => false);
     }
-  }
-
-
-}
-
-
-// 메뉴 위로 올라 오게 하기
-class BottomMenu extends StatelessWidget {
-  BottomMenu({Key? key, required this.index}) : super(key: key);
-  final int index;
-  final List<String> categories = ["상의", "하의", "외투", "신발", "추천"];
-
-  @override
-  Widget build(BuildContext context) {
-    Color txtColor;
-    if (index<4) {
-      txtColor = Colors.black;
-    } else {
-      txtColor = Colors.red;
-    }
-    return TextButton(
-      child: Text(categories[index], style: TextStyle(color: txtColor,
-          fontFamily: 'SUITE',
-          fontWeight: FontWeight.w800,
-          fontSize: 20)
-      ),
-      onPressed: () {
-        showCoordiBottomSheet(context, index);
-      },
-    );
-  }
-
-  showCoordiBottomSheet (BuildContext context, int ind) {
-    // BuildContext temp;
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-      ),
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height*0.77,
-          child: ClothesOptions(depth: 0, indexes: [ind, 0])
-        );
-      },
-    );
-  }
-}
-
-
-// 메뉴가 올라 오지 않은 캐릭터 페이지 전체
-class CharacterPage extends StatelessWidget {
-  const CharacterPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    topImageWidth = MediaQuery.of(context).size.width*0.405;
-    botImageWidth = MediaQuery.of(context).size.width*0.41;
-    outImageWidth = MediaQuery.of(context).size.width*0.405;
-    shoeImageWidth = MediaQuery.of(context).size.width*0.416;
-
-    Get.put(ClothesImageController());
-    // 메뉴 옵션들 간에 벽(divider)
-    var divider = const VerticalDivider(
-      color: Color(0xFFBCBCBC),
-      width: 2,
-      thickness: 1.5,
-    );
-
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background_image.png'),
-            fit: BoxFit.cover,
-          )
-        ),
-        child: Padding( // 양 옆 간격
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // 페이지 표시 동그라미 두 개
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,50,0,20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: 15,
-                      height: 7,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(width: 10), // 회색 동그라미와 검정색 동그라미 사이 간격
-                    Container(
-                      width: 15,
-                      height: 7,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // 조언 멘트
-              Container(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                child: Text(
-                    weatherCast(),
-                    style: txtStyle(16),
-                  ),
-              ),
-
-              // 중간부 (체크 박스와 슬라이더, 캐릭터)
-              const Expanded(flex:8, child: CharAndTemp()),
-
-              // 하단부 (옷 메뉴)
-              Expanded(
-                flex: 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFFFFDF9),
-                      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(0),top: Radius.circular(20)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 3,
-                          offset: const Offset(0, 1), // 그림자 의 위치 조정
-                        )
-                      ]
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      BottomMenu(index: 0),
-                      divider,
-                      BottomMenu(index: 1),
-                      divider,
-                      BottomMenu(index: 2),
-                      divider,
-                      BottomMenu(index: 3),
-                      divider,
-                      BottomMenu(index: 4)
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
