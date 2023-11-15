@@ -15,16 +15,27 @@ class MyLocation {
   Future<void> getMyCurrentLongilati() async {
 
 
+    // try {
+    //   LocationPermission permission = await Geolocator
+    //       .requestPermission(); //위치 권한
+    //   Position position = await Geolocator.getCurrentPosition(
+    //       desiredAccuracy: LocationAccuracy.high); //위경도 값 -> position변수에 저장
+    //   latitude2 = position.latitude;
+    //   longtitude2 = position.longitude;
+    //   print(latitude2);
+    //   print(longtitude2);
+
     try {
-      LocationPermission permission = await Geolocator
-          .requestPermission(); //위치 권한
+      LocationPermission permission = await Geolocator.checkPermission(); //위치 권한
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high); //위경도 값 -> position변수에 저장
       latitude2 = position.latitude;
       longtitude2 = position.longitude;
       print(latitude2);
       print(longtitude2);
-
 
 
       List<Placemark> placemarks = await placemarkFromCoordinates(

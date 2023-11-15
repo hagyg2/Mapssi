@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mapssi/screens/model.dart';
 import 'package:mapssi/screens/weather_screen.dart';
 import 'menu_bar_draw.dart';
@@ -51,9 +53,12 @@ class _CityDropdownState extends State<CityDropdown> {
 
     if (locations.isNotEmpty) {
       Location firstLocation = locations.first;
-      latitude = firstLocation.latitude;
-      longitude = firstLocation.longitude;
+      setState(() {
+        latitude = firstLocation.latitude;
+        longitude = firstLocation.longitude;
+      });
       print(address);
+
       print("위도 $latitude");
       print("경도 $longitude");
     }
@@ -62,7 +67,35 @@ class _CityDropdownState extends State<CityDropdown> {
 
   Future<void> showLocation() async {
     await convertLocationToCoordinatesAndShow(selectedCity!, selectedLocal!);
+    if (latitude != null && longitude != null) {
+      print('변환 후 위도: $latitude');
+      print('변환 후 경도: $longitude');
+      Navigator.pop(context, [latitude, longitude]);
+    }
   }
+
+
+
+  Future<void> resetLocation() async {
+
+    try {
+      LocationPermission permission = await Geolocator.checkPermission(); //위치 권한
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high); //위경도 값 -> position변수에 저장
+      latitude = position.latitude;
+      longitude = position.longitude;
+
+    } catch (e) {
+      print("인터넷 연결에 문제가 있습니다.");
+    }
+    Navigator.pop(context, [latitude, longitude]);
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,95 +106,128 @@ class _CityDropdownState extends State<CityDropdown> {
         title: Text("지역 검색", style: myTextStyle(22.0),),
         iconTheme: IconThemeData(color: Colors.black,),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+
+        // 전체 = 세로로 배치
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // DropdownButton for "XX도"
-            DropdownButton<String>(
-              value: selectedCity, // 도의 값을 나타냄
-              hint: Text('도 선택', style: myTextStyle(17.0)),
-              // 도를 선택 -> 해당하는 시 목록을 보여줌.
-              onChanged: (String? value) {
-                setState(() {
-                  selectedCity = value; //선택된 '도'의 값을 업데이트
-                  selectedLocal = null; //'시'는 초기화
-                });
-              }, //onChanged: 사용자가 '도'를 선택시 호출되는 콜백함수
-              //'도' 목록을 mapping해서 DropdownMenuItem 위젯의 리스트로 반환
-              items: doList.map<DropdownMenuItem<String>>((
-                  String value) {
-                return DropdownMenuItem<String>(
-                  value: value, //value = '도'
-                  child: Text(value, style: myTextStyle(17.0)), //'도'이름을 text로
-                );
-              }).toList(),
-            ),
-
-            // DropdownButton for "XX시"
-            SizedBox(height: 16.0),
-            DropdownButton<String>(
-              value: selectedLocal,
-              hint: Text('시 선택', style: myTextStyle(17.0)),
-              onChanged: (String? value) {
-                setState(() {
-                  selectedLocal = value; //선택된 '시'의 값을 업데이트
-                });
-              }, //onChanged: 사용자가 '시'를 선택시 호출되는 콜백함수
-              items: selectedCity != null //사용자가 도를 선택한 경우
-              //선택된 '도'를 바탕으로 시의 목록(DropdownMenuItem으로 반환)을 가져옴.
-                  ? doSiMap[selectedCity]?.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(value: value, child: Text(
-                    value, style: myTextStyle(17.0)),); //여기서 value = 시
-              }).toList() //map의 반환값인 iterable -> list로 변환 하여 item에 전
-                  : null, //사용자가 '도'를 선택하지 않은 경우 - 시 선택 불가
-            ),
+            Container(
+              margin: EdgeInsets.all(16.0), // 여백 추가
+              padding: EdgeInsets.all(16.0),
+              height: MediaQuery.of(context).size.height*0.2,
+              decoration: BoxDecoration(
+                color: Color(0xFFCCCCCC),
+                borderRadius: BorderRadius.circular(12.0), // 첫 번째 Container의 테두리 둥글게 설정
+              ) ,
 
 
-            SizedBox(height: 80.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center, // 가로 방향으로 중앙 배치
+                children: [
 
-            ElevatedButton(
-              child: Text('해당 지역 날씨 바로가기', style: myTextStyle(20.0),),
-              style: myButtonStyle(),
-              onPressed: ()async {
-                if(selectedCity != null && selectedLocal != null){
-                  print(selectedLocal);
-                  print(selectedCity);
-                  convertLocationToCoordinatesAndShow(selectedCity!, selectedLocal!);
-                  // WeatherPage로 이동
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WeatherScreen(),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // DropdownButton for "XX도"
+                        DropdownButton<String>(
+                          value: selectedCity, // 도의 값을 나타냄
+                          hint: Text('도 선택', style: myTextStyle(17.0)),
+                          // 도를 선택 -> 해당하는 시 목록을 보여줌.
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedCity = value; //선택된 '도'의 값을 업데이트
+                              selectedLocal = null; //'시'는 초기화
+                            });
+                          }, //onChanged: 사용자가 '도'를 선택시 호출되는 콜백함수
+                          //'도' 목록을 mapping해서 DropdownMenuItem 위젯의 리스트로 반환
+                          items: doList.map<DropdownMenuItem<String>>((
+                              String value) {
+                            return DropdownMenuItem<String>(
+                              value: value, //value = '도'
+                              child: Text(value, style: myTextStyle(17.0)), //'도'이름을 text로
+                            );
+                          }).toList(),
+                        ),
+
+                        // DropdownButton for "XX시"
+                        SizedBox(height: 16.0),
+                        DropdownButton<String>(
+                          value: selectedLocal,
+                          hint: Text('시 선택', style: myTextStyle(17.0)),
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedLocal = value; //선택된 '시'의 값을 업데이트
+                            });
+                          }, //onChanged: 사용자가 '시'를 선택시 호출되는 콜백함수
+                          items: selectedCity != null //사용자가 도를 선택한 경우
+                          //선택된 '도'를 바탕으로 시의 목록(DropdownMenuItem으로 반환)을 가져옴.
+                              ? doSiMap[selectedCity]?.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(value: value, child: Text(
+                                value, style: myTextStyle(17.0)),); //여기서 value = 시
+                          }).toList() //map의 반환값인 iterable -> list로 변환 하여 item에 전
+                              : null, //사용자가 '도'를 선택하지 않은 경우 - 시 선택 불가
+                        ),
+
+                        //izedBox(width: 10.0), // 간격 조절
+
+
+                      ],
                     ),
-                  );
-                }
-                else{
-                  MyCustomDialog.showCustomDialog(context, '도와 시를 모두 선택해주세요.');
-                }
-              },
-            ),
 
-            SizedBox(height: 35),
+
+                  ),
+
+                  //go버튼
+                  ElevatedButton(
+                    onPressed: ()async {
+                      if(selectedCity != null && selectedLocal != null){
+                        showLocation();
+
+                      }
+                      else{
+                        MyCustomDialog.showCustomDialog(context, '도와 시를 모두 선택해주세요.');
+                      }
+                    },
+                    child: Text('지역\n검색', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xffFFFAF3),
+                        surfaceTintColor: Color(0xffFFFAF3),
+                        foregroundColor: Colors.black,
+                        minimumSize: Size(50, 70),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)
+                        )
+                    ),
+                  ),
+                ],),),
 
             ElevatedButton(
-              child: Text('해당 지역 날씨 추가하기', style: myTextStyle(20.0),),
-              style: myButtonStyle(),
               onPressed: ()async {
-                if(selectedCity != null && selectedLocal != null){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MenuBarDraw(),),
-                  );
-                }
-                else{
-                  MyCustomDialog.showCustomDialog(context, '도와 시를 모두 선택해주세요.');
-                }
+                resetLocation();
               },
+              child: Text('현재 위치로 설정', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xffCFC7B4),
+                  surfaceTintColor: Color(0xffFFFAF3),
+                  foregroundColor: Colors.black,
+                  minimumSize: Size(50, 70),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7)
+                  )
+              ),
+
             ),
+
           ],),
-      ),
-    );
+      ),);
+
   }
+
+
+
+
 }
 
 
@@ -194,3 +260,5 @@ class MyCustomDialog {
     );
   }
 }
+
+
