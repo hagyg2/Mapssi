@@ -8,15 +8,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:mapssi/screens/search_area_screen.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/screens/login_screen.dart';
+import 'package:mapssi/screens/search_area_screen2.dart';
+import 'package:mapssi/screens/splash_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../main.dart';
-import 'character_screen.dart';
+import '../personal_info.dart';
 
 
 // 현재 페이지 에서 쓰일 TextStyle (글씨체, 색상 고정 / 크기, 굵기 조절)
@@ -29,7 +29,13 @@ TextStyle myTextStyle(double fs, {FontWeight fontWeight = FontWeight.w600}) {
   );
 }
 
-
+TextStyle myTextStyle2(double fs) {
+  return TextStyle(
+    fontSize: fs,
+    color: Colors.black,
+    fontFamily: 'Dovemayo_gothic',
+  );
+}
 
 class MenuBarDraw extends StatefulWidget {
   @override
@@ -58,8 +64,8 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
               ),
             ),
 
-            accountName: const Text("", ),
-            accountEmail:  Text(' " Mapssi로 맵시있게 " ', style: myTextStyle(20.0),),
+            accountName: const Text("",),
+            accountEmail: Text(' " Mapssi로 맵시있게 " ', style: myTextStyle(20.0),),
             decoration: BoxDecoration(color: Color(0xFFECE7E0)),
             // UserAccountsDrawerHeader 내에 로그아웃 버튼 추가
             otherAccountsPictures: <Widget>[
@@ -69,13 +75,11 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        content: Text("로그아웃 하시겠습니까?"
-                          , style: TextStyle(
-                              fontSize: 15, fontFamily: 'Dovemayo_gothic'),),
+                        content: Text(
+                          "로그아웃 하시겠습니까?", style: myTextStyle2(15.0),),
                         actions: <Widget>[
                           TextButton(
-                            child: Text("확인", style: TextStyle(
-                                fontSize: 15, fontFamily: 'Dovemayo_gothic'),),
+                            child: Text("확인", style: myTextStyle2(15.0),),
                             onPressed: () async {
                               if (loginplatform == 'kakao') {
                                 await UserApi.instance.unlink();
@@ -90,8 +94,7 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
                             },
                           ),
                           TextButton(
-                            child: Text("취소", style: TextStyle(
-                                fontSize: 15, fontFamily: 'Dovemayo_gothic'),),
+                            child: Text("취소", style: myTextStyle2(15.0),),
                             onPressed: () {
                               // 알림 대화 상자를 닫기 위한 코드
                               Navigator.of(context).pop();
@@ -105,7 +108,6 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
               ),
             ],),
 
-
           //프로픨(완성)
           SizedBox(height: 30.0),
           ListTile(
@@ -113,11 +115,8 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
                 "assets/icons/account_circle_black_24dp.svg"),
               onPressed: () {},
             ),
-            title: Text('프로필', style: TextStyle(
-              fontSize: 20.0,
-              color: Colors.black,
-              fontFamily: 'SUITE',
-              fontWeight: FontWeight.w600,),),
+            title: Text(
+              '프로필', style: myTextStyle(20.0, fontWeight: FontWeight.w600),),
             onTap: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Profile()));
@@ -126,33 +125,23 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
           ),
 
 
-          //즐겨찾는 지역(미완성)
-          SizedBox(height: 15.0),
-          ExpansionTile(
-            leading: IconButton(icon: SvgPicture.asset(
-                "assets/icons/star_black_24dp.svg"),
-              onPressed: () {},
-            ),
-            title: Text('즐겨찾는 지역', style: TextStyle(
-              fontSize: 20.0,
-              color: Colors.black,
-              fontFamily: 'SUITE',
-              fontWeight: FontWeight.w600,),),
-            trailing: Icon(Icons.navigate_next_outlined),
-            children: [
-              ListTile(
-                title: Text('즐겨찾는 지역 추가하러 가기'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CityDropdown(),),
-                  );
-                },
-              ),
-
-
-            ],
-          ),
+          // //즐겨찾는 지역(미완성)
+          // SizedBox(height: 15.0),
+          // ListTile(
+          //   leading: IconButton(icon: SvgPicture.asset(
+          //       "assets/icons/star_black_24dp.svg"),
+          //     onPressed: () {},
+          //   ),
+          //   title: Text(
+          //     '지역 검색', style: myTextStyle(20.0, fontWeight: FontWeight.w600),),
+          //   onTap: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(builder: (context) => CityDropdown()));
+          //   },
+          //   trailing: Icon(Icons.navigate_next_outlined),
+          // ),
+          //
 
           //즐겨찾는 코디(미완성)
           SizedBox(height: 15.0),
@@ -161,11 +150,8 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
                 "assets/icons/wc_black_24dp.svg"),
               onPressed: () {},
             ),
-            title: Text('즐겨찾는 코디', style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.black,
-                fontFamily: 'SUITE',
-                fontWeight: FontWeight.w600),),
+            title: Text('즐겨찾는 코디',
+              style: myTextStyle(20.0, fontWeight: FontWeight.w600),),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => FavoriteCoordi()));
@@ -173,75 +159,12 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
             trailing: Icon(Icons.navigate_next_outlined),
           ),
 
+          Spacer(),
 
-          // //로그아웃 버튼 - 목록으로 (ListTile)
-          // SizedBox(height: 30.0,),
-          // ListTile(
-          //   title: Row(
-          //     children: [
-          //       Icon(Icons.logout),
-          //       GestureDetector(
-          //         onTap: () async { // 텍스트를 눌렀을 때만 dialog 동작하도록 감싸기
-          //           showDialog(
-          //             context: context,
-          //             builder: (BuildContext context) {
-          //               return AlertDialog(
-          //                 content: Text("로그아웃 하시겠습니까?"
-          //                   , style: TextStyle(
-          //                       fontSize: 15, fontFamily: 'Dovemayo_gothic'),),
-          //                 actions: <Widget>[
-          //                   TextButton(
-          //                     child: Text("확인",
-          //                       style: TextStyle(fontSize: 15,
-          //                           fontFamily: 'Dovemayo_gothic'),),
-          //                     onPressed: () async {
-          //                       if (loginplatform == 'kakao') {
-          //                         await UserApi.instance.unlink();
-          //                         Navigator.pushNamedAndRemoveUntil(
-          //                             context, '/login', (route) => false);
-          //                       }
-          //                       else {
-          //                         SignInWithGoogle.signOut();
-          //                         Navigator.pushNamedAndRemoveUntil(
-          //                             context, '/login', (route) => false);
-          //                       }
-          //                     },
-          //                   ),
-          //                   TextButton(
-          //                     child: Text("취소",
-          //                       style: TextStyle(fontSize: 15,
-          //                           fontFamily: 'Dovemayo_gothic'),),
-          //                     onPressed: () {
-          //                       // 알림 대화 상자를 닫기 위한 코드
-          //                       Navigator.of(context).pop();
-          //                     },
-          //                   ),
-          //                 ],
-          //               );
-          //             },
-          //           );
-          //         },
-          //
-          //         child: Row(
-          //           children: [
-          //             SizedBox(width: 4.0),
-          //             Text('로그아웃', style: TextStyle(
-          //                 fontSize: 20.0,
-          //                 color: Colors.black,
-          //                 fontFamily: 'SUITE',
-          //                 fontWeight: FontWeight.w600),),
-          //           ],
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           //로그아웃 버튼 - 목록으로 (ListTile)
           SizedBox(height: 30.0,),
           ListTile(
             title: Row(
-              mainAxisAlignment: MainAxisAlignment.end, // 아이콘과 텍스트를 오른쪽 정렬
-
               children: [
                 Icon(Icons.logout),
                 GestureDetector(
@@ -250,14 +173,11 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          content: Text("로그아웃 하시겠습니까?"
-                            , style: TextStyle(
-                                fontSize: 15, fontFamily: 'Dovemayo_gothic'),),
+                          content: Text(
+                            "로그아웃 하시겠습니까?", style: myTextStyle2(15.0),),
                           actions: <Widget>[
                             TextButton(
-                              child: Text("확인",
-                                style: TextStyle(fontSize: 15,
-                                    fontFamily: 'Dovemayo_gothic'),),
+                              child: Text("확인", style: myTextStyle2(15.0),),
                               onPressed: () async {
                                 if (loginplatform == 'kakao') {
                                   await UserApi.instance.unlink();
@@ -272,9 +192,7 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
                               },
                             ),
                             TextButton(
-                              child: Text("취소",
-                                style: TextStyle(fontSize: 15,
-                                    fontFamily: 'Dovemayo_gothic'),),
+                              child: Text("취소", style: myTextStyle2(15.0),),
                               onPressed: () {
                                 // 알림 대화 상자를 닫기 위한 코드
                                 Navigator.of(context).pop();
@@ -289,20 +207,15 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
                   child: Row(
                     children: [
                       SizedBox(width: 4.0),
-                      Text('로그아웃', style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
-                          fontFamily: 'SUITE',
-                          fontWeight: FontWeight.w600),),
+                      Text('로그아웃',
+                        style: myTextStyle(20, fontWeight: FontWeight.w600),),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-
-        ],
-      ),
+        ],),
     );
   }
 }
@@ -317,72 +230,202 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFECE7E0),
-        title: Text("프로필", style: myTextStyle(22.0),),
-        iconTheme: IconThemeData(color: Colors.black,) // 뒤로 가는 화살표 색상 설정
+          backgroundColor: Color(0xFFECE7E0),
+          title: Text("프로필", style: myTextStyle(22.0),),
+          iconTheme: IconThemeData(color: Colors.black,) // 뒤로 가는 화살표 색상 설정
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
 
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Color(0xFFECE7E0),
-              child: Icon(
-                Icons.person,
-                size: 80,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 22.0),
-            Text(
-              '   캡스톤',
-              style: myTextStyle(30, fontWeight: FontWeight.bold),
-            ),
+      body: Center(
 
-            SizedBox(height: 60),
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 16.0, bottom: 30.0), // 간격 추가
-              leading: Icon(Icons.wc, size: 35.0),
-              title: Padding(
-                padding: EdgeInsets.only(bottom: 13.0),
-                child: Text('성별',  style: myTextStyle(18.0),),
-              ),
-              subtitle: Text('"여자"', style: myTextStyle(25.0),),
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 16.0, bottom: 30.0), // 간격 추가
-              leading: Icon(Icons.favorite, size: 35.0),
-              title: Padding(
-                padding: EdgeInsets.only(bottom: 13.0),
-                child: Text('선호 스타일',  style: myTextStyle(18.0),),
-              ),
-              subtitle: Text('"러블리"', style: myTextStyle(25.0),),
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 16.0, bottom: 30.0), // 간격 추가
-              leading: Icon(Icons.color_lens, size: 35.0),
-              title: Padding(
-                padding: EdgeInsets.only(bottom: 13.0),
-                child: Text('퍼스널 컬러',  style: myTextStyle(18.0),),
-              ),
-              subtitle: Text('"여름 쿨톤"', style: myTextStyle(25.0),),
 
-              // decoration: BoxDecoration(
-                //   //여기에 컬러 팔레트 보여주면 좋을듯!!
-                //   shape: BoxShape.rectangle,
-                // ),
-              //),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 30,),
+              CircleAvatar(    //나중에 사용자 이미지 추가
+                radius: 60,
+                backgroundColor: Color(0xFFECE7E0),
+                child: Icon(
+                  Icons.person,
+                  size: 80,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 20,),
+              Text(
+                '캡스톤',
+                style: myTextStyle(30, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 30,),
 
-            ),
-          ],
-        ),
-      ),
-    );
+
+
+              //개인 정보
+              Container(
+                margin: EdgeInsets.all(16.0), // 여백 추가
+                padding: EdgeInsets.fromLTRB(5.0, 30.0, 15.0, 30.0,), //여백(왼위오아래)
+                //height: MediaQuery.of(context).size.height*0.3,
+                decoration: BoxDecoration(
+                  color: Color(0xFFCCCCCC),
+                  borderRadius: BorderRadius.circular(12.0), // 첫 번째 Container의 테두리 둥글게 설정
+                ) ,
+
+
+
+
+
+
+      child: Column(
+                  children: [
+                    ListTile(
+                      title: Row(
+                        children: <Widget>[
+                          Icon(Icons.wc, size: 30.0),
+                          SizedBox(width: 10.0,),
+                          Text('성별',  style: myTextStyle2(18.0),),
+                          Spacer(), // 빈 공간 추가
+                        //  Text('여자', style: myTextStyle(22.0, fontWeight: FontWeight.w700),),
+
+                          ElevatedButton(
+                          onPressed: ()async {},
+                            child:
+                            Text('여자', style: myTextStyle(22.0, fontWeight: FontWeight.w700),),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFECE7E0),
+                                surfaceTintColor: Color(0xffFFFAF3),
+                                foregroundColor: Colors.black,
+                                minimumSize: Size(120, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20), // 박스의 모서리 둥글게 설정
+                                )
+                            ),
+                          ),
+
+                        ],),
+                    ),
+
+                    SizedBox(height: 30,),
+                    ListTile(
+                      title: Row(
+                        children: <Widget>[
+                          Icon(Icons.favorite, size: 30.0),
+                          SizedBox(width: 10.0,),
+                          Text('선호 스타일',  style: myTextStyle2(18.0),),
+                          Spacer(), // 빈 공간 추가
+
+                          ElevatedButton(
+                            onPressed: ()async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => prefstylepage()),
+                              );
+                            },
+                            child:
+                                Row(
+                                  children: [
+                                  Text('러블리',  style: myTextStyle(22.0, fontWeight: FontWeight.w700),),
+
+                                  Icon(Icons.arrow_forward, size: 30,),
+                                ],),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFECE7E0),
+                                surfaceTintColor: Color(0xffFFFAF3),
+                                foregroundColor: Colors.black,
+                                minimumSize: Size(120, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20), // 박스의 모서리 둥글게 설정
+                                )
+                            ),
+                          ),
+                          ],
+                        ),
+                    ),
+                    SizedBox(height: 30,),
+
+                    ListTile(
+                      title: Row(
+                        children: <Widget>[
+                          Icon(Icons.color_lens, size: 30.0),
+                          SizedBox(width: 10.0,),
+                          Text('퍼스널 컬러',  style: myTextStyle2(18.0),),
+                          Spacer(),
+                          ElevatedButton(
+                            onPressed: ()async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => percolpage()),
+                              );
+                            },
+                            child:
+                            Row(
+                              children: [
+                                Text('여름 쿨톤', style: myTextStyle(22.0, fontWeight: FontWeight.w700),),
+                                Icon(Icons.arrow_forward, size: 30,),
+                              ],),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFECE7E0),
+                                surfaceTintColor: Color(0xffFFFAF3),
+                                foregroundColor: Colors.black,
+                                minimumSize: Size(120, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20), // 박스의 모서리 둥글게 설정
+                                )
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+      ),),
+
+                    SizedBox(height: 30,),
+
+
+              //회원 탈퇴
+              Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: 70,
+                padding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0,), //여백(왼위오아래)
+                decoration: BoxDecoration(
+                  color: Color(0xFFECE7E0),
+                  borderRadius: BorderRadius.circular(50), // 박스의 모서리 둥글게 설정
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center, // 텍스트를 가운데 정렬
+                  children: <Widget>[
+                    Text('회원탈퇴',  style: myTextStyle2(18.0),),
+                  ],
+                ),
+              ),
+],),),
+
+      );
   }
 }
+
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         content: Text("탈퇴 하시겠습니까?" , style: myTextStyle2(15),),
+//         actions: <Widget>[
+//       TextButton(
+//       child: Text("확인" , style: myTextStyle2(15),),
+//       onPressed: () async {
+//       //
+//       },
+//     ),
+//
+//     TextButton(
+//     child: Text("취소" , style: myTextStyle2(15),),
+//     onPressed: () {
+//       Navigator.of(context).pop();
+//       },
+//     ),
+//   ],
+//   );
+// },
+
+
 
 class FavoriteArea extends StatelessWidget {
   const FavoriteArea({super.key});
@@ -405,14 +448,6 @@ class FavoriteArea extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView( //전체적인 화면을 위아래로 스크롤
-        child: Column(
-
-            children: [
-            ]
-        ),
-      ),
-
     );
     throw UnimplementedError();
   }
@@ -431,8 +466,6 @@ class FavoriteCoordi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ClothesImageController());
-    createSubDirectory("favorites");
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Color(0xFFECE7E0),
@@ -459,7 +492,7 @@ class FavoriteCoordi extends StatelessWidget {
                       itemCount: loadFiles.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // 한 줄에 2개의 이미지 버튼을 배치
-                        childAspectRatio: 0.66, // 가로세로 비율 조절
+                        childAspectRatio: 0.8, // 가로세로 비율 조절
                       ),
                       padding: const EdgeInsets.all(5),
                       itemBuilder: (BuildContext context, int index) {
@@ -467,33 +500,9 @@ class FavoriteCoordi extends StatelessWidget {
                           highlightColor: Colors.transparent, // 터치 시 강조 효과를 숨김
                           splashColor: Colors.transparent,     // 터치 시 스플래시 효과를 숨김
                           onTap: () {
-                            var clothesNotParsed = loadFiles[index].path.split("/").last;
-                            var clothes = clothesNotParsed.split("^");
-                            var path = 'assets/character/$gender/';
-                            if (clothes[0]!="") {
-                              var top = clothes[0].split("@");
-                              Get.find<ClothesImageController>().setTopImage(path + top[0], color: Color(int.parse(top[1]))); // 상의
-                            } else{
-                              Get.find<ClothesImageController>().setTopImage('assets/character/initialImage.png');
-                            }
-                            if (clothes[1]!="") {
-                              var bot = clothes[1].split("@");
-                              Get.find<ClothesImageController>().setBotImage(path + bot[0], color: Color(int.parse(bot[1]))); // 하의
-                            } else{
-                              Get.find<ClothesImageController>().setBotImage('assets/character/initialImage.png');
-                            }
-                            if (clothes[2]!="") {
-                              var out = clothes[2].split("@");
-                              Get.find<ClothesImageController>().setOutImage(path + out[0], color: Color(int.parse(out[1]))); // 아우터
-                            } else{
-                              Get.find<ClothesImageController>().setOutImage('assets/character/initialImage.png');
-                            }
-                            if (clothes[3]!="") {
-                              var shoe = clothes[3].split("@");
-                              Get.find<ClothesImageController>().setShoeImage(path + shoe[0], color: Color(int.parse(shoe[1]))); // 신발
-                            } else{
-                              Get.find<ClothesImageController>().setShoeImage('assets/character/initialImage.png');
-                            }
+
+                            // !!!! 옷 입히기 코드 추가 필요 !!!!
+
                             Navigator.pushAndRemoveUntil(context,
                                 PageRouteBuilder(
                                     transitionDuration: const Duration(milliseconds: 200),
