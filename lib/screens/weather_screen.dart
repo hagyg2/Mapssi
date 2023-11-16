@@ -83,6 +83,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   //8. 일일예보
   var dailyWeatherData;
 
+  bool isLoading = true;
 
   List<dynamic> weatherList = [];
   //List<WeatherData> weatherDataList = [];
@@ -95,6 +96,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       super.initState();
       getMyLocation();
       getLocation();
+      //getLocation();
     }
   }
 
@@ -111,7 +113,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 
   Future<void> loadWeatherData(var currentWeatherData) async {
-
+    setState(() {
+      isLoading = true; // 데이터를 불러오는 중으로 상태 변경
+    });
     // network.dart에서 파싱된 json data를 출력해주기 위해 weatherData 변수에 getJsonData()의 값을 할당
     String currentWeather = 'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apiKey&units=metric';
     String dailyWeather = 'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude3&lon=$longitude3&appid=$apiKey&units=metric';
@@ -243,12 +247,18 @@ class _WeatherScreenState extends State<WeatherScreen> {
     //koreanDes = getKoreanWeatherDescription(des!);
     //koreanDayOfWeek = getKoreanWeekDay(englishDayOfWeek);
 
+    setState(() {
+      isLoading = false; // 데이터를 불러오는 중으로 상태 변경
+    });
   }
 
 
 
   //사용자 위치 불러오기 -위경도 값f
   void getMyLocation() async {
+    setState(() {
+      isLoading = true; // 데이터를 불러오는 중으로 상태 변경
+    });
     MyLocation myLocation = MyLocation();
     await myLocation.getMyCurrentLongilati();
     latitude3 = myLocation.latitude2;
@@ -380,10 +390,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
     //koreanDes = getKoreanWeatherDescription(des!);
     //koreanDayOfWeek = getKoreanWeekDay(englishDayOfWeek);
 
+    setState(() {
+      isLoading = false; // 데이터를 불러오는 중으로 상태 변경
+    });
   }
-
-
-
 
 
   @override
@@ -526,6 +536,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
               if (locationData != null) {
                 latitude3 = locationData[0];
                 longitude3 = locationData[1];
+                setState(() {
+                  isLoading = true; // 데이터를 불러오는 중으로 상태 변경
+                });
                 var weatherData = await weather.getCityWeather(
                     latitude3!, longitude3!);
                 await loadWeatherData(weatherData);
@@ -630,7 +643,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
             )
         ),
         child: SingleChildScrollView(
-          child: maxTemperature != 100
+          child: isLoading == false
               ? Column(
             children: [
               //상단
