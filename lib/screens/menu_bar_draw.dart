@@ -11,7 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mapssi/screens/search_area_screen.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/screens/login_screen.dart';
-import 'package:mapssi/screens/search_area_screen2.dart';
+//import 'package:mapssi/screens/search_area_screen2.dart';
 import 'package:mapssi/screens/splash_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
