@@ -756,7 +756,7 @@ class _prefstylepagewState extends State<prefstylepagew> {
                           Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
                         }
                         */
-                        Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
                       }
                       else{
                         showDialog(

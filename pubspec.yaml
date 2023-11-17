@@ -36,6 +36,7 @@ dependencies:
   shared_preferences: ^2.1.1 #로그인 여부 전역에서 체크
   percent_indicator: ^4.2.3
   fluttertoast: ^8.2.2
+  camera: ^0.10.0
 
 
 dev_dependencies:
