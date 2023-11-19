@@ -98,12 +98,12 @@ class _CharAndTempState extends State<CharAndTemp> {
     );
 
     // 즐겨찾기 버튼
-    var favoriteButton = clothesPosition(5, 10,
+    var favoriteButton = clothesPosition(5, 5,
         isFavorite == true ? // 현재 옷이 즐겨찾기 인가?
         // YES -> 즐겨찾기 삭제
         SizedBox(
-          height: 55,
-          width: 55,
+          height: 70,
+          width: 70,
           child: ElevatedButton(
             onPressed: (){
               curClothes = Get.find<ClothesImageController>().getFileName();
@@ -123,13 +123,13 @@ class _CharAndTempState extends State<CharAndTemp> {
               elevation: MaterialStateProperty.all(0),
               overlayColor: MaterialStateProperty.all(Colors.transparent),
             ),
-            child: Image.asset('assets/favorite_selected.png'),
+            child: Image.asset('assets/favorite_selected.png',fit: BoxFit.cover),
           ),
         )
         // NO -> 즐겨찾기 등록
             : SizedBox(
-          height: 55,
-          width: 55,
+          height: 70,
+          width: 70,
           child: ElevatedButton(
             onPressed: (){
               curClothes = Get.find<ClothesImageController>().getFileName();
@@ -150,7 +150,7 @@ class _CharAndTempState extends State<CharAndTemp> {
               elevation: MaterialStateProperty.all(0),
               overlayColor: MaterialStateProperty.all(Colors.transparent),
             ),
-            child: Image.asset('assets/favorite_not_selected.png'),
+            child: Image.asset('assets/favorite_not_selected.png',fit: BoxFit.cover),
           ),
         )
     );

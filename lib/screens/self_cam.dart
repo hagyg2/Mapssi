@@ -1,12 +1,17 @@
 import 'dart:io';
-import 'dart:convert';
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+
+import '../main.dart';
+
+String gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
 
 // 현재 페이지 에서 쓰일 TextStyle (글씨체,색상 고정 / 크기,굵기 조절)
 TextStyle myTextStyle(double fs, {FontWeight fontWeight = FontWeight.w600}) {
@@ -39,6 +44,7 @@ class _SelfCamState extends State<SelfCam> {
 
   @override
   void initState() {
+    print("#######################CAM ON#########################");
     super.initState();
     prepareCam();
   }
@@ -178,18 +184,35 @@ class _ChkAndSendState extends State<ChkAndSend> {
 
   Future<Object> uploadImage() async {
     // 주소
-    final uri = Uri.parse('http://121.137.148.133:5000/test');
+    final uri = Uri.parse('http://192.168.0.7:5000/process_image');
+    final path = join(
+        ( await getTemporaryDirectory() ).path,
+        '${DateTime.now()}.png'
+    );
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
+    String appDocumentsPath = appDocumentsDirectory.path;
+
     var request = http.MultipartRequest('POST', uri);
     request.files.add(await http.MultipartFile.fromPath('image', widget.imagePath));
+    request.fields['gender'] = gender;
     print("Image sent");
     var response = await request.send();
     if (response.statusCode == 200) {
       print("Image scanned successfully!");
-      jsonResult = jsonDecode(await response.stream.bytesToString());
-      print(jsonResult);
-      time = jsonResult["time"];
-      state = jsonResult["state"];
-      carNumber = jsonResult["carnumber"];
+      // Create a file in the documents directory
+      File file = File('$appDocumentsPath/userFace.jpg');
+
+      var responseStream = response.stream;
+      var byteList = await http.ByteStream(responseStream).toBytes();
+      var imageBytes = Uint8List.fromList(byteList);
+      // Write the image bytes to the file
+      await file.writeAsBytes(imageBytes);
+
+      // Convert File to XFile
+      XFile faceResult = XFile(file.path);
+      // 사진 저장
+      faceResult.saveTo(path);
+      print('Image saved to: ${faceResult.path}');
       return response;
     } else {
       throw ('Image upload failed with status: ${response.statusCode}');
@@ -227,26 +250,13 @@ class _ChkAndSendState extends State<ChkAndSend> {
                 Expanded(
                     child: TextButton(
                       onPressed: ()  {
+                        uploadImage().then((response) {
+                          setState(() {});
+                        }).catchError((error) {
+                          // 에러 처리 로직
+                          print(error);
+                        });
                         Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
-                        // // 응답 받아 오는 동안 로딩 창 생성
-                        // showDialog(
-                        //   context: context,
-                        //   barrierDismissible: false, // 다이얼로그를 탭해도 닫히지 않도록 설정
-                        //   builder: (context) {
-                        //     return const Center(
-                        //       child: CircularProgressIndicator(),
-                        //     );
-                        //   },
-                        // );
-                        // uploadImage().then((response) {
-                        //   Navigator.pop(context); // 로딩 다이얼로그 닫기
-                        //   setState(() {});
-                        // }).catchError((error) {
-                        //   Navigator.pop(context);
-                        //   // 에러 처리 로직
-                        //   print(error);
-                        // });
-
                       },
                       child: const Text("스캔 시작",style: TextStyle(color: Colors.black)),
                     )
