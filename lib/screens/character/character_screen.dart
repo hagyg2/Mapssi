@@ -90,6 +90,7 @@ class ClothesImageController extends GetxController {
 class CharacterPage extends StatelessWidget {
   const CharacterPage({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     topImageWidth = MediaQuery.of(context).size.width*0.405;

@@ -141,3 +141,14 @@ Future<List<String>> getFilesInDirectory(String path) async {
   print("Files in $path = $files");
   return files;
 }
+
+// 캐릭터 화면 다시 로드(상태 바뀌었을때 사용)
+reloadCharacterScreen(context) {
+  return Navigator.pushAndRemoveUntil(
+      context,
+      PageRouteBuilder(
+          transitionDuration: Duration.zero,
+          pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
+      ),
+          (route) => false);
+}

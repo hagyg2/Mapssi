@@ -10,6 +10,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:mapssi/screens/character/character_screen.dart';
 import 'package:mapssi/screens/character/fnc_for_character_screen.dart';
 
+
+bool loadFace = false;
+
 //화면 중앙 (현재 기온, 캐릭터)
 class CharAndTemp extends StatefulWidget {
   const CharAndTemp({super.key});
@@ -29,6 +32,11 @@ class _CharAndTempState extends State<CharAndTemp> {
   var clothesImages = Get.find<ClothesImageController>().getImage();
   var curClothes = Get.find<ClothesImageController>().getFileName();
 
+  var characterImage = Image.asset( // 기본 캐릭터
+    'assets/character/${gender}_default.png',
+    fit: BoxFit.cover,
+  );
+  
   //색상 팔레트 아이콘 클릭
   void _buttonclickcount(){
     setState(() {
@@ -58,21 +66,46 @@ class _CharAndTempState extends State<CharAndTemp> {
     File(filePath).writeAsBytes(uint8List);
   }
 
+  // 사용자 합성 얼굴 사진 불러오는 용도
+  void loadUserImage() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    List<FileSystemEntity> files = appDocDir.listSync();
+    for (FileSystemEntity file in files) {
+      print(file.uri.pathSegments.last);
+    }
+    String appDocPath = appDocDir.path;
+    String filePath = '$appDocPath/${gender}UserFace.png';
+    print("Searching "+filePath);
+    File file = File(filePath);
+
+    if (await file.exists()) {
+      showToast("이미지를 불러옵니다.");
+      setState(() {
+        characterImage = Image.file(file);
+        loadFace = true;
+      });
+      if (!mounted) return;
+      reloadCharacterScreen(context);
+    } else {
+      showToast("생성된 이미지가 없습니다.");
+      characterImage = Image.asset( // 기본 캐릭터
+        'assets/character/${gender}_default.png',
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (! loadFace) {
+      loadUserImage();
+    }
     // 현재 옷이 즐겨찾기인지 확인
     if ( !isFavoriteSaving ) {  // 즐겨찾기 저장 중이 아닌 경우에만 (저장하는 비동기 작업 시간차 때문에 chkIsFavorite 결과 이상함)
       chkIsFavorite(curClothes).then((result) { // 현재 옷이 즐겨찾기 인지 아닌지 확인
         if (result != isFavorite) {           // 상태가 바뀌었다면 (즐겨찾기 맞음<->즐겨찾기 아님)
           isFavorite = result;
-          Navigator.pushAndRemoveUntil(   // 화면 다시 빌드
-              context,
-              PageRouteBuilder(
-                  transitionDuration: Duration.zero,
-                  pageBuilder: (context, animation,
-                      secondaryAnimation) => const MyPageView(pageIndex: 1)
-              ),
-                  (route) => false);
+          reloadCharacterScreen(context);
         }
       }).catchError((error) {
         print('An error occurred: $error');
@@ -94,36 +127,24 @@ class _CharAndTempState extends State<CharAndTemp> {
     var resetButton = clothesPosition(5, 300, IconButton(
         onPressed: (){
           Get.find<ClothesImageController>().resetImages();
-          Navigator.pushAndRemoveUntil(
-              context,
-              PageRouteBuilder(
-                  transitionDuration: Duration.zero,
-                  pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
-              ),
-                  (route) => false);
+          reloadCharacterScreen(context);
         },
         icon: const Icon(Icons.refresh,color: Colors.black,))
     );
 
     // 즐겨찾기 버튼
-    var favoriteButton = clothesPosition(5, 10,
+    var favoriteButton = clothesPosition(5, 5,
         isFavorite == true ? // 현재 옷이 즐겨찾기 인가?
         // YES -> 즐겨찾기 삭제
         SizedBox(
-          height: 55,
-          width: 55,
+          height: 70,
+          width: 70,
           child: ElevatedButton(
             onPressed: (){
               curClothes = Get.find<ClothesImageController>().getFileName();
               deleteFile(curClothes);
               isFavorite = false;
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  PageRouteBuilder(
-                      transitionDuration: Duration.zero,
-                      pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
-                  ),
-                      (route) => false);
+              reloadCharacterScreen(context);
               showToast("즐겨찾기 삭제 되었습니다.");
             },
             style: ButtonStyle(
@@ -131,26 +152,21 @@ class _CharAndTempState extends State<CharAndTemp> {
               elevation: MaterialStateProperty.all(0),
               overlayColor: MaterialStateProperty.all(Colors.transparent),
             ),
-            child: Image.asset('assets/favorite_selected.png'),
+            child: Image.asset('assets/favorite_selected.png',fit: BoxFit.cover),
           ),
         )
         // NO -> 즐겨찾기 등록
             : SizedBox(
-          height: 55,
-          width: 55,
+          height: 70,
+          width: 70,
           child: ElevatedButton(
             onPressed: (){
               curClothes = Get.find<ClothesImageController>().getFileName();
               captureAndSave(curClothes);
               isFavoriteSaving = true;
               isFavorite = true;
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  PageRouteBuilder(
-                      transitionDuration: Duration.zero,
-                      pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
-                  ),
-                      (route) => false);
+              if (!mounted) return;
+              reloadCharacterScreen(context);
               showToast("즐겨찾기에 등록 되었습니다.");
             },
             style: ButtonStyle(
@@ -158,7 +174,7 @@ class _CharAndTempState extends State<CharAndTemp> {
               elevation: MaterialStateProperty.all(0),
               overlayColor: MaterialStateProperty.all(Colors.transparent),
             ),
-            child: Image.asset('assets/favorite_not_selected.png'),
+            child: Image.asset('assets/favorite_not_selected.png',fit: BoxFit.cover),
           ),
         )
     );
@@ -436,11 +452,8 @@ class _CharAndTempState extends State<CharAndTemp> {
                     key: key,
                     child: Stack(
                         fit: StackFit.expand,
-                        children: [// 기본 캐릭터
-                          Image.asset(
-                            'assets/character/${gender}_default.png',
-                            fit: BoxFit.cover,
-                          ),
+                        children: [
+                          characterImage,
                           // 위에 의상
                           ...clothesStack]
                     ),

@@ -1,12 +1,18 @@
 import 'dart:io';
-import 'dart:convert';
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+
+import '../main.dart';
+import 'character/fnc_for_character_screen.dart';
+
+String gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
 
 // 현재 페이지 에서 쓰일 TextStyle (글씨체,색상 고정 / 크기,굵기 조절)
 TextStyle myTextStyle(double fs, {FontWeight fontWeight = FontWeight.w600}) {
@@ -39,6 +45,7 @@ class _SelfCamState extends State<SelfCam> {
 
   @override
   void initState() {
+    print("#######################CAM ON#########################");
     super.initState();
     prepareCam();
   }
@@ -176,26 +183,42 @@ class _ChkAndSendState extends State<ChkAndSend> {
   var state = "";
   var carNumber = "";
 
-  Future<Object> uploadImage() async {
+  // 이미지 전송 및 합성 사진 생성
+  Future<Object> uploadAndGetImage() async {
     // 주소
-    final uri = Uri.parse('http://121.137.148.133:5000/test');
+    final uri = Uri.parse('http://59.11.201.30:5000/process_image');
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
+    String appDocumentsPath = appDocumentsDirectory.path;
+
     var request = http.MultipartRequest('POST', uri);
     request.files.add(await http.MultipartFile.fromPath('image', widget.imagePath));
+    request.fields['gender'] = gender;
     print("Image sent");
     var response = await request.send();
     if (response.statusCode == 200) {
       print("Image scanned successfully!");
-      jsonResult = jsonDecode(await response.stream.bytesToString());
-      print(jsonResult);
-      time = jsonResult["time"];
-      state = jsonResult["state"];
-      carNumber = jsonResult["carnumber"];
+      // Create a file in the documents directory
+      File file = File('$appDocumentsPath/${gender}UserFace');
+
+      var responseStream = response.stream;
+      var byteList = await http.ByteStream(responseStream).toBytes();
+      var imageBytes = Uint8List.fromList(byteList);
+      // Write the image bytes to the file
+      await file.writeAsBytes(imageBytes);
+
+      // Convert File to XFile
+      XFile faceResult = XFile(file.path);
+      // 사진 저장
+      faceResult.saveTo('${file.path}.png');
+      print('Image saved to: ${faceResult.path}');
       return response;
     } else {
       throw ('Image upload failed with status: ${response.statusCode}');
     }
   }
 
+
+  // 화면 구현
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -210,9 +233,6 @@ class _ChkAndSendState extends State<ChkAndSend> {
                 child: Image.file( File(widget.imagePath) , fit: BoxFit.fitHeight),
               )
           ),
-          Text(time,style: TextStyle(fontSize: 20)),
-          Text(state,style: TextStyle(fontSize: 20)),
-          Text(carNumber,style: TextStyle(fontSize: 20)),
           Expanded(
             child: Row(
               children: [
@@ -227,26 +247,43 @@ class _ChkAndSendState extends State<ChkAndSend> {
                 Expanded(
                     child: TextButton(
                       onPressed: ()  {
-                        Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
-                        // // 응답 받아 오는 동안 로딩 창 생성
-                        // showDialog(
-                        //   context: context,
-                        //   barrierDismissible: false, // 다이얼로그를 탭해도 닫히지 않도록 설정
-                        //   builder: (context) {
-                        //     return const Center(
-                        //       child: CircularProgressIndicator(),
-                        //     );
-                        //   },
-                        // );
-                        // uploadImage().then((response) {
-                        //   Navigator.pop(context); // 로딩 다이얼로그 닫기
-                        //   setState(() {});
-                        // }).catchError((error) {
-                        //   Navigator.pop(context);
-                        //   // 에러 처리 로직
-                        //   print(error);
-                        // });
-
+                        // 생성 이후
+                        uploadAndGetImage().then((response) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('캐릭터 이미지 완성'),
+                                content: Text('이미지가 완성되었습니다.\n지금 바로 적용하시겠습니까?'),
+                                actions: <Widget>[
+                                  // 캐릭터 사진 적용
+                                  TextButton(
+                                    onPressed: () {
+                                      // 다이얼로그 닫기
+                                      Navigator.of(context).pop();
+                                      // 화면 전환
+                                      reloadCharacterScreen(context);
+                                    },
+                                    child: Text('네'),
+                                  ),
+                                  // 캐릭터 사진 비적용
+                                  TextButton(
+                                    onPressed: () {
+                                      // 다이얼로그 닫기
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('아니오'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          setState(() {});
+                        }).catchError((error) {
+                          // 에러 처리 로직
+                          print(error);
+                        });
+                        Navigator.pushNamed(context, '/index');
                       },
                       child: const Text("스캔 시작",style: TextStyle(color: Colors.black)),
                     )

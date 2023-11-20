@@ -140,7 +140,7 @@ class MyPageView extends StatelessWidget {
     return Scaffold(
       body: PageView.builder(
         controller: PageController(
-        initialPage: pageIndex, // 두 번째 페이지를 초기 페이지로 설정
+        initialPage: pageIndex, // 해당 페이지를 초기 페이지로 설정
       ),
         itemBuilder: (BuildContext context, int index) {
           if (index==0) { // 날씨 관련 페이지 출력
