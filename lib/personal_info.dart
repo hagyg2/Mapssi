@@ -480,17 +480,17 @@ class _prefstylepage extends State<prefstylepage> {
                         print(UserInfo[0]);
                         print(UserInfo[1]);
                         print(UserInfo[2]);
-                        /*
                         userController.setUserGender(UserInfo[0] as int?);
                         userController.setUserPerCol(UserInfo[1].toString());
                         userController.setUserPrefType(UserInfo[2].toString());
+                        /*
                         //백엔드로 정보(userinfo) 넘겨주기
                         if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
                           //메인 화면으로 이동
                           Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
                         }
                         */
-                        Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
                       }
                       else{
                         showDialog(
@@ -746,10 +746,10 @@ class _prefstylepagewState extends State<prefstylepagew> {
                         print(UserInfo[0]);
                         print(UserInfo[1]);
                         print(UserInfo[2]);
-                        /*
                         userController.setUserGender(UserInfo[0] as int?);
                         userController.setUserPerCol(UserInfo[1].toString());
                         userController.setUserPrefType(UserInfo[2].toString());
+                        /*
                         //백엔드로 정보(userinfo) 넘겨주기
                         if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
                           //메인 화면으로 이동
