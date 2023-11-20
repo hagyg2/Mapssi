@@ -82,6 +82,7 @@ getItem(int index) {
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
+            coordi = "sweatshirts_0x00050d24/shorts_0x00b7b4a6/sneakers";
 
           } else if (curTemp>4 && curTemp<=11) {
 

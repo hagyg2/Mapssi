@@ -26,6 +26,7 @@ class _CharAndTempState extends State<CharAndTemp> {
   // var height=165.0;   // 키 몸무게 초기화
   // var weight=80.0;
 
+  int Count =0; //색 변경에 쓰이는 변수
   int? curTemp;
   late List<Widget> clothesStack;
   var clothesImages = Get.find<ClothesImageController>().getImage();
@@ -35,6 +36,13 @@ class _CharAndTempState extends State<CharAndTemp> {
     'assets/character/${gender}_default.png',
     fit: BoxFit.cover,
   );
+  
+  //색상 팔레트 아이콘 클릭
+  void _buttonclickcount(){
+    setState(() {
+      Count =(Count + 1) % 4;
+    });
+  }
 
   // 현재 화면 캡쳐해서 저장
   void captureAndSave(String fileName) async {
@@ -171,6 +179,238 @@ class _CharAndTempState extends State<CharAndTemp> {
         )
     );
 
+    List<Widget> buildBox(int count) {
+      List<Widget> buttons = [];
+      switch(count){
+        case 1: //상의
+        case 3: //아우터
+          buttons.add(
+            clothesPosition(400, 30, ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: CircleBorder(),
+                minimumSize: Size(20, 20),
+              ),
+              onPressed: (){}, child: null)
+            )
+          );
+          buttons.add(
+              clothesPosition(400, 60, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 90, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.yellow,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 120, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 150, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 180, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueGrey,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 210, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurpleAccent,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 240, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 270, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 300, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          return buttons;
+        case 2: //하의
+          buttons.add(
+              clothesPosition(400, 30, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFFc4c4c4), //화이트
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20)
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 60, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFFbeb6a9), //아이보리
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20)
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 90, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF978868), //베이지
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20)
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 120, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF201716), //브라운
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20)
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 150, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF383838), //그레이
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20)
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 180, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF151514), //블랙
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20)
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 210, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF917188), //핑크
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20)
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 240, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF131824), //네이비
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20)
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          buttons.add(
+              clothesPosition(400, 270, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF323b32), //카키
+                      shape: CircleBorder(),
+                      minimumSize: Size(20, 20)
+                  ),
+                  onPressed: (){}, child: null)
+              )
+          );
+          return buttons;
+        default:
+          return [];
+      }
+    }
+
+
+    Image colorbutton(){
+      //초기
+      if(Count == 0){
+        return Image.asset("assets/icon_color.png", width: 20, height: 20,);
+      }
+      //상의
+      else if(Count == 1){
+        return Image.asset("assets/icon_top.png", width: 20, height: 20,);
+      }
+      //하의
+      else if(Count == 2){
+        return Image.asset("assets/icon_bottom.png", width: 20, height: 20,);
+      }
+      //아우터
+      else{
+        return Image.asset("assets/icon_outer.png", width: 20, height: 20,);
+      }
+    }
+
+    //색상 팔레트 버튼
+    var colorButton = clothesPosition(400, 10, InkWell(
+      onTap: () {
+        _buttonclickcount();
+      },
+      child: colorbutton()
+      )
+    );
+
     // 실제 화면이 나타나는 부분
     return Column(
       children: [
@@ -220,7 +460,9 @@ class _CharAndTempState extends State<CharAndTemp> {
                   ),
                   // 기타 버튼들
                   resetButton,
-                  favoriteButton
+                  favoriteButton,
+                  colorButton,
+                  ... buildBox(Count)
                 ],
               ),
             ),
