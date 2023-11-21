@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mapssi/main.dart';
+import 'package:mapssi/screens/character/test111.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:mapssi/screens/character/character_screen.dart';
 import 'package:mapssi/screens/character/fnc_for_character_screen.dart';
@@ -36,7 +37,7 @@ class _CharAndTempState extends State<CharAndTemp> {
     'assets/character/${gender}_default.png',
     fit: BoxFit.cover,
   );
-  
+
   //색상 팔레트 아이콘 클릭
   void _buttonclickcount(){
     setState(() {
@@ -185,21 +186,26 @@ class _CharAndTempState extends State<CharAndTemp> {
         case 1: //상의
         case 3: //아우터
           buttons.add(
-            clothesPosition(400, 30, ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                shape: CircleBorder(),
-                minimumSize: Size(20, 20),
-              ),
-              onPressed: (){}, child: null)
-            )
+              clothesPosition(400, 30, ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
+                  ),
+                  onPressed: (){
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => testPage()));
+
+
+                  }, child: null)
+              )
           );
           buttons.add(
               clothesPosition(400, 60, ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20),
+                    backgroundColor: Colors.orange,
+                    shape: CircleBorder(),
+                    minimumSize: Size(20, 20),
                   ),
                   onPressed: (){}, child: null)
               )
@@ -404,11 +410,11 @@ class _CharAndTempState extends State<CharAndTemp> {
 
     //색상 팔레트 버튼
     var colorButton = clothesPosition(400, 10, InkWell(
-      onTap: () {
-        _buttonclickcount();
-      },
-      child: colorbutton()
-      )
+        onTap: () {
+          _buttonclickcount();
+        },
+        child: colorbutton()
+    )
     );
 
     // 실제 화면이 나타나는 부분
