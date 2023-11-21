@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:get/get.dart';
 import 'main.dart';
 
-var curTemp = Get.find<WeatherJasonData>().getData()[0];
+//var curTemp = Get.find<WeatherJasonData>().getData()[0];
+var curTemp = 10;
 var perCol = Get.find<UserDataFromServer>().getUserPerCol();
 
 getItem(int index) {

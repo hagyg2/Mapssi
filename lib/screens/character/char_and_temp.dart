@@ -13,6 +13,10 @@ import 'package:mapssi/screens/character/fnc_for_character_screen.dart';
 
 
 bool loadFace = false;
+var characterImage = Image.asset( // 기본 캐릭터
+  'assets/character/${gender}_default.png',
+  fit: BoxFit.cover,
+);
 
 //화면 중앙 (현재 기온, 캐릭터)
 class CharAndTemp extends StatefulWidget {
@@ -32,12 +36,6 @@ class _CharAndTempState extends State<CharAndTemp> {
   late List<Widget> clothesStack;
   var clothesImages = Get.find<ClothesImageController>().getImage();
   var curClothes = Get.find<ClothesImageController>().getFileName();
-
-  var characterImage = Image.asset( // 기본 캐릭터
-    'assets/character/${gender}_default.png',
-    fit: BoxFit.cover,
-  );
-  
 
 
   // 현재 화면 캡쳐해서 저장
@@ -77,8 +75,14 @@ class _CharAndTempState extends State<CharAndTemp> {
     if (await file.exists()) {
       showToast("이미지를 불러옵니다.");
       setState(() {
-        characterImage = Image.file(file);
-        loadFace = true;
+        var oldImage = characterImage;
+        var imageBytes = Uint8List.fromList(file.readAsBytesSync());
+
+        characterImage = Image.memory(imageBytes, fit: BoxFit.cover);
+        if (oldImage != characterImage) {
+          showToast("이미지가 바뀌었습니다!");
+          loadFace = true;
+        }
       });
       if (!mounted) return;
       reloadCharacterScreen(context);
@@ -98,7 +102,10 @@ class _CharAndTempState extends State<CharAndTemp> {
             shape: CircleBorder(),
             minimumSize: Size(20, 20)
         ),
-        onPressed: (){}, child: null);
+        onPressed: (){
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context) => testPage()));
+        }, child: null);
   }
 
   @override

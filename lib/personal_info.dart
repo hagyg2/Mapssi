@@ -485,13 +485,13 @@ class _prefstylepage extends State<prefstylepage> {
                         userController.setUserPerCol(UserInfo[1].toString());
                         userController.setUserPrefType(UserInfo[2].toString());
 
-                        //백엔드로 정보(userinfo) 넘겨주기
-                        if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
-                          //메인 화면으로 이동
-                          Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
-                        }
+                        // //백엔드로 정보(userinfo) 넘겨주기
+                        // if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
+                        //   //메인 화면으로 이동
+                        //   Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                        // }
 
-                       // Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
+                       Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
                       }
                       else{
                         showDialog(
@@ -752,13 +752,13 @@ class _prefstylepagewState extends State<prefstylepagew> {
                         userController.setUserPerCol(UserInfo[1].toString());
                         userController.setUserPrefType(UserInfo[2].toString());
 
-                        //백엔드로 정보(userinfo) 넘겨주기
-                        if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
-                          //메인 화면으로 이동
-                          Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
-                        }
+                        // //백엔드로 정보(userinfo) 넘겨주기
+                        // if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
+                        //   //메인 화면으로 이동
+                        //   Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                        // }
 
-                        //Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
                       }
                       else{
                         showDialog(

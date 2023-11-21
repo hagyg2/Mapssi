@@ -18,11 +18,11 @@ TextStyle txtStyle (double fs) {
 }
 
 // 이미지 사이즈 조절 및 설정
-ColorFiltered setImage(String url, double w, [Color color=Colors.transparent]) {
+ColorFiltered setImage(String url, double w, [Color color=Colors.white]) {
   return ColorFiltered(
     colorFilter: ColorFilter.mode(
       color,
-      BlendMode.color,
+      BlendMode.modulate,
     ),
     child: Image.asset(url, width: w, fit: BoxFit.cover),
   );
@@ -149,6 +149,6 @@ reloadCharacterScreen(context) {
       PageRouteBuilder(
           transitionDuration: Duration.zero,
           pageBuilder: (context, animation, secondaryAnimation) => const MyPageView(pageIndex: 1)
-      ),
-          (route) => false);
+      ), (route) => false
+  );
 }
