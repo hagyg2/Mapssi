@@ -37,13 +37,8 @@ class _CharAndTempState extends State<CharAndTemp> {
     'assets/character/${gender}_default.png',
     fit: BoxFit.cover,
   );
+  
 
-  //색상 팔레트 아이콘 클릭
-  void _buttonclickcount(){
-    setState(() {
-      Count =(Count + 1) % 4;
-    });
-  }
 
   // 현재 화면 캡쳐해서 저장
   void captureAndSave(String fileName) async {
@@ -96,6 +91,16 @@ class _CharAndTempState extends State<CharAndTemp> {
     }
   }
 
+  ElevatedButton colorOnPalette(Color color) {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: color, //네이비
+            shape: CircleBorder(),
+            minimumSize: Size(20, 20)
+        ),
+        onPressed: (){}, child: null);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (! loadFace) {
@@ -138,8 +143,8 @@ class _CharAndTempState extends State<CharAndTemp> {
         isFavorite == true ? // 현재 옷이 즐겨찾기 인가?
         // YES -> 즐겨찾기 삭제
         SizedBox(
-          height: 70,
-          width: 70,
+          height: 55,
+          width: 55,
           child: ElevatedButton(
             onPressed: (){
               curClothes = Get.find<ClothesImageController>().getFileName();
@@ -158,8 +163,8 @@ class _CharAndTempState extends State<CharAndTemp> {
         )
         // NO -> 즐겨찾기 등록
             : SizedBox(
-          height: 70,
-          width: 70,
+          height: 55,
+          width: 55,
           child: ElevatedButton(
             onPressed: (){
               curClothes = Get.find<ClothesImageController>().getFileName();
@@ -185,209 +190,43 @@ class _CharAndTempState extends State<CharAndTemp> {
       switch(count){
         case 1: //상의
         case 3: //아우터
-          buttons.add(
-              clothesPosition(400, 30, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => testPage()));
-
-
-                  }, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 60, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 90, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 120, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 150, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 180, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueGrey,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 210, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurpleAccent,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 240, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 270, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 300, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: CircleBorder(),
-                    minimumSize: Size(20, 20),
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(Colors.red)),
+            clothesPositionFromBottom(15, 60,colorOnPalette(Colors.orange)),
+            clothesPositionFromBottom(15, 90,colorOnPalette(Colors.yellow)),
+            clothesPositionFromBottom(15, 120,colorOnPalette(Colors.green)),
+            clothesPositionFromBottom(15, 150,colorOnPalette(Colors.blue)),
+            clothesPositionFromBottom(15, 180,colorOnPalette(Colors.blueGrey)),
+            clothesPositionFromBottom(15, 210,colorOnPalette(Colors.deepPurpleAccent)),
+            clothesPositionFromBottom(15, 240,colorOnPalette(Colors.white)),
+            clothesPositionFromBottom(15, 270,colorOnPalette(Colors.grey)),
+            clothesPositionFromBottom(15, 300,colorOnPalette(Colors.black))
+          ];
           return buttons;
         case 2: //하의
-          buttons.add(
-              clothesPosition(400, 30, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFFc4c4c4), //화이트
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20)
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 60, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFFbeb6a9), //아이보리
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20)
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 90, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF978868), //베이지
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20)
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 120, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF201716), //브라운
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20)
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 150, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF383838), //그레이
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20)
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 180, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF151514), //블랙
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20)
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 210, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF917188), //핑크
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20)
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 240, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF131824), //네이비
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20)
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
-          buttons.add(
-              clothesPosition(400, 270, ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF323b32), //카키
-                      shape: CircleBorder(),
-                      minimumSize: Size(20, 20)
-                  ),
-                  onPressed: (){}, child: null)
-              )
-          );
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFc4c4c4))),
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFbeb6a9))),
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF978868))),
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF201716))),
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF383838))),
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF151514))),
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF917188))),
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF131824))),
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF323b32)))
+          ];
           return buttons;
         default:
           return [];
       }
     }
 
+    //색상 팔레트 아이콘 클릭
+    void _buttonclickcount(){
+      setState(() {
+        Count =(Count + 1) % 4;
+      });
+    }
 
     Image colorbutton(){
       //초기
@@ -409,12 +248,12 @@ class _CharAndTempState extends State<CharAndTemp> {
     }
 
     //색상 팔레트 버튼
-    var colorButton = clothesPosition(400, 10, InkWell(
-        onTap: () {
-          _buttonclickcount();
-        },
-        child: colorbutton()
-    )
+    var colorButton = clothesPositionFromBottom(15, 15, InkWell(
+      onTap: () {
+        _buttonclickcount();
+      },
+      child: colorbutton()
+      )
     );
 
     // 실제 화면이 나타나는 부분

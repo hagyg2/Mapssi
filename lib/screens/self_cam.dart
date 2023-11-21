@@ -45,7 +45,6 @@ class _SelfCamState extends State<SelfCam> {
 
   @override
   void initState() {
-    print("#######################CAM ON#########################");
     super.initState();
     prepareCam();
   }
