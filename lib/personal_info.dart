@@ -484,7 +484,7 @@ class _prefstylepage extends State<prefstylepage> {
                         userController.setUserGender(UserInfo[0] as int?);
                         userController.setUserPerCol(UserInfo[1].toString());
                         userController.setUserPrefType(UserInfo[2].toString());
-                        /*
+
                         //백엔드로 정보(userinfo) 넘겨주기
                         if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
                           //메인 화면으로 이동
@@ -751,7 +751,7 @@ class _prefstylepagewState extends State<prefstylepagew> {
                         userController.setUserGender(UserInfo[0] as int?);
                         userController.setUserPerCol(UserInfo[1].toString());
                         userController.setUserPrefType(UserInfo[2].toString());
-                        /*
+
                         //백엔드로 정보(userinfo) 넘겨주기
                         if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
                           //메인 화면으로 이동

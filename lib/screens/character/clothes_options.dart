@@ -211,7 +211,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
     // getItem에서 얻은 의상 종류 중 구체적인 한 이미지를 선택해서 가져온 후 배열에 담아 반환
     var top = [await getRandomImages("top_${items[0][0]}"), Color(int.parse(items[0][1]))];
     var bot = [await getRandomImages("bot_${items[1][0]}"), Color(int.parse(items[1][1]))];
-    var shoe = [await getRandomImages("shoe_${items[2][0]}"), Color(int.parse(items[2][1]))];
+    var shoe = [await getRandomImages("shoe_${items[2]}")];
     var out = [await getRandomImages("out_${items[3][0]}"), Color(int.parse(items[3][1]))];
     var clothes = [top,bot,shoe,out];
     return clothes;
@@ -508,7 +508,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
       var recClothes = await recommendClothes(ind); // recommendClothes 함수 사용해서 받아온 결과
       Get.find<ClothesImageController>().setTopImage(recClothes[0][0],color:recClothes[0][1]); //상의로 설정
       Get.find<ClothesImageController>().setBotImage(recClothes[1][0],color:recClothes[1][1]); //하의로 설정
-      Get.find<ClothesImageController>().setShoeImage(recClothes[2][0],color:recClothes[2][1]); //신발로 설정
+      Get.find<ClothesImageController>().setShoeImage(recClothes[2][0]); //신발로 설정
       Get.find<ClothesImageController>().setOutImage(recClothes[3][0],color:recClothes[3][1]); //외투로 설정
       isFavoriteSaving = false;
       if (!mounted) return;
