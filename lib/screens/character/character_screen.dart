@@ -47,12 +47,12 @@ class ClothesImageController extends GetxController {
     shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth);
   }
 
-  setTopImage(String path, {Color? color=Colors.transparent}) {
+  setTopImage(String path, {Color? color=Colors.white}) {
     top = "${path.split("/").last}@${color.hashCode.toString()}";
     topImage =  setImage(path, topImageWidth, color!);
   }
 
-  setBotImage(String path, {Color? color=Colors.transparent}) {
+  setBotImage(String path, {Color? color=Colors.white}) {
     var length = path.split("_").last;
     if (length =="long.png") {
       botBg = setImage('assets/character/$gender/botBgLong.png', botImageWidth*0.4);
@@ -65,12 +65,12 @@ class ClothesImageController extends GetxController {
     botImage = setImage(path, botImageWidth, color!);
   }
 
-  setOutImage(String path, {Color? color=Colors.transparent}) {
+  setOutImage(String path, {Color? color=Colors.white}) {
     out = "${path.split("/").last}@${color.hashCode.toString()}";
     outImage = setImage(path, outImageWidth, color!);
   }
 
-  setShoeImage(String path, {Color? color=Colors.transparent}) {
+  setShoeImage(String path, {Color? color=Colors.white}) {
     shoe = "${path.split("/").last}@${color.hashCode.toString()}";
     shoeImage = setImage(path, shoeImageWidth, color!);
   }

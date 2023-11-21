@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:get/get.dart';
 import 'main.dart';
 
-var curTemp = Get.find<WeatherJasonData>().getData()[0];
+//var curTemp = Get.find<WeatherJasonData>().getData()[0];
+var curTemp = 10;
 var perCol = Get.find<UserDataFromServer>().getUserPerCol();
 
 getItem(int index) {
@@ -11,7 +12,7 @@ getItem(int index) {
   List<String> coordi = [];
   //['캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '러블리 or 댄디', '고프코어']
   switch (index) {
-    case 1: // 캐주얼
+    case 0: // 캐주얼
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
@@ -112,7 +113,7 @@ getItem(int index) {
       break;
 
 
-    case 2: // 스트릿
+    case 1: // 스트릿
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
@@ -213,7 +214,7 @@ getItem(int index) {
       break;
 
 
-    case 3: // 아메카지
+    case 2: // 아메카지
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
@@ -314,7 +315,7 @@ getItem(int index) {
       break;
 
 
-    case 4: // 스포츠
+    case 3: // 스포츠
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
@@ -383,7 +384,7 @@ getItem(int index) {
       break;
 
 
-    case 5: // 클래식
+    case 4: // 클래식
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
@@ -452,7 +453,7 @@ getItem(int index) {
       break;
 
 
-    case 6: // 러블리 or 댄디
+    case 5: // 러블리 or 댄디
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
@@ -521,7 +522,7 @@ getItem(int index) {
       break;
 
 
-    case 7: // 고프코어
+    case 6: // 고프코어
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
@@ -590,6 +591,7 @@ getItem(int index) {
       break;
   }
   //coordi = "hoodie_0x00000000/denim_0x00000000/sports_0x00000000";
+  print(coordi);
   var random = Random();
   String randomcoordi = "";
   randomcoordi = coordi[random.nextInt(coordi.length)];
