@@ -486,12 +486,10 @@ class _prefstylepage extends State<prefstylepage> {
                         userController.setUserPrefType(UserInfo[2].toString());
 
                         // //백엔드로 정보(userinfo) 넘겨주기
-                        // if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
-                        //   //메인 화면으로 이동
-                        //   Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
-                        // }
-
-                       Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                        if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
+                          Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                        }
+                       //Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
                       }
                       else{
                         showDialog(
@@ -752,13 +750,12 @@ class _prefstylepagewState extends State<prefstylepagew> {
                         userController.setUserPerCol(UserInfo[1].toString());
                         userController.setUserPrefType(UserInfo[2].toString());
 
-                        // //백엔드로 정보(userinfo) 넘겨주기
-                        // if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
-                        //   //메인 화면으로 이동
-                        //   Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
-                        // }
+                         //백엔드로 정보(userinfo) 넘겨주기
+                        if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
+                          Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                         }
 
-                        Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                        //Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
                       }
                       else{
                         showDialog(
@@ -795,7 +792,7 @@ class _prefstylepagewState extends State<prefstylepagew> {
 
 //성별, 퍼스널 컬러, 선호 스타일 백엔드로 넘겨주기
 Future<bool> sendUserData(id, usergender, usercolor, userstyle) async {
-  var url = 'http://52.79.164.56:50000/set-userdata/$id';
+  var url = 'http://13.209.46.142:50000/set-userdata/$id';
 
   var userData = {
     'gender': usergender,

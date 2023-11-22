@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/perinfo': (context) => genderpage(),
         '/selfcam': (context) => SelfCam(),
       },
-      initialRoute: '/splash',
+      initialRoute: '/index',
 
     );
   }
