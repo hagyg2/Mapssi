@@ -56,8 +56,8 @@ class Network {
       var parsingData = jsonDecode(jsonData);
       return parsingData;
     }
-    else {
-      throw Exception('미세먼지 정보를 가져오는 데 실패했습니다.');
-    }
+    // else {
+    //   throw Exception('미세먼지 정보를 가져오는 데 실패했습니다.');
+    // }
   }
 }

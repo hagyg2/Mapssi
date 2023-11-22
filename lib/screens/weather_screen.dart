@@ -83,7 +83,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   //8. 일일예보
   var dailyWeatherData;
 
-  bool isLoading = true;
+  bool isLoading = false;
 
   List<dynamic> weatherList = [];
   //List<WeatherData> weatherDataList = [];
@@ -95,19 +95,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
     if (Get.find<WeatherJasonData>().getData()[1] == 100) {
       super.initState();
       getMyLocation();
-      getLocation();
+      //getLocation();
       //getLocation();
     }
   }
 
-
-
-  Future<void> getLocation() async {
-    var weatherData = await WeatherModel().getLocationWeather();
-
-
-    await loadWeatherData(weatherData);
-  }
 
 
 
@@ -307,7 +299,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     currentWeatherData['rain'] != null ? currentWeatherData['rain']['1h'] : 0.0;  //현재 강수량
 
     weatherList = dailyWeatherData['list'];    // 5일간 3시간 단위 예보
-   // print('weatherList? $weatherList');
+    // print('weatherList? $weatherList');
 
 
 
@@ -507,8 +499,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 
     //더미
-   // String text1= "용인시";
-  //  String text2= "경기로";
+    // String text1= "용인시";
+    //  String text2= "경기로";
 
 
 
@@ -557,26 +549,26 @@ class _WeatherScreenState extends State<WeatherScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-            padding: EdgeInsets.all(8.0),
-            child:
-            RichText(
-              textAlign: TextAlign.center, // 가운데 정렬
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: text1,
-                    style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
-                  ),
-                  TextSpan(
-                    text: "\n",
-                  ),
-                  TextSpan(
-                    text: text2,
-                    style: TextStyle(fontSize: 13, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
-            ),),
+                  padding: EdgeInsets.all(8.0),
+                  child:
+                  RichText(
+                    textAlign: TextAlign.center, // 가운데 정렬
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: text1,
+                          style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
+                        ),
+                        TextSpan(
+                          text: "\n",
+                        ),
+                        TextSpan(
+                          text: text2,
+                          style: TextStyle(fontSize: 13, color: Colors.black, fontFamily: 'SUITE', fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                  ),),
 
                 Image.asset(
                   'assets/icons/down_arrow_black.png',
@@ -584,8 +576,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   height: 15,
                 ),
               ],
-              ),
             ),
+          ),
         ),
 
 
@@ -1149,5 +1141,3 @@ class WeatherIconWidget extends StatelessWidget {
     );
   }
 }
-
-
