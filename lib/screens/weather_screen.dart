@@ -127,10 +127,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
     var dailyWeatherData = await network.getdailyWeatherData();
     var weeklyWeatherData = await network.getWeeklyeatherData();
     var airConditionData = await network.getAirConditionData();
-    print(currentWeatherData);
-    print(dailyWeatherData);
-    print(weeklyWeatherData);
-    print(airConditionData);
+    // print(currentWeatherData);
+    // print(dailyWeatherData);
+    // print(weeklyWeatherData);
+    // print(airConditionData);
 
 
     //위경도 => 지역 변환
@@ -162,7 +162,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     currentWeatherData['rain'] != null ? currentWeatherData['rain']['1h'] : 0.0;  //현재 강수량
 
     weatherList = dailyWeatherData['list'];    // 5일간 3시간 단위 예보
-    print('weatherList? $weatherList');
+    //print('weatherList? $weatherList');
 
 
 
@@ -198,8 +198,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
     updateTemperatures();
 
 
-    print("최고 $maxTemperature");
-    print("최저 $minTemperature");
+    // print("최고 $maxTemperature");
+    // print("최저 $minTemperature");
 
 
     List<dynamic> _filterDailyForecasts(List<dynamic> weatherList) {
@@ -224,7 +224,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     }
     final dailyForecasts = _filterDailyForecasts(weatherList);
 
-    print('주간예보? $dailyForecasts');
+    //print('주간예보? $dailyForecasts');
 
 
     for (final forecast in dailyForecasts) {
@@ -234,8 +234,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
       final weatherDescription = forecast['weather'][0]['description'];
 
       // 하루 기준의 데이터를 출력하거나 처리
-      print('Date: $forecastDate');
-      print('Weather Description: $weatherDescription');
+      // print('Date: $forecastDate');
+      // print('Weather Description: $weatherDescription');
     }
 
     //생성된 위치 기반 날씨 정보를 character_page으로 넘김
@@ -263,13 +263,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
     await myLocation.getMyCurrentLongilati();
     latitude3 = myLocation.latitude2;
     longitude3 = myLocation.longtitude2;
-    print(latitude3);
-    print(longitude3);
+    // print(latitude3);
+    // print(longitude3);
 
     addresNameDo = myLocation.addressDo;
     addresNameSi = myLocation.addressSi;
-    print(addresNameDo);
-    print(addresNameSi);
+    // print(addresNameDo);
+    // print(addresNameSi);
 
 
     // network.dart 에서 getJsonData()불러오기 위해 network인스턴스 생성
@@ -284,10 +284,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
     var dailyWeatherData = await network.getdailyWeatherData();
     var weeklyWeatherData = await network.getWeeklyeatherData();
     var airConditionData = await network.getAirConditionData();
-    print(currentWeatherData);
-    print(dailyWeatherData);
-    print(weeklyWeatherData);
-    print(airConditionData);
+    // print(currentWeatherData);
+    // print(dailyWeatherData);
+    // print(weeklyWeatherData);
+    // print(airConditionData);
 
 
 
@@ -307,7 +307,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     currentWeatherData['rain'] != null ? currentWeatherData['rain']['1h'] : 0.0;  //현재 강수량
 
     weatherList = dailyWeatherData['list'];    // 5일간 3시간 단위 예보
-    print('weatherList? $weatherList');
+   // print('weatherList? $weatherList');
 
 
 
@@ -341,8 +341,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
     updateTemperatures();
 
 
-    print("최고 $maxTemperature");
-    print("최저 $minTemperature");
+    // print("최고 $maxTemperature");
+    // print("최저 $minTemperature");
 
 
     List<dynamic> _filterDailyForecasts(List<dynamic> weatherList) {
@@ -367,7 +367,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     }
     final dailyForecasts = _filterDailyForecasts(weatherList);
 
-    print('주간예보? $dailyForecasts');
+    //print('주간예보? $dailyForecasts');
 
 
     for (final forecast in dailyForecasts) {
@@ -377,8 +377,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
       final weatherDescription = forecast['weather'][0]['description'];
 
       // 하루 기준의 데이터를 출력하거나 처리
-      print('Date: $forecastDate');
-      print('Weather Description: $weatherDescription');
+      // print('Date: $forecastDate');
+      // print('Weather Description: $weatherDescription');
     }
 
     //생성된 위치 기반 날씨 정보를 character_page으로 넘김
@@ -424,7 +424,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     }
 
     var dailyForecasts = _filterDailyForecasts(weatherList);
-    print('주간예보????????????? $dailyForecasts');
+    // print('주간예보????????????? $dailyForecasts');
 
 
 
@@ -436,8 +436,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 
       // 하루 기준의 데이터를 출력하거나 처리
-      print('Date: $forecastDate');
-      print('Weather Description: $weatherDescription');
+      // print('Date: $forecastDate');
+      // print('Weather Description: $weatherDescription');
     }
 
     currentTemperature = Get.find<WeatherJasonData>().getData()[0];
@@ -486,10 +486,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
       maxTemperatures.add(maxTemp);
       minTemperatures.add(minTemp);
 
-      print('날짜: ${currentMidnight.toString().substring(0, 10)}');
-      print('최고 온도: ${maxTemp.toStringAsFixed(1)}');
-      print('최저 온도: ${minTemp.toStringAsFixed(1)}');
-      print('===================!!!!!!!!!!=');
+      // print('날짜: ${currentMidnight.toString().substring(0, 10)}');
+      // print('최고 온도: ${maxTemp.toStringAsFixed(1)}');
+      // print('최저 온도: ${minTemp.toStringAsFixed(1)}');
+      // print('===================!!!!!!!!!!=');
     }
 
 
