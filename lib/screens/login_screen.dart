@@ -8,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/main.dart';
 import 'package:mapssi/personal_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // 최초 로그인이면 /splash -> /login -> /perinfo -> /index
 // 로그인 되어 있지 않고 최초 로그인이 아니면 /splash -> /login -> /index
@@ -67,6 +68,8 @@ class LoginScreen extends StatelessWidget {
                     print(userId);
                     loginplatform = 'kakao';
                     chkIfRegisteredAndRedirect(context, userId, userName);
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('isLoggedIn', true);
                   } catch (error) {
                     print('카카오톡으로 로그인 실패 $error');
 
@@ -80,6 +83,8 @@ class LoginScreen extends StatelessWidget {
                       print(userId);
                       loginplatform = 'kakao';
                       chkIfRegisteredAndRedirect(context, userId, userName);
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.setBool('isLoggedIn', true);
                     } catch (error) {
                       print('카카오계정으로 로그인 실패 $error');
                     }
@@ -96,6 +101,8 @@ class LoginScreen extends StatelessWidget {
                     print(userId);
                     loginplatform = 'kakao';
                     chkIfRegisteredAndRedirect(context, userId, userName);
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('isLoggedIn', true);
                   } catch (error) {
                     print('카카오계정으로 로그인 실패 $error');
                   }
@@ -124,6 +131,8 @@ class LoginScreen extends StatelessWidget {
                 if(user != null){
                   loginplatform = 'google';
                   chkIfRegisteredAndRedirect(context, userId, userName);
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setBool('isLoggedIn', true);
                 }
               },
             )

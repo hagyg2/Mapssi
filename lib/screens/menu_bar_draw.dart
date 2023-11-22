@@ -16,6 +16,7 @@ import 'package:mapssi/screens/login_screen.dart';
 //import 'package:mapssi/screens/search_area_screen2.dart';
 import 'package:mapssi/screens/splash_screen.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
 import '../personal_info.dart';
@@ -87,11 +88,15 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
                             onPressed: () async {
                               if (loginplatform == 'kakao') {
                                 await UserApi.instance.unlink();
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                prefs.setBool('isLoggedIn', false);
                                 Navigator.pushNamedAndRemoveUntil(
                                     context, '/login', (route) => false);
                               }
                               else {
                                 SignInWithGoogle.signOut();
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                prefs.setBool('isLoggedIn', false);
                                 Navigator.pushNamedAndRemoveUntil(
                                     context, '/login', (route) => false);
                               }
@@ -185,11 +190,15 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
                               onPressed: () async {
                                 if (loginplatform == 'kakao') {
                                   await UserApi.instance.unlink();
+                                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                                  prefs.setBool('isLoggedIn', false);
                                   Navigator.pushNamedAndRemoveUntil(
                                       context, '/login', (route) => false);
                                 }
                                 else {
                                   SignInWithGoogle.signOut();
+                                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                                  prefs.setBool('isLoggedIn', false);
                                   Navigator.pushNamedAndRemoveUntil(
                                       context, '/login', (route) => false);
                                 }
