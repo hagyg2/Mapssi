@@ -136,7 +136,7 @@ class LoginScreen extends StatelessWidget {
 }
 
   chkIfRegisteredAndRedirect (context, userId, userName) async {
-    const serverUrl = 'http://52.79.164.56:50000/'; // 노드 서버의 엔드포인트 URL
+    const serverUrl = 'http://13.209.46.142:50000/'; // 노드 서버의 엔드포인트 URL
     UserDataFromServer userController = Get.find<UserDataFromServer>();
     userController.setUserId(userId);
     userController.setUserName(userName);
