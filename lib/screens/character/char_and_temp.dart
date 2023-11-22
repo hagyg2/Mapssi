@@ -95,6 +95,7 @@ class _CharAndTempState extends State<CharAndTemp> {
     }
   }
 
+  // 색깔별 동그라미 버튼들
   ElevatedButton colorOnPalette(Color color) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -192,6 +193,7 @@ class _CharAndTempState extends State<CharAndTemp> {
         )
     );
 
+    // 동그라미 색상 버튼들
     List<Widget> buildBox(int count) {
       List<Widget> buttons = [];
       switch(count){
@@ -235,6 +237,7 @@ class _CharAndTempState extends State<CharAndTemp> {
       });
     }
 
+    // 팔레트 버튼 이미지
     Image colorbutton(){
       //초기
       if(Count == 0){
