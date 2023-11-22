@@ -68,13 +68,13 @@ class _CharAndTempState extends State<CharAndTemp> {
     File file = File(filePath);
 
     if (await file.exists()) {
-      showToast("이미지를 불러옵니다.");
       setState(() {
         var oldImage = characterImage;
         var imageBytes = Uint8List.fromList(file.readAsBytesSync());
 
         characterImage = Image.memory(imageBytes, fit: BoxFit.cover);
         if (oldImage != characterImage) {
+          showToast("새 이미지를 적용했습니다!");
           loadFace = true;
         }
       });
