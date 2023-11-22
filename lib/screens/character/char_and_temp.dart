@@ -6,7 +6,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mapssi/main.dart';
-import 'package:mapssi/screens/character/test111.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:mapssi/screens/character/character_screen.dart';
 import 'package:mapssi/screens/character/fnc_for_character_screen.dart';
@@ -80,14 +79,12 @@ class _CharAndTempState extends State<CharAndTemp> {
 
         characterImage = Image.memory(imageBytes, fit: BoxFit.cover);
         if (oldImage != characterImage) {
-          showToast("이미지가 바뀌었습니다!");
           loadFace = true;
         }
       });
       if (!mounted) return;
       reloadCharacterScreen(context);
     } else {
-      showToast("생성된 이미지가 없습니다.");
       characterImage = Image.asset( // 기본 캐릭터
         'assets/character/${gender}_default.png',
         fit: BoxFit.cover,
@@ -100,13 +97,32 @@ class _CharAndTempState extends State<CharAndTemp> {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: color, //네이비
-            shape: CircleBorder(),
-            minimumSize: Size(20, 20)
+            shape: const CircleBorder(),
+            minimumSize: const Size(20, 20)
         ),
         onPressed: (){
-          Navigator.push(
-            context, MaterialPageRoute(builder: (context) => testPage()));
-        }, child: null);
+          var path = "assets/character/$gender/";
+          if (Count==1) {
+            var curTop = Get.find<ClothesImageController>().getTopPath();
+            if (curTop!="") {
+              Get.find<ClothesImageController>().setTopImage(path+curTop, color: color);
+            }
+          } else if (Count==2) {
+            var curBot = Get.find<ClothesImageController>().getBotPath();
+            if (curBot!="") {
+              Get.find<ClothesImageController>().setBotImage(path+curBot, color: color);
+            }
+          } else if (Count==3) {
+            var curOut = path+Get.find<ClothesImageController>().getOutPath();
+            if (curOut!="") {
+              Get.find<ClothesImageController>().setOutImage(path+curOut, color: color);
+            }
+          }
+          Navigator.pushAndRemoveUntil(
+            context, MaterialPageRoute(builder: (context) => const MyPageView(pageIndex: 1)),(route)=>false);
+        },
+        child: null
+    );
   }
 
   @override

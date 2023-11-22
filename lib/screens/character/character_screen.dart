@@ -82,6 +82,30 @@ class ClothesImageController extends GetxController {
   getFileName() {
     return "$top^$bot^$out^$shoe";
   }
+
+  getTopPath() {
+    if (top==""){
+      return top;
+    } else {
+      return top.split("@").first;
+    }
+  }
+
+  getBotPath() {
+    if (bot==""){
+      return bot;
+    } else {
+      return bot.split("@").first;
+    }
+  }
+
+  getOutPath() {
+    if (out==""){
+      return out;
+    } else {
+      return out.split("@").first;
+    }
+  }
 }
 
 
