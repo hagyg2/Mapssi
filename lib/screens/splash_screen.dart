@@ -46,10 +46,10 @@ class _SplashScreenState extends State<SplashScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xffFFFDF9),
         appBar: null,
         body: Center(
-            child: Image.asset('assets/mapssi_logo.jpg', width: 120, height: 120,))
+            child: Image.asset('assets/logo.jpg', width: 120, height: 120,))
     );
   }
 }
