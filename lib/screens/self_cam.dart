@@ -20,7 +20,7 @@ TextStyle myTextStyle(double fs, {FontWeight fontWeight = FontWeight.w600}) {
   return TextStyle(
     fontSize: fs,
     color: Colors.black,
-    fontFamily: 'SUITE',
+    fontFamily: 'Dovemayo_gothic',
     fontWeight: fontWeight,
   );
 }
@@ -94,73 +94,106 @@ class _SelfCamState extends State<SelfCam> {
     return Scaffold(
         body: !cameraInitialized ?
         Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/loading_new.gif', // 로딩 이미지 파일 경로
-                width: 200, // 이미지의 너비 설정
-                height: 200,
-              ),
-              Text(
-                'Loading...',
-                style:  myTextStyle(25.0, fontWeight: FontWeight.w500),),
-            ],
-
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/background_image.png'),
+                  fit: BoxFit.cover,
+                )
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/loading_new.gif', // 로딩 이미지 파일 경로
+                  width: 200, // 이미지의 너비 설정
+                  height: 200,
+                ),
+                Text(
+                  'Loading...',
+                  style:  myTextStyle(25.0, fontWeight: FontWeight.w500),),
+              ],
+            ),
           ),
         ):
-        Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 29),
-              Expanded(flex: 7,
-                  child: CameraPreview(
-                    controller,
-                    child: GestureDetector(onTapDown: (TapDownDetails details) {
-                      x = details.localPosition.dx;
-                      y = details.localPosition.dy;
-
-                      double fullWidth = MediaQuery.of(context).size.width;
-                      double cameraHeight = fullWidth * controller.value.aspectRatio;
-
-                      double xp = x / fullWidth;
-                      double yp = y / cameraHeight;
-
-                      Offset point = Offset(xp,yp);
-                      controller.setFocusPoint(point);
-                    },),
-                  )
-              ),
-              Expanded(
-                  flex: 1,
-                  child: IconButton(
-                      onPressed: !isPictureCapturing ? () async {
-                        isPictureCapturing = true;
-                        // 경로 생성
-                        final path = join(
-                            ( await getTemporaryDirectory() ).path,
-                            '${DateTime.now()}.png'
-                        );
-                        // 사진 촬영
-                        // 포커스 모드 고정 안하면 STATE_WAITING_FOCUS 뜨면서 엄청 오래걸림
-                        controller.setFocusMode(FocusMode.locked);
-                        XFile picture = await controller.takePicture();
-                        controller.setFocusMode(FocusMode.auto);
-                        // 사진 저장
-                        picture.saveTo(path);
-                        if (!mounted) return;
-                        isPictureCapturing = false;
-                        // 검사 화면으로 전환
-                        Navigator.push(context,
-                            MaterialPageRoute(
-                                builder: ( context ) => ChkAndSend( imagePath: path )
-                            )
-                        );
-                      } : null,
-                      icon: Image.asset("assets/photo_capture.png")
-                  )
+        Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/background_image.png'),
+                fit: BoxFit.cover,
               )
-            ],
+          ),
+          child: Center(
+            child:Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+                  // 그림자
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFFFFDF9),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 3,
+                          offset: const Offset(0, 1), // 위치 조정
+                        )
+                      ]
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: CameraPreview(
+                      controller,
+                      child: GestureDetector(onTapDown: (TapDownDetails details) {
+                        x = details.localPosition.dx;
+                        y = details.localPosition.dy;
+
+                        double fullWidth = MediaQuery.of(context).size.width;
+                        double cameraHeight = fullWidth * controller.value.aspectRatio;
+
+                        double xp = x / fullWidth;
+                        double yp = y / cameraHeight;
+
+                        Offset point = Offset(xp,yp);
+                        controller.setFocusPoint(point);
+                      },),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    flex: 1,
+                    child: IconButton(
+                        onPressed: !isPictureCapturing ? () async {
+                          isPictureCapturing = true;
+                          // 경로 생성
+                          final path = join(
+                              ( await getTemporaryDirectory() ).path,
+                              '${DateTime.now()}.png'
+                          );
+                          // 사진 촬영
+                          // 포커스 모드 고정 안하면 STATE_WAITING_FOCUS 뜨면서 엄청 오래걸림
+                          controller.setFocusMode(FocusMode.locked);
+                          XFile picture = await controller.takePicture();
+                          controller.setFocusMode(FocusMode.auto);
+                          // 사진 저장
+                          picture.saveTo(path);
+                          if (!mounted) return;
+                          isPictureCapturing = false;
+                          // 검사 화면으로 전환
+                          Navigator.push(context,
+                              MaterialPageRoute(
+                                  builder: ( context ) => ChkAndSend( imagePath: path )
+                              ),
+                          );
+                        } : null,
+                        icon: Image.asset("assets/photo_capture.png")
+                    )
+                )
+              ],
+            ),
           ),
         )
     );
@@ -220,96 +253,123 @@ class _ChkAndSendState extends State<ChkAndSend> {
   Widget build(BuildContext context) {
 
     var dialog = Dialog(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.3,
-          color: Colors.white,
-          child: Center(
-            child: Column(
-              children: [
-                const Expanded(
-                  flex: 1, child: Text('캐릭터 이미지 완성'),
-                ),
-                const Expanded(
-                    flex: 2, child: Text('이미지가 완성되었습니다.\n지금 바로 적용하시겠습니까?')
-                ),
-                Expanded(
-                    flex: 1,
-                    child: Row(
-                      children: [
-                        // 캐릭터 사진 적용
-                        TextButton(
-                          onPressed: () {
-                            // 다이얼로그 닫기
-                            Navigator.of(_scaffoldKey.currentContext!).pop();
-                            // 화면 전환
-                            reloadCharacterScreen(context);
-                          },
-                          child: const Text('네'),
-                        ),
-                        // 캐릭터 사진 비적용
-                        TextButton(
-                          onPressed: () {
-                            // 다이얼로그 닫기
-                            Navigator.of(_scaffoldKey.currentContext!).pop();
-                          },
-                          child: const Text('아니오'),
-                        ),
-                      ],
-                    )
-                )
-              ],
+        child: Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              width: MediaQuery.of(context).size.width*0.5,
+              height: MediaQuery.of(context).size.height*0.5,
+              child: Column(
+                children: [
+                  const Expanded(
+                    flex: 1, child: Text('캐릭터 이미지 완성'),
+                  ),
+                  const Expanded(
+                      flex: 2, child: Text('이미지가 완성되었습니다.\n지금 바로 적용하시겠습니까?')
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: Row(
+                        children: [
+                          // 캐릭터 사진 적용
+                          TextButton(
+                            onPressed: () {
+                              // 다이얼로그 닫기
+                              Navigator.of(_scaffoldKey.currentContext!).pop();
+                              // 화면 전환
+                              reloadCharacterScreen(context);
+                            },
+                            child: const Text('네'),
+                          ),
+                          // 캐릭터 사진 비적용
+                          TextButton(
+                            onPressed: () {
+                              // 다이얼로그 닫기
+                              Navigator.of(_scaffoldKey.currentContext!).pop();
+                            },
+                            child: const Text('아니오'),
+                          ),
+                        ],
+                      )
+                  )
+                ],
+              ),
             ),
           ),
-        )
+        ),
     );
 
+    // 화면 구현
     return Scaffold(
       key: _scaffoldKey,
-      body: Column(
-        children: [
-          const SizedBox(height: 29),
-          SizedBox(
-              height: MediaQuery.of(context).size.height*0.8,
-              child: Transform(
-                alignment: Alignment.center,
-                transform: Matrix4.rotationY(math.pi),
-                child: Image.file( File(widget.imagePath) , fit: BoxFit.fitHeight),
-              )
-          ),
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                    flex: 1,
-                    child: TextButton(
-                      onPressed: () { Navigator.pop(context); },
-                      child: const Text("다시 찍기",style: TextStyle(color: Colors.black)),
-                    )
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/background_image.png'),
+              fit: BoxFit.cover,
+            )
+        ),
+        child: Column(
+          children: [
+            Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+                // 그림자
+                decoration: BoxDecoration(
+                    color: const Color(0xFFFFFDF9),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: const Offset(0, 1), // 위치 조정
+                      )
+                    ]
                 ),
-                const VerticalDivider(color: Color(0x676767FF),width: 2),
-                Expanded(
-                    child: TextButton(
-                      onPressed: ()  {
-                        // 생성 이후
-                        uploadAndGetImage().then((response) {
-                          showDialog(context: _scaffoldKey.currentContext! ,builder: (context){
-                            return dialog;
-                          });
-                          setState(() {});
-                        }).catchError((error) {
-                          // 에러 처리 로직
-                          print(error);
-                        });
-                        Navigator.pushNamed(context,'/index');
-                      },
-                      child: const Text("스캔 시작",style: TextStyle(color: Colors.black)),
-                    )
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(math.pi),
+                    child: Image.file( File(widget.imagePath) , fit: BoxFit.cover),
+                  ),
                 )
-              ],
             ),
-          )
-        ],
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                      flex: 1,
+                      child: TextButton(
+                        onPressed: () { Navigator.pop(context); },
+                        child: Text("다시 찍기",style:  myTextStyle(25.0, fontWeight: FontWeight.w500)),
+                      )
+                  ),
+                  const VerticalDivider(color: Color(0xFF000000),thickness: 1.5),
+                  Expanded(
+                      child: TextButton(
+                        onPressed: ()  {
+                          // 생성 이후
+                          uploadAndGetImage().then((response) {
+                            showDialog(context: _scaffoldKey.currentContext! ,builder: (context){
+                              return dialog;
+                            });
+                            setState(() {});
+                          }).catchError((error) {
+                            // 에러 처리 로직
+                            print(error);
+                          });
+                          Navigator.pushNamed(context,'/index');
+                        },
+                        child: Text("스캔 시작",style: myTextStyle(25.0, fontWeight: FontWeight.w500)),
+                      ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
