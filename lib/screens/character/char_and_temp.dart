@@ -10,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:mapssi/screens/character/character_screen.dart';
 import 'package:mapssi/screens/character/fnc_for_character_screen.dart';
 
-
+var perCol = Get.find<UserDataFromServer>().getUserPerCol();
 bool loadFace = false;
 var characterImage = Image.asset( // 기본 캐릭터
   'assets/character/${gender}_default.png',
@@ -210,37 +210,216 @@ class _CharAndTempState extends State<CharAndTemp> {
     );
 
     // 동그라미 색상 버튼들
-    List<Widget> buildBox(int count) {
+    //봄 웜
+    List<Widget> buildBoxSpring(int count) {
       List<Widget> buttons = [];
       switch(count){
         case 1: //상의
-        case 3: //아우터
           buttons = [
-            clothesPositionFromBottom(15, 30,colorOnPalette(Colors.red)),
-            clothesPositionFromBottom(15, 60,colorOnPalette(Colors.orange)),
-            clothesPositionFromBottom(15, 90,colorOnPalette(Colors.yellow)),
-            clothesPositionFromBottom(15, 120,colorOnPalette(Colors.green)),
-            clothesPositionFromBottom(15, 150,colorOnPalette(Colors.blue)),
-            clothesPositionFromBottom(15, 180,colorOnPalette(Colors.blueGrey)),
-            clothesPositionFromBottom(15, 210,colorOnPalette(Colors.deepPurpleAccent)),
-            clothesPositionFromBottom(15, 240,colorOnPalette(Colors.white)),
-            clothesPositionFromBottom(15, 270,colorOnPalette(Colors.grey)),
-            clothesPositionFromBottom(15, 300,colorOnPalette(Colors.black))
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF5e1e13))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFeec8c5))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF588f54))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFa291b3))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF3a2b22))),//brown
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
+            clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
           ];
           return buttons;
         case 2: //하의
           buttons = [
-            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFc4c4c4))),
-            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFbeb6a9))),
-            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF978868))),
-            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF201716))),
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF383838))),
-            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF151514))),
-            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF917188))),
-            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF131824))),
-            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF323b32)))
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa69879))), //beige
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF413c38))), //brown
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF7c6375))), //pink
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF414c41))), //khaki
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF96abb8))), //denim(연청)
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF5e5e5e))), //gray
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF272727))) //black
           ];
           return buttons;
+        case 3: //아우터
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF5e1e13))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFeec8c5))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF588f54))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFa291b3))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF3a2b22))),//brown
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
+            clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
+          ];
+          return buttons;
+        default:
+          return [];
+      }
+    }
+
+    //여름 쿨
+    List<Widget> buildBoxSummer(int count) {
+      List<Widget> buttons = [];
+      switch(count){
+        case 1: //상의
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF5e1e13))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFdbb0ac))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF588f54))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFa291b3))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF3a2b22))),//brown
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
+            clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
+          ];
+          return buttons;
+        case 2: //하의
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFc4c4c4))), //white
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa69879))), //beige
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF413c38))), //brown
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF7c6375))), //pink
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF414c41))), //khaki
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF96abb8))), //denim(연청)
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF5e5e5e))), //gray
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF1a1a1a))) //black
+          ];
+          return buttons;
+        case 3: //아우터
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF5e1e13))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFdbb0ac))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF588f54))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFa291b3))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF3a2b22))),//brown
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
+            clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
+          ];
+          return buttons;
+        default:
+          return [];
+      }
+    }
+
+    //가을 웜
+    List<Widget> buildBoxAutumn(int count) {
+      List<Widget> buttons = [];
+      switch(count){
+        case 1: //상의
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF2e030a))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFF84657b))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF17280e))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF260629))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF272022))),//brown
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
+            clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
+          ];
+          return buttons;
+        case 2: //하의
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFc4c4c4))), //white
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa69879))), //beige
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF413c38))), //brown
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF7c6375))), //pink
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF414c41))), //khaki
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF96abb8))), //denim(연청)
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF5e5e5e))), //gray
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF1a1a1a))) //black
+          ];
+          return buttons;
+        case 3: //아우터
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF2e030a))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFF84657b))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF17280e))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF260629))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF272022))),//brown
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
+            clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
+          ];
+          return buttons;
+        default:
+          return [];
+      }
+    }
+
+    //겨울 쿨
+    List<Widget> buildBoxWinter(int count) {
+      List<Widget> buttons = [];
+      switch(count){
+        case 1: //상의
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF5e1e13))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFdbb0ac))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF588f54))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFa291b3))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF3a2b22))),//brown
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
+            clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
+          ];
+          return buttons;
+        case 2: //하의
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFc4c4c4))), //white
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa69879))), //beige
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF413c38))), //brown
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF7c6375))), //pink
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF414c41))), //khaki
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF96abb8))), //denim(연청)
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF5e5e5e))), //gray
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF1a1a1a))) //black
+          ];
+          return buttons;
+        case 3: //아우터
+          buttons = [
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF5e1e13))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFdbb0ac))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF588f54))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFa291b3))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF3a2b22))),//brown
+            clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
+            clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
+          ];
+          return buttons;
+        default:
+          return [];
+      }
+    }
+
+    List<Widget> displayButtons(var percol, int count){
+      switch(percol){
+        case "Spring Warm":
+          return buildBoxSpring(count);
+        case "Summer Cool":
+          return buildBoxSummer(count);
+        case "Autumn Warm":
+          return buildBoxAutumn(count);
+        case "Winter Cool":
+          return buildBoxWinter(count);
         default:
           return [];
       }
@@ -333,7 +512,7 @@ class _CharAndTempState extends State<CharAndTemp> {
                   resetButton,
                   favoriteButton,
                   colorButton,
-                  ... buildBox(Count)
+                  ... displayButtons(perCol, Count)
                 ],
               ),
             ),
