@@ -628,15 +628,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
       body: Container(
         // 배경 이미지 고정(배경 이미지도 스크롤하려면 SingleChild를 body에 두고 Container를 child에
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/background_image.png'),
               fit: BoxFit.cover,
             )
         ),
-        child: SingleChildScrollView(
-          child: isLoading == false
-              ? Column(
+        child:  isLoading == false
+            ?  SingleChildScrollView(
+          child: Column(
             children: [
               //상단
               SizedBox(height: 20.0),
@@ -972,32 +973,35 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       ],
                     ),
 
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           )
           // maxTemperature ==100 (로딩 표시 보여주기)
               : Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 222.2),
-                Image.asset(
-                  'assets/loading_new.gif', // 로딩 이미지 파일 경로
-                  width: 200, // 이미지의 너비 설정
-                  height: 200,
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Loading...',
-                  style:  myTextStyle(25.0, fontWeight: FontWeight.w500),),
-                SizedBox(height: 250 ,)
-              ],
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                          'assets/loading_new.gif', // 로딩 이미지 파일 경로
+                          width: 200, // 이미지의 너비 설정
+                          height: 200,
+                        ),
+                      Text(
+                        'Loading...',
+                        style:  myTextStyle(25.0, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                        height: 80,
+                      )
+                    ],
 
-            ),
-          ),
-        ),
+                ),
+              ),
       ),
     );
   }

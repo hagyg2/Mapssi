@@ -62,23 +62,19 @@ class _CharAndTempState extends State<CharAndTemp> {
   // 사용자 합성 얼굴 사진 불러오는 용도
   void loadUserImage() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    List<FileSystemEntity> files = appDocDir.listSync();
-    for (FileSystemEntity file in files) {
-      print(file.uri.pathSegments.last);
-    }
     String appDocPath = appDocDir.path;
     String filePath = '$appDocPath/${gender}UserFace.png';
     print("Searching "+filePath);
     File file = File(filePath);
 
     if (await file.exists()) {
-      showToast("이미지를 불러옵니다.");
       setState(() {
         var oldImage = characterImage;
         var imageBytes = Uint8List.fromList(file.readAsBytesSync());
 
         characterImage = Image.memory(imageBytes, fit: BoxFit.cover);
         if (oldImage != characterImage) {
+          showToast("새 이미지를 적용했습니다!");
           loadFace = true;
         }
       });
@@ -113,7 +109,7 @@ class _CharAndTempState extends State<CharAndTemp> {
               Get.find<ClothesImageController>().setBotImage(path+curBot, color: color);
             }
           } else if (Count==3) {
-            var curOut = path+Get.find<ClothesImageController>().getOutPath();
+            var curOut = Get.find<ClothesImageController>().getOutPath();
             if (curOut!="") {
               Get.find<ClothesImageController>().setOutImage(path+curOut, color: color);
             }

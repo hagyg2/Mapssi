@@ -252,53 +252,6 @@ class _ChkAndSendState extends State<ChkAndSend> {
   @override
   Widget build(BuildContext context) {
 
-    var dialog = Dialog(
-        child: Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              width: MediaQuery.of(context).size.width*0.5,
-              height: MediaQuery.of(context).size.height*0.5,
-              child: Column(
-                children: [
-                  const Expanded(
-                    flex: 1, child: Text('캐릭터 이미지 완성'),
-                  ),
-                  const Expanded(
-                      flex: 2, child: Text('이미지가 완성되었습니다.\n지금 바로 적용하시겠습니까?')
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          // 캐릭터 사진 적용
-                          TextButton(
-                            onPressed: () {
-                              // 다이얼로그 닫기
-                              Navigator.of(_scaffoldKey.currentContext!).pop();
-                              // 화면 전환
-                              reloadCharacterScreen(context);
-                            },
-                            child: const Text('네'),
-                          ),
-                          // 캐릭터 사진 비적용
-                          TextButton(
-                            onPressed: () {
-                              // 다이얼로그 닫기
-                              Navigator.of(_scaffoldKey.currentContext!).pop();
-                            },
-                            child: const Text('아니오'),
-                          ),
-                        ],
-                      )
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-    );
-
     // 화면 구현
     return Scaffold(
       key: _scaffoldKey,
@@ -352,15 +305,13 @@ class _ChkAndSendState extends State<ChkAndSend> {
                         onPressed: ()  {
                           // 생성 이후
                           uploadAndGetImage().then((response) {
-                            showDialog(context: _scaffoldKey.currentContext! ,builder: (context){
-                              return dialog;
-                            });
+                            showToast("얼굴 생성이 완료되었습니다!");
                             setState(() {});
                           }).catchError((error) {
                             // 에러 처리 로직
                             print(error);
                           });
-                          Navigator.pushNamed(context,'/index');
+                          Navigator.pushNamedAndRemoveUntil(context,'/index', (route) => false);
                         },
                         child: Text("스캔 시작",style: myTextStyle(25.0, fontWeight: FontWeight.w500)),
                       ),
