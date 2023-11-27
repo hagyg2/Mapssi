@@ -23,12 +23,12 @@ class ClothesOptions extends StatefulWidget {
 class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderStateMixin{
   int _currentSheetIndex = 0;
   late AnimationController _animationController;
-  List topTypes = ['상의', '티셔츠', '스웨터/맨투맨', '셔츠/블라우스', '후드', '민소매/조끼', '원피스', '크롭티', '스포츠'];
-  List botTypes = ['하의', '데님', '카고', '조거', '반바지', '트라우저/슬랙스', '치마', '스포츠'];
+  List topTypes = ['상의', '티셔츠', '스웨터/맨투맨', '셔츠/블라우스', '후드', '민소매/조끼', '스포츠'];
+  List botTypes = ['하의', '데님', '카고', '조거', '반바지', '트라우저/슬랙스', '스포츠'];
   List outTypes = ['외투', '점퍼', '코트', '야상', '재킷', '조끼', '가디건', '바람막이'];
   List shoeTypes = ['신발', '운동화', '스니커즈', '부츠', '구두', '슬리퍼', '샌들'];
-  List recTypes = ['추천', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '러블리', '고프코어'];
-  List clothesTypeNum = [9, 8, 8, 7, 8]; // 상 하 신 외 개수
+  List recTypes = ['추천', '캐주얼', '스트릿', '아메카지', '스포츠', '클래식', '고프코어'];
+  List clothesTypeNum = [7, 7, 8, 7, 7]; // 상 하 신 외 개수
   List clothesList = [];
   List<String> loadFiles = [];
   String bigCategory = "";
@@ -36,6 +36,15 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
 
   @override
   void initState() {
+    if (gender == "female") {
+      topTypes.addAll(['원피스', '크롭티']);
+      botTypes.add('치마');
+      recTypes.add('러블리');
+    } else {
+      botTypes.add('면바지');
+      recTypes.add('댄디');
+    }
+    clothesTypeNum = [topTypes.length, botTypes.length, 8, 7, recTypes.length]; // 상 하 신 외 개수
     super.initState();
     _animationController = AnimationController(
       vsync: this,
@@ -127,6 +136,9 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
         case '트라우저/슬랙스':
           chosenType = 'trouser';
           break;
+        case '면바지':
+          chosenType = 'cotton';
+          break;
         case '치마':
           chosenType = 'skirt';
           break;
@@ -196,6 +208,9 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
           break;
         case '러블리':
           chosenType = 'lovely';
+          break;
+        case '댄디':
+          chosenType = 'dandy';
           break;
         default :
           chosenType = 'casual';

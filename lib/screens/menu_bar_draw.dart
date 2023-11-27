@@ -1,7 +1,6 @@
 //weater_screen에 넣으면 너무 복잡할 것 같아서
 //햄버거 바 화면은 일단 여기서 만들어서 weather_screen으로 넘길겁니당
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -14,7 +13,6 @@ import 'package:mapssi/screens/search_area_screen.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mapssi/screens/login_screen.dart';
 //import 'package:mapssi/screens/search_area_screen2.dart';
-import 'package:mapssi/screens/splash_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -462,7 +460,6 @@ class FavoriteArea extends StatelessWidget {
         ],
       ),
     );
-    throw UnimplementedError();
   }
 }
 
@@ -507,10 +504,11 @@ class FavoriteCoordi extends StatelessWidget {
                       itemCount: loadFiles.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // 한 줄에 2개의 이미지 버튼을 배치
-                        childAspectRatio: 0.8, // 가로세로 비율 조절
+                        childAspectRatio: 0.7, // 가로세로 비율 조절
                       ),
                       padding: const EdgeInsets.all(5),
                       itemBuilder: (BuildContext context, int index) {
+                        // 즐겨찾기 된 옷 다시 입히기
                         return InkWell(
                           highlightColor: Colors.transparent, // 터치 시 강조 효과를 숨김
                           splashColor: Colors.transparent,     // 터치 시 스플래시 효과를 숨김
@@ -595,7 +593,6 @@ class FavoriteCoordi extends StatelessWidget {
         },
       ),
     );
-    throw UnimplementedError();
   }
 }
 
