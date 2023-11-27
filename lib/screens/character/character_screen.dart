@@ -48,7 +48,7 @@ class ClothesImageController extends GetxController {
   }
 
   setTopImage(String path, {Color? color=Colors.white}) {
-    top = "${path.split("/").last}@${color.hashCode.toString()}";
+    top = "${path.split("/").last}@${color?.value.toString()}";
     topImage =  setImage(path, topImageWidth, color!);
   }
 
@@ -61,17 +61,17 @@ class ClothesImageController extends GetxController {
     } else {
       botBg = setImage('assets/character/initialImage.png', botImageWidth);
     }
-    bot = "${path.split("/").last}@${color.hashCode.toString()}";
+    bot = "${path.split("/").last}@${color?.value.toString()}";
     botImage = setImage(path, botImageWidth, color!);
   }
 
   setOutImage(String path, {Color? color=Colors.white}) {
-    out = "${path.split("/").last}@${color.hashCode.toString()}";
+    out = "${path.split("/").last}@${color?.value.toString()}";
     outImage = setImage(path, outImageWidth, color!);
   }
 
   setShoeImage(String path, {Color? color=Colors.white}) {
-    shoe = "${path.split("/").last}@${color.hashCode.toString()}";
+    shoe = "${path.split("/").last}@${color?.value.toString()}";
     shoeImage = setImage(path, shoeImageWidth, color!);
   }
 
@@ -117,10 +117,19 @@ class CharacterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    topImageWidth = MediaQuery.of(context).size.width*0.405;
-    botImageWidth = MediaQuery.of(context).size.width*0.41;
-    outImageWidth = MediaQuery.of(context).size.width*0.405;
-    shoeImageWidth = MediaQuery.of(context).size.width*0.416;
+    gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
+    // 옷 크기 설정
+    if (gender == "female") {
+      topImageWidth = MediaQuery.of(context).size.width*0.405;
+      botImageWidth = MediaQuery.of(context).size.width*0.41;
+      outImageWidth = MediaQuery.of(context).size.width*0.405;
+      shoeImageWidth = MediaQuery.of(context).size.width*0.416;
+    } else {
+      topImageWidth = MediaQuery.of(context).size.width*0.49;
+      botImageWidth = MediaQuery.of(context).size.width*0.476;
+      outImageWidth = MediaQuery.of(context).size.width*0.405;
+      shoeImageWidth = MediaQuery.of(context).size.width*0.416;
+    }
 
     Get.put(ClothesImageController());
     // 메뉴 옵션들 간에 벽(divider)

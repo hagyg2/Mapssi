@@ -152,3 +152,4 @@ reloadCharacterScreen(context) {
       ), (route) => false
   );
 }
+

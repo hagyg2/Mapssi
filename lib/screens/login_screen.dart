@@ -68,8 +68,6 @@ class LoginScreen extends StatelessWidget {
                     print(userId);
                     loginplatform = 'kakao';
                     chkIfRegisteredAndRedirect(context, userId, userName);
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.setBool('isLoggedIn', true);
                   } catch (error) {
                     print('카카오톡으로 로그인 실패 $error');
 
@@ -83,8 +81,6 @@ class LoginScreen extends StatelessWidget {
                       print(userId);
                       loginplatform = 'kakao';
                       chkIfRegisteredAndRedirect(context, userId, userName);
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
-                      prefs.setBool('isLoggedIn', true);
                     } catch (error) {
                       print('카카오계정으로 로그인 실패 $error');
                     }
@@ -101,8 +97,6 @@ class LoginScreen extends StatelessWidget {
                     print(userId);
                     loginplatform = 'kakao';
                     chkIfRegisteredAndRedirect(context, userId, userName);
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.setBool('isLoggedIn', true);
                   } catch (error) {
                     print('카카오계정으로 로그인 실패 $error');
                   }
@@ -131,8 +125,6 @@ class LoginScreen extends StatelessWidget {
                 if(user != null){
                   loginplatform = 'google';
                   chkIfRegisteredAndRedirect(context, userId, userName);
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.setBool('isLoggedIn', true);
                 }
               },
             )
@@ -142,7 +134,16 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-}
+
+  saveToSharedPreference (String id, String name, String perCol, String prefType, int gender) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("isLoggedIn", true);
+    prefs.setString("id", id);
+    prefs.setString("name", name);
+    prefs.setString("perCol", perCol);
+    prefs.setString("prefType", prefType);
+    prefs.setInt("gender", gender);
+  }
 
   chkIfRegisteredAndRedirect (context, userId, userName) async {
     const serverUrl = 'http://13.209.46.142:50000/'; // 노드 서버의 엔드포인트 URL
@@ -164,6 +165,8 @@ class LoginScreen extends StatelessWidget {
           userController.setUserGender(registeredData['gender']);
           userController.setUserPerCol(registeredData['perCol']);
           userController.setUserPrefType(registeredData['prefType']);
+          saveToSharedPreference(userId,userName,registeredData['perCol'],
+              registeredData['prefType'],registeredData['gender']);
         }
       } else {
         // 요청이 실패했을 경우
@@ -188,7 +191,6 @@ class LoginScreen extends StatelessWidget {
         body: jsonEncode(userData),
       );
       if (response.statusCode == 200) {  // 요청이 성공했을 경우
-        print(response.body);
         // 저장된 것이 확인되면 true로 변경
         if (response.body=="Successfully Done"){
           print("***등록 성공!***");
@@ -197,11 +199,19 @@ class LoginScreen extends StatelessWidget {
         // 요청이 실패했을 경우
         print('Request failed with status: ${response.statusCode}');
       }
-      print('로그인 성공');
+      print('신규 유저 로그인 성공');
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const genderpage()), (route) => false);
     }
     else {  // 등록된 유저의 경우 바로 화면 전환
-      print('로그인 성공');
+      print('기존 유저 로그인 성공');
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MyPageView(pageIndex: 0)), (route) => false);
     }
   }
+
+
+
+
+}
+
+
+

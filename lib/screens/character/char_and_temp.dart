@@ -123,6 +123,31 @@ class _CharAndTempState extends State<CharAndTemp> {
 
   @override
   Widget build(BuildContext context) {
+    // 여성 옷 위치 설정
+    var femaleShoeBgPosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244];
+    var femaleShoePosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.22];
+    var femaleTopPosition = [MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19];
+    var femaleBotBgPosition = [MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32];
+    var femaleBotPosition = [MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.19];
+    var femaleOutPosition = [MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19];
+
+    // 남성 옷 위치 설정
+    var maleShoeBgPosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244];
+    var maleShoePosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.22];
+    var maleTopPosition = [MediaQuery.of(context).size.height*0.107, MediaQuery.of(context).size.width*0.17];
+    var maleBotBgPosition = [MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32];
+    var maleBotPosition = [MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.182];
+    var maleOutPosition = [MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19];
+
+    // 성별에 따른 위치 확정
+    var shoeBgPosition = (gender=="female") ? femaleShoeBgPosition : maleShoeBgPosition;
+    var shoePosition = (gender=="female") ? femaleShoePosition : maleShoePosition;
+    var topPosition = (gender=="female") ? femaleTopPosition : maleTopPosition;
+    var botBgPosition = (gender=="female") ? femaleBotBgPosition : maleBotBgPosition;
+    var botPosition = (gender=="female") ? femaleBotPosition : maleBotPosition;
+    var outPosition = (gender=="female") ? femaleOutPosition : maleOutPosition;
+
+
     if (! loadFace) {
       loadUserImage();
     }
@@ -137,16 +162,15 @@ class _CharAndTempState extends State<CharAndTemp> {
         print('An error occurred: $error');
       });
     }
-    sleep(const Duration(milliseconds: 50));
     // 기온 불러오기
     curTemp = Get.find<WeatherJasonData>().getData()[0];
     clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
-      clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244, clothesImages[0]),  // 신발 배경
-      clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.22, clothesImages[1]),  // 신발
-      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19, clothesImages[2]),    // 상의
-      clothesPosition(MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32, clothesImages[3]),   // 하의 배경
-      clothesPosition(MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.19, clothesImages[4]),   // 하의
-      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19, clothesImages[5])    // 아우터
+      clothesPositionFromBottom(shoeBgPosition[0], shoeBgPosition[1], clothesImages[0]),  // 신발 배경
+      clothesPositionFromBottom(shoePosition[0], shoePosition[1], clothesImages[1]),  // 신발
+      clothesPosition(topPosition[0], topPosition[1], clothesImages[2]),    // 상의
+      clothesPosition(botBgPosition[0], botBgPosition[1], clothesImages[3]),   // 하의 배경
+      clothesPosition(botPosition[0], botPosition[1], clothesImages[4]),   // 하의
+      clothesPosition(outPosition[0], outPosition[1], clothesImages[5])    // 아우터
     ];
 
     // 새로고침 버튼
