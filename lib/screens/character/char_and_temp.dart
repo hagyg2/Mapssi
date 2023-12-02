@@ -133,11 +133,11 @@ class _CharAndTempState extends State<CharAndTemp> {
 
     // 남성 옷 위치 설정
     var maleShoeBgPosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244];
-    var maleShoePosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.22];
+    var maleShoePosition = [0.0, MediaQuery.of(context).size.width*0.18];
     var maleTopPosition = [MediaQuery.of(context).size.height*0.107, MediaQuery.of(context).size.width*0.17];
     var maleBotBgPosition = [MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32];
     var maleBotPosition = [MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.182];
-    var maleOutPosition = [MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19];
+    var maleOutPosition = [MediaQuery.of(context).size.height*0.105, MediaQuery.of(context).size.width*0.182];
 
     // 성별에 따른 위치 확정
     var shoeBgPosition = (gender=="female") ? femaleShoeBgPosition : maleShoeBgPosition;

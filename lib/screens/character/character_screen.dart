@@ -127,8 +127,8 @@ class CharacterPage extends StatelessWidget {
     } else {
       topImageWidth = MediaQuery.of(context).size.width*0.49;
       botImageWidth = MediaQuery.of(context).size.width*0.476;
-      outImageWidth = MediaQuery.of(context).size.width*0.405;
-      shoeImageWidth = MediaQuery.of(context).size.width*0.416;
+      outImageWidth = MediaQuery.of(context).size.width*0.475;
+      shoeImageWidth = MediaQuery.of(context).size.width*0.475;
     }
 
     Get.put(ClothesImageController());
