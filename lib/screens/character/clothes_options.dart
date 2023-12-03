@@ -439,7 +439,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
                                         default:
                                           break;
                                       }
-                                      isFavoriteSaving = false;
                                       // 화면 새로 고침 -> 옷 입혀짐
                                       Navigator.pushAndRemoveUntil(context,
                                           PageRouteBuilder(
@@ -526,7 +525,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
       Get.find<ClothesImageController>().setBotImage(recClothes[1][0],color:recClothes[1][1]); //하의로 설정
       Get.find<ClothesImageController>().setShoeImage(recClothes[2][0]); //신발로 설정
       Get.find<ClothesImageController>().setOutImage(recClothes[3][0],color:recClothes[3][1]); //외투로 설정
-      isFavoriteSaving = false;
       if (!mounted) return;
       // 화면 새로고침
       Navigator.pushAndRemoveUntil(context,

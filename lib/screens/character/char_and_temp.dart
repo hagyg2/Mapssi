@@ -11,7 +11,6 @@ import 'package:mapssi/screens/character/character_screen.dart';
 import 'package:mapssi/screens/character/fnc_for_character_screen.dart';
 
 var perCol = Get.find<UserDataFromServer>().getUserPerCol();
-bool loadFace = false;
 var characterImage = Image.asset( // 기본 캐릭터
   'assets/character/${gender}_default.png',
   fit: BoxFit.cover,
@@ -26,12 +25,11 @@ class CharAndTemp extends StatefulWidget {
 }
 
 class _CharAndTempState extends State<CharAndTemp> {
-  // bool _isVisible = true;
-  // var height=165.0;   // 키 몸무게 초기화
-  // var weight=80.0;
-
-  int Count =0; //색 변경에 쓰이는 변수
+  int count =0; //색 변경에 쓰이는 변수
   int? curTemp;
+  bool isChecked = false;
+  bool isFavorite = false;
+  bool faceNotMadeYet = false;
   late List<Widget> clothesStack;
   var clothesImages = Get.find<ClothesImageController>().getImage();
   var curClothes = Get.find<ClothesImageController>().getFileName();
@@ -59,6 +57,29 @@ class _CharAndTempState extends State<CharAndTemp> {
     File(filePath).writeAsBytes(uint8List);
   }
 
+  // 현재 의상이 즐겨찾기 인지 확인
+  void chkIsFavorite(String fileName) async {
+    isChecked = true;
+    // 디렉토리 경로를 열기
+    String directoryPath = '${(await getApplicationDocumentsDirectory()).path}/favorites/';
+    final directory = Directory(directoryPath);
+    final files = directory.listSync();
+    print("checking '$fileName' is favorite in $files");
+    // 파일 목록을 반복하며 원하는 파일 이름과 일치하는지 확인
+    for (var file in files) {
+      if (file is File && file.path.endsWith(fileName)) {
+        print("☆☆☆☆☆");
+        setState(() {
+          isFavorite = true;
+        });
+        return;
+      }
+    }
+    setState(() {
+      isFavorite = false;
+    });
+  }
+
   // 사용자 합성 얼굴 사진 불러오는 용도
   void loadUserImage() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
@@ -74,13 +95,14 @@ class _CharAndTempState extends State<CharAndTemp> {
 
         characterImage = Image.memory(imageBytes, fit: BoxFit.cover);
         if (oldImage != characterImage) {
-          showToast("새 이미지를 적용했습니다!");
+          showToast("이미지를 적용했습니다");
           loadFace = true;
         }
       });
       if (!mounted) return;
       reloadCharacterScreen(context);
     } else {
+      faceNotMadeYet = true;
       characterImage = Image.asset( // 기본 캐릭터
         'assets/character/${gender}_default.png',
         fit: BoxFit.cover,
@@ -98,17 +120,17 @@ class _CharAndTempState extends State<CharAndTemp> {
         ),
         onPressed: (){
           var path = "assets/character/$gender/";
-          if (Count==1) {
+          if (count==1) {
             var curTop = Get.find<ClothesImageController>().getTopPath();
             if (curTop!="") {
               Get.find<ClothesImageController>().setTopImage(path+curTop, color: color);
             }
-          } else if (Count==2) {
+          } else if (count==2) {
             var curBot = Get.find<ClothesImageController>().getBotPath();
             if (curBot!="") {
               Get.find<ClothesImageController>().setBotImage(path+curBot, color: color);
             }
-          } else if (Count==3) {
+          } else if (count==3) {
             var curOut = Get.find<ClothesImageController>().getOutPath();
             if (curOut!="") {
               Get.find<ClothesImageController>().setOutImage(path+curOut, color: color);
@@ -124,53 +146,52 @@ class _CharAndTempState extends State<CharAndTemp> {
   @override
   Widget build(BuildContext context) {
     // 여성 옷 위치 설정
-    var femaleShoeBgPosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244];
+    var femaleShoeBgPosition = [MediaQuery.of(context).size.height*0.003,0.0];
     var femaleShoePosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.22];
+    var femaleTopBgPosition = [MediaQuery.of(context).size.height*0.138, -5.0];
     var femaleTopPosition = [MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19];
     var femaleBotBgPosition = [MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32];
     var femaleBotPosition = [MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.19];
     var femaleOutPosition = [MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19];
 
     // 남성 옷 위치 설정
-    var maleShoeBgPosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244];
+    var maleShoeBgPosition = [0.0, 0.0];
     var maleShoePosition = [0.0, MediaQuery.of(context).size.width*0.18];
+    var maleTopBgPosition = [MediaQuery.of(context).size.height*0.132, -5.0];
     var maleTopPosition = [MediaQuery.of(context).size.height*0.107, MediaQuery.of(context).size.width*0.17];
     var maleBotBgPosition = [MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32];
     var maleBotPosition = [MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.182];
     var maleOutPosition = [MediaQuery.of(context).size.height*0.105, MediaQuery.of(context).size.width*0.182];
 
     // 성별에 따른 위치 확정
-    var shoeBgPosition = (gender=="female") ? femaleShoeBgPosition : maleShoeBgPosition;
-    var shoePosition = (gender=="female") ? femaleShoePosition : maleShoePosition;
-    var topPosition = (gender=="female") ? femaleTopPosition : maleTopPosition;
-    var botBgPosition = (gender=="female") ? femaleBotBgPosition : maleBotBgPosition;
-    var botPosition = (gender=="female") ? femaleBotPosition : maleBotPosition;
-    var outPosition = (gender=="female") ? femaleOutPosition : maleOutPosition;
+    var shoeBgPosition = (gender=="male") ? maleShoeBgPosition : femaleShoeBgPosition;
+    var shoePosition = (gender=="male") ? maleShoePosition : femaleShoePosition;
+    var topBgPosition = (gender=="male") ? maleTopBgPosition : femaleTopBgPosition;
+    var topPosition = (gender=="male") ? maleTopPosition : femaleTopPosition;
+    var botBgPosition = (gender=="male") ? maleBotBgPosition : femaleBotBgPosition;
+    var botPosition = (gender=="male") ? maleBotPosition : femaleBotPosition;
+    var outPosition = (gender=="male") ? maleOutPosition : femaleOutPosition;
 
-
-    if (! loadFace) {
+    // 합성된 얼굴 적용
+    if (! loadFace && ! faceNotMadeYet) {
       loadUserImage();
     }
-    // 현재 옷이 즐겨찾기인지 확인
-    if ( !isFavoriteSaving ) {  // 즐겨찾기 저장 중이 아닌 경우에만 (저장하는 비동기 작업 시간차 때문에 chkIsFavorite 결과 이상함)
-      chkIsFavorite(curClothes).then((result) { // 현재 옷이 즐겨찾기 인지 아닌지 확인
-        if (result != isFavorite) {           // 상태가 바뀌었다면 (즐겨찾기 맞음<->즐겨찾기 아님)
-          isFavorite = result;
-          reloadCharacterScreen(context);
-        }
-      }).catchError((error) {
-        print('An error occurred: $error');
-      });
+
+    // 현재옷 즐겨찾기 확인
+    if (!isChecked) {
+      chkIsFavorite(curClothes);
     }
+
     // 기온 불러오기
     curTemp = Get.find<WeatherJasonData>().getData()[0];
     clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
       clothesPositionFromBottom(shoeBgPosition[0], shoeBgPosition[1], clothesImages[0]),  // 신발 배경
       clothesPositionFromBottom(shoePosition[0], shoePosition[1], clothesImages[1]),  // 신발
-      clothesPosition(topPosition[0], topPosition[1], clothesImages[2]),    // 상의
-      clothesPosition(botBgPosition[0], botBgPosition[1], clothesImages[3]),   // 하의 배경
-      clothesPosition(botPosition[0], botPosition[1], clothesImages[4]),   // 하의
-      clothesPosition(outPosition[0], outPosition[1], clothesImages[5])    // 아우터
+      clothesPosition(topBgPosition[0], topBgPosition[1], clothesImages[2]),    // 상의 배경
+      clothesPosition(topPosition[0], topPosition[1], clothesImages[3]),    // 상의
+      clothesPosition(botBgPosition[0], botBgPosition[1], clothesImages[4]),   // 하의 배경
+      clothesPosition(botPosition[0], botPosition[1], clothesImages[5]),   // 하의
+      clothesPosition(outPosition[0], outPosition[1], clothesImages[6])    // 아우터
     ];
 
     // 새로고침 버튼
@@ -193,8 +214,9 @@ class _CharAndTempState extends State<CharAndTemp> {
             onPressed: (){
               curClothes = Get.find<ClothesImageController>().getFileName();
               deleteFile(curClothes);
-              isFavorite = false;
-              reloadCharacterScreen(context);
+              setState(() {
+                isFavorite = false;
+              });
               showToast("즐겨찾기 삭제 되었습니다.");
             },
             style: ButtonStyle(
@@ -213,10 +235,9 @@ class _CharAndTempState extends State<CharAndTemp> {
             onPressed: (){
               curClothes = Get.find<ClothesImageController>().getFileName();
               captureAndSave(curClothes);
-              isFavoriteSaving = true;
-              isFavorite = true;
-              if (!mounted) return;
-              reloadCharacterScreen(context);
+              setState(() {
+                isFavorite = true;
+              });
               showToast("즐겨찾기에 등록 되었습니다.");
             },
             style: ButtonStyle(
@@ -448,22 +469,22 @@ class _CharAndTempState extends State<CharAndTemp> {
     //색상 팔레트 아이콘 클릭
     void _buttonclickcount(){
       setState(() {
-        Count =(Count + 1) % 4;
+        count =(count + 1) % 4;
       });
     }
 
     // 팔레트 버튼 이미지
     Image colorbutton(){
       //초기
-      if(Count == 0){
+      if(count == 0){
         return Image.asset("assets/icon_color.png", width: 20, height: 20,);
       }
       //상의
-      else if(Count == 1){
+      else if(count == 1){
         return Image.asset("assets/icon_top.png", width: 20, height: 20,);
       }
       //하의
-      else if(Count == 2){
+      else if(count == 2){
         return Image.asset("assets/icon_bottom.png", width: 20, height: 20,);
       }
       //아우터
@@ -532,7 +553,7 @@ class _CharAndTempState extends State<CharAndTemp> {
                   resetButton,
                   favoriteButton,
                   colorButton,
-                  ... displayButtons(perCol, Count)
+                  ... displayButtons(perCol, count)
                 ],
               ),
             ),

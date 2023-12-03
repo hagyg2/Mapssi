@@ -93,22 +93,6 @@ void createSubDirectory(String dirName) async {
   await Directory(newDirPath).create();
 }
 
-// 현재 의상이 즐겨찾기 인지 확인
-Future<bool> chkIsFavorite(String fileName) async {
-  // 디렉토리 경로를 열기
-  String directoryPath = '${(await getApplicationDocumentsDirectory()).path}/favorites/';
-  final directory = Directory(directoryPath);
-  final files = directory.listSync();
-
-  // 파일 목록을 반복하며 원하는 파일 이름과 일치하는지 확인
-  for (var file in files) {
-    if (file is File && file.path.endsWith(fileName)) {
-      return true;
-    }
-  }
-  return false;
-}
-
 // 파일 삭제
 void deleteFile(String fileName) async {
   final directory = (await getApplicationDocumentsDirectory()).path;
