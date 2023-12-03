@@ -128,9 +128,19 @@ class _SelfCamState extends State<SelfCam> {
           child: Center(
             child:Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: Text("※알림※",textAlign: TextAlign.center,style: myTextStyle(24)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Text("캐릭터에 적용될 얼굴 사진을 촬영합니다!",
+                      textAlign: TextAlign.center,style: myTextStyle(20, fontWeight: FontWeight.w500)
+                  ),
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   // 그림자
                   decoration: BoxDecoration(
                       color: const Color(0xFFFFFDF9),
@@ -146,21 +156,50 @@ class _SelfCamState extends State<SelfCam> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: CameraPreview(
-                      controller,
-                      child: GestureDetector(onTapDown: (TapDownDetails details) {
-                        x = details.localPosition.dx;
-                        y = details.localPosition.dy;
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CameraPreview(
+                          controller,
+                          child: GestureDetector(onTapDown: (TapDownDetails details) {
+                            x = details.localPosition.dx;
+                            y = details.localPosition.dy;
 
-                        double fullWidth = MediaQuery.of(context).size.width;
-                        double cameraHeight = fullWidth * controller.value.aspectRatio;
+                            double fullWidth = MediaQuery.of(context).size.width;
+                            double cameraHeight = fullWidth * controller.value.aspectRatio;
 
-                        double xp = x / fullWidth;
-                        double yp = y / cameraHeight;
+                            double xp = x / fullWidth;
+                            double yp = y / cameraHeight;
 
-                        Offset point = Offset(xp,yp);
-                        controller.setFocusPoint(point);
-                      },),
+                            Offset point = Offset(xp,yp);
+                            controller.setFocusPoint(point);
+                          },),
+                        ),
+                        Image.asset("assets/face_frame.png",width: MediaQuery.of(context).size.width*0.8,),
+                        const Positioned(
+                            bottom: 40,
+                            child: Text("틀에 얼굴을 맞춰 찍어주세요!",
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.black,
+                                fontFamily: 'Dovemayo_gothic',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                        ),
+                        const Positioned(
+                          bottom: 40,
+                            child: Text("틀에 얼굴을 맞춰 찍어주세요!",
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.white,
+                                fontFamily: 'Dovemayo_gothic',
+                                fontWeight: FontWeight.w500,
+                              ),
+
+                            )
+                        ),
+                      ],
                     ),
                   ),
                 ),

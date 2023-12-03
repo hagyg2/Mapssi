@@ -12,12 +12,12 @@ GlobalKey key = GlobalKey();
 String gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
 String assetManifest = '';
 bool gotManifest = false;
-bool isFavorite = false;
-bool isFavoriteSaving = false;
+bool loadFace = false;
+double topBgImageWidth = 0;
 double topImageWidth = 0;
 double botImageWidth = 0;
-double botImageHeight = 0;
 double outImageWidth = 0;
+double shoeBgImageWidth = 0;
 double shoeImageWidth = 0;
 
 
@@ -27,11 +27,12 @@ class ClothesImageController extends GetxController {
   String bot='';
   String out='';
   String shoe='';
+  ColorFiltered topBg = setImage('assets/character/initialImage.png', topBgImageWidth); // 상의 배경
   ColorFiltered topImage = setImage('assets/character/initialImage.png', topImageWidth); // 상의
   ColorFiltered botBg = setImage('assets/character/initialImage.png', botImageWidth);    // 하의 배경
   ColorFiltered botImage = setImage('assets/character/initialImage.png', botImageWidth); // 하의
   ColorFiltered outImage = setImage('assets/character/initialImage.png', outImageWidth); // 아우터
-  ColorFiltered shoeBg = setImage('assets/character/initialImage.png', shoeImageWidth);    // 신발 배경
+  ColorFiltered shoeBg = setImage('assets/character/initialImage.png', shoeBgImageWidth);    // 신발 배경
   ColorFiltered shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth); // 신발
 
   resetImages() {
@@ -39,17 +40,26 @@ class ClothesImageController extends GetxController {
     bot='';
     out='';
     shoe='';
+    topBg = setImage('assets/character/initialImage.png', topBgImageWidth);
     topImage = setImage('assets/character/initialImage.png', topImageWidth);
     botBg = setImage('assets/character/initialImage.png', botImageWidth);
     botImage = setImage('assets/character/initialImage.png', botImageWidth);
     outImage = setImage('assets/character/initialImage.png', outImageWidth);
-    shoeBg = setImage('assets/character/initialImage.png', shoeImageWidth);
+    shoeBg = setImage('assets/character/initialImage.png', shoeBgImageWidth);
     shoeImage = setImage('assets/character/initialImage.png', shoeImageWidth);
+    return;
   }
 
   setTopImage(String path, {Color? color=Colors.white}) {
+    var needBg = path.split("_").last;
+    if (needBg != "noBg.png") {
+      topBg = setImage('assets/character/$gender/top_bg.jpg', topBgImageWidth);
+    } else {
+      topBg = setImage('assets/character/initialImage.png', botImageWidth);
+    }
     top = "${path.split("/").last}@${color?.value.toString()}";
     topImage =  setImage(path, topImageWidth, color!);
+    return;
   }
 
   setBotImage(String path, {Color? color=Colors.white}) {
@@ -63,23 +73,44 @@ class ClothesImageController extends GetxController {
     }
     bot = "${path.split("/").last}@${color?.value.toString()}";
     botImage = setImage(path, botImageWidth, color!);
+    return;
   }
 
   setOutImage(String path, {Color? color=Colors.white}) {
     out = "${path.split("/").last}@${color?.value.toString()}";
     outImage = setImage(path, outImageWidth, color!);
+    return;
   }
 
   setShoeImage(String path, {Color? color=Colors.white}) {
+    var needBg = path.split("_").last;
+    if (needBg != "noBg.png") {
+      shoeBg = setImage('assets/character/$gender/shoe_bg.jpg', shoeBgImageWidth);
+    } else {
+      shoeBg = setImage('assets/character/initialImage.png', botImageWidth);
+    }
     shoe = "${path.split("/").last}@${color?.value.toString()}";
     shoeImage = setImage(path, shoeImageWidth, color!);
+    return;
   }
 
   getImage() {
-    return [shoeBg, shoeImage, topImage, botBg, botImage, outImage];
+    return [shoeBg, shoeImage, topBg, topImage, botBg, botImage, outImage];
   }
 
   getFileName() {
+    if (top.startsWith("initialImage")){
+      top = "";
+    }
+    if (bot.startsWith("initialImage")){
+      bot = "";
+    }
+    if (out.startsWith("initialImage")){
+      out = "";
+    }
+    if (shoe.startsWith("initialImage")){
+      shoe = "";
+    }
     return "$top^$bot^$out^$shoe";
   }
 
@@ -120,14 +151,18 @@ class CharacterPage extends StatelessWidget {
     gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
     // 옷 크기 설정
     if (gender == "female") {
+      topBgImageWidth = MediaQuery.of(context).size.width*0.9;
       topImageWidth = MediaQuery.of(context).size.width*0.405;
       botImageWidth = MediaQuery.of(context).size.width*0.41;
       outImageWidth = MediaQuery.of(context).size.width*0.405;
+      shoeBgImageWidth = MediaQuery.of(context).size.width*0.88;
       shoeImageWidth = MediaQuery.of(context).size.width*0.416;
     } else {
+      topBgImageWidth = MediaQuery.of(context).size.width*0.9;
       topImageWidth = MediaQuery.of(context).size.width*0.49;
       botImageWidth = MediaQuery.of(context).size.width*0.476;
       outImageWidth = MediaQuery.of(context).size.width*0.475;
+      shoeBgImageWidth = MediaQuery.of(context).size.width*0.9;
       shoeImageWidth = MediaQuery.of(context).size.width*0.475;
     }
 
