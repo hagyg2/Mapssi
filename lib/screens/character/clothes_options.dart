@@ -221,8 +221,14 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
 
   // 의상 추천 함수
   Future<List<List>> recommendClothes(int style) async {
-    var items = getItem(style);  // style_recommend.dart 파일
-    //여자일 경우, 남자일 경우 나누기
+    var items;
+    //여자일 경우, 남자일 경우 나누기 if(gender == female or male)
+    if(gender == "female"){
+      items = getItemFemale(style);  // style_recommend.dart 파일
+    }
+    else{
+      items = getItemMale(style);
+    }
     print("recommend : $items");
     // getItem에서 얻은 의상 종류 중 구체적인 한 이미지를 선택해서 가져온 후 배열에 담아 반환
     var top = [await getRandomImages("top_${items[0][0]}"), Color(int.parse(items[0][1]))];
