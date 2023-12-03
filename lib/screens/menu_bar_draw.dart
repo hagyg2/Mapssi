@@ -1,6 +1,7 @@
 //weater_screen에 넣으면 너무 복잡할 것 같아서
 //햄버거 바 화면은 일단 여기서 만들어서 weather_screen으로 넘길겁니당
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -20,6 +21,8 @@ import '../main.dart';
 import '../personal_info.dart';
 import 'character/character_screen.dart';
 import 'package:mapssi/screens/character/fnc_for_character_screen.dart';
+
+
 
 
 // 현재 페이지 에서 쓰일 TextStyle (글씨체, 색상 고정 / 크기, 굵기 조절)
@@ -124,7 +127,7 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
             ),
             title: Text(
               '프로필', style: myTextStyle(20.0, fontWeight: FontWeight.w600),),
-            onTap: () {
+            onTap: () async {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Profile()));
             },
@@ -166,66 +169,7 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
             trailing: Icon(Icons.navigate_next_outlined),
           ),
 
-          Spacer(),
 
-          //로그아웃 버튼 - 목록으로 (ListTile)
-          SizedBox(height: 30.0,),
-          ListTile(
-            title: Row(
-              children: [
-                Icon(Icons.logout),
-                GestureDetector(
-                  onTap: () async { // 텍스트를 눌렀을 때만 dialog 동작하도록 감싸기
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Text(
-                            "로그아웃 하시겠습니까?", style: myTextStyle2(15.0),),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text("확인", style: myTextStyle2(15.0),),
-                              onPressed: () async {
-                                if (loginplatform == 'kakao') {
-                                  await UserApi.instance.unlink();
-                                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                                  prefs.setBool('isLoggedIn', false);
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, '/login', (route) => false);
-                                }
-                                else {
-                                  SignInWithGoogle.signOut();
-                                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                                  prefs.setBool('isLoggedIn', false);
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, '/login', (route) => false);
-                                }
-                              },
-                            ),
-                            TextButton(
-                              child: Text("취소", style: myTextStyle2(15.0),),
-                              onPressed: () {
-                                // 알림 대화 상자를 닫기 위한 코드
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-
-                  child: Row(
-                    children: [
-                      SizedBox(width: 4.0),
-                      Text('로그아웃',
-                        style: myTextStyle(20, fontWeight: FontWeight.w600),),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],),
     );
   }
@@ -234,11 +178,45 @@ class _MenuBarDrawState extends State<MenuBarDraw> {
 
 
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+class Profile extends StatefulWidget {
+  const Profile({Key? key}) : super(key: key);
+
+  @override
+  _ProfileState createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String? perCol;
+  String? prefType;
+  String? gender;
+  String? name;
+
 
   @override
   Widget build(BuildContext context) {
+
+    perCol = Get.find<UserDataFromServer>().getUserPerCol();
+    prefType =  Get.find<UserDataFromServer>().getUserPrefType();
+    gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
+    name = Get.find<UserDataFromServer>().getUserName();
+
+    String? userName = name;
+    String? userGender = englishToKoreanforGender[gender];
+    String? userStyle = englishToKoreanforStyle[prefType];
+    String? userPerCol = englishToKoreanforPerCol[perCol];
+
+    print("사용자 이름 = $name");
+    print("사용자 성별 = $gender");
+    print("사용자 스타일 = $prefType");
+    print("사용자 퍼스널 = $perCol");
+
+    print("dddddddddddddddddddddddddddddddddddddddddddd");
+    print("사용자 이름 = $userName");
+    print("사용자 성별 = $userGender");
+    print("사용자 스타일 = $userStyle");
+    print("사용자 퍼스널 = $userPerCol");
+
+
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Color(0xFFECE7E0),
@@ -263,7 +241,7 @@ class Profile extends StatelessWidget {
               ),
               SizedBox(height: 20,),
               Text(
-                '캡스톤',
+                '$userName',
                 style: myTextStyle(30, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 30,),
@@ -299,7 +277,7 @@ class Profile extends StatelessWidget {
                           ElevatedButton(
                           onPressed: ()async {},
                             child:
-                            Text('여자', style: myTextStyle(22.0, fontWeight: FontWeight.w700),),
+                            Text('$userGender', style: myTextStyle(18.0, fontWeight: FontWeight.w700),),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFFECE7E0),
                                 surfaceTintColor: Color(0xffFFFAF3),
@@ -325,17 +303,17 @@ class Profile extends StatelessWidget {
 
                           ElevatedButton(
                             onPressed: ()async {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => prefstylepage()),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => prefstylepage()),
+                              // );
                             },
                             child:
                                 Row(
                                   children: [
-                                  Text('러블리',  style: myTextStyle(22.0, fontWeight: FontWeight.w700),),
-
-                                  Icon(Icons.arrow_forward, size: 30,),
+                                  Text('$userStyle',  style: myTextStyle(18.0, fontWeight: FontWeight.w700),),
+                                    // SizedBox(width: 8.0,),
+                                    // Icon(Icons.arrow_forward, size: 25,),
                                 ],),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFFECE7E0),
@@ -361,16 +339,17 @@ class Profile extends StatelessWidget {
                           Spacer(),
                           ElevatedButton(
                             onPressed: ()async {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => percolpage()),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => percolpage()),
+                              // );
                             },
                             child:
                             Row(
                               children: [
-                                Text('여름 쿨톤', style: myTextStyle(22.0, fontWeight: FontWeight.w700),),
-                                Icon(Icons.arrow_forward, size: 30,),
+                                Text('$userPerCol', style: myTextStyle(18.0, fontWeight: FontWeight.w700),),
+                                // SizedBox(width: 8.0,),
+                                // Icon(Icons.arrow_forward, size: 25,),
                               ],),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFFECE7E0),
@@ -388,80 +367,92 @@ class Profile extends StatelessWidget {
                   ],
       ),),
 
-                    SizedBox(height: 30,),
+              SizedBox(height: 30,),
 
 
-              //회원 탈퇴
-              Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: 70,
-                padding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0,), //여백(왼위오아래)
-                decoration: BoxDecoration(
-                  color: Color(0xFFECE7E0),
-                  borderRadius: BorderRadius.circular(50), // 박스의 모서리 둥글게 설정
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center, // 텍스트를 가운데 정렬
-                  children: <Widget>[
-                    Text('회원탈퇴',  style: myTextStyle2(18.0),),
-                  ],
-                ),
-              ),
-],),),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 수평 방향으로 요소들을 공간을 균등하게 배치
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      // 여기에 원하는 페이지 이동 코드 작성
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => genderpage()),
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: 70,
+                      padding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFECE7E0),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('회원정보 수정하기', style: myTextStyle2(18.0)),
+                        ],
+                      ),
+                    ),
+                  ),
 
+
+
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text("탈퇴 하시겠습니까?" , style: myTextStyle2(15),),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text("확인" , style: myTextStyle2(15),),
+                              onPressed: () async {
+                                //
+                              },
+                            ),
+
+                            TextButton(
+                              child: Text("취소" , style: myTextStyle2(15),),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: 70,
+                      padding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFECE7E0),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('탈퇴하기', style: myTextStyle2(18.0)),
+                        ],
+                      ),
+                    ),
+                  ),
+    ]
+),],),
+      ),
       );
   }
 }
 
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         content: Text("탈퇴 하시겠습니까?" , style: myTextStyle2(15),),
-//         actions: <Widget>[
-//       TextButton(
-//       child: Text("확인" , style: myTextStyle2(15),),
-//       onPressed: () async {
-//       //
-//       },
-//     ),
-//
-//     TextButton(
-//     child: Text("취소" , style: myTextStyle2(15),),
-//     onPressed: () {
-//       Navigator.of(context).pop();
-//       },
-//     ),
-//   ],
-//   );
-// },
 
 
 
-class FavoriteArea extends StatelessWidget {
-  const FavoriteArea({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("즐겨찾는 지역", style: myTextStyle(22.0),),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  CityDropdown(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
+
 
 class FavoriteCoordi extends StatelessWidget {
   const FavoriteCoordi({super.key});
@@ -595,4 +586,35 @@ class FavoriteCoordi extends StatelessWidget {
     );
   }
 }
+
+
+Map<String, String> englishToKoreanforGender = {
+  'female': '여자',
+  'male': '남자',
+};
+
+Map<String, String> englishToKoreanforPerCol = {
+  'Spring Warm': '봄 웜톤',
+  'Summer Cool': '여름 쿨톤',
+  'Autumn Warm': '가을 웜톤',
+  'Winter Cool': '겨울 쿨톤',
+
+
+};
+
+Map<String, String> englishToKoreanforStyle = {
+  'Casual': '캐주얼',
+  'Street': '스트릿',
+  'Amekaji': '아메카지',
+  'Classic': '클래식',
+  'GoffCore': '고프코어',
+  'Dandy': '댄디',
+  'Sports': '스포츠',
+  'Lovely': '러블리',
+
+
+};
+
+
+
 
