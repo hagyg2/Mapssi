@@ -62,23 +62,19 @@ class _CharAndTempState extends State<CharAndTemp> {
   // 사용자 합성 얼굴 사진 불러오는 용도
   void loadUserImage() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    List<FileSystemEntity> files = appDocDir.listSync();
-    for (FileSystemEntity file in files) {
-      print(file.uri.pathSegments.last);
-    }
     String appDocPath = appDocDir.path;
     String filePath = '$appDocPath/${gender}UserFace.png';
     print("Searching "+filePath);
     File file = File(filePath);
 
     if (await file.exists()) {
-      showToast("이미지를 불러옵니다.");
       setState(() {
         var oldImage = characterImage;
         var imageBytes = Uint8List.fromList(file.readAsBytesSync());
 
         characterImage = Image.memory(imageBytes, fit: BoxFit.cover);
         if (oldImage != characterImage) {
+          showToast("새 이미지를 적용했습니다!");
           loadFace = true;
         }
       });
@@ -113,7 +109,7 @@ class _CharAndTempState extends State<CharAndTemp> {
               Get.find<ClothesImageController>().setBotImage(path+curBot, color: color);
             }
           } else if (Count==3) {
-            var curOut = path+Get.find<ClothesImageController>().getOutPath();
+            var curOut = Get.find<ClothesImageController>().getOutPath();
             if (curOut!="") {
               Get.find<ClothesImageController>().setOutImage(path+curOut, color: color);
             }
@@ -127,6 +123,31 @@ class _CharAndTempState extends State<CharAndTemp> {
 
   @override
   Widget build(BuildContext context) {
+    // 여성 옷 위치 설정
+    var femaleShoeBgPosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244];
+    var femaleShoePosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.22];
+    var femaleTopPosition = [MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19];
+    var femaleBotBgPosition = [MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32];
+    var femaleBotPosition = [MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.19];
+    var femaleOutPosition = [MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19];
+
+    // 남성 옷 위치 설정
+    var maleShoeBgPosition = [MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244];
+    var maleShoePosition = [0.0, MediaQuery.of(context).size.width*0.18];
+    var maleTopPosition = [MediaQuery.of(context).size.height*0.107, MediaQuery.of(context).size.width*0.17];
+    var maleBotBgPosition = [MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32];
+    var maleBotPosition = [MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.182];
+    var maleOutPosition = [MediaQuery.of(context).size.height*0.105, MediaQuery.of(context).size.width*0.182];
+
+    // 성별에 따른 위치 확정
+    var shoeBgPosition = (gender=="female") ? femaleShoeBgPosition : maleShoeBgPosition;
+    var shoePosition = (gender=="female") ? femaleShoePosition : maleShoePosition;
+    var topPosition = (gender=="female") ? femaleTopPosition : maleTopPosition;
+    var botBgPosition = (gender=="female") ? femaleBotBgPosition : maleBotBgPosition;
+    var botPosition = (gender=="female") ? femaleBotPosition : maleBotPosition;
+    var outPosition = (gender=="female") ? femaleOutPosition : maleOutPosition;
+
+
     if (! loadFace) {
       loadUserImage();
     }
@@ -141,16 +162,15 @@ class _CharAndTempState extends State<CharAndTemp> {
         print('An error occurred: $error');
       });
     }
-    sleep(const Duration(milliseconds: 50));
     // 기온 불러오기
     curTemp = Get.find<WeatherJasonData>().getData()[0];
     clothesStack = [  // 순서대로 신발, 상의, 하의, 아우터
-      clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.244, clothesImages[0]),  // 신발 배경
-      clothesPositionFromBottom(MediaQuery.of(context).size.height*0.003, MediaQuery.of(context).size.width*0.22, clothesImages[1]),  // 신발
-      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19, clothesImages[2]),    // 상의
-      clothesPosition(MediaQuery.of(context).size.height*0.34, MediaQuery.of(context).size.width*0.32, clothesImages[3]),   // 하의 배경
-      clothesPosition(MediaQuery.of(context).size.height*0.25, MediaQuery.of(context).size.width*0.19, clothesImages[4]),   // 하의
-      clothesPosition(MediaQuery.of(context).size.height*0.125, MediaQuery.of(context).size.width*0.19, clothesImages[5])    // 아우터
+      clothesPositionFromBottom(shoeBgPosition[0], shoeBgPosition[1], clothesImages[0]),  // 신발 배경
+      clothesPositionFromBottom(shoePosition[0], shoePosition[1], clothesImages[1]),  // 신발
+      clothesPosition(topPosition[0], topPosition[1], clothesImages[2]),    // 상의
+      clothesPosition(botBgPosition[0], botBgPosition[1], clothesImages[3]),   // 하의 배경
+      clothesPosition(botPosition[0], botPosition[1], clothesImages[4]),   // 하의
+      clothesPosition(outPosition[0], outPosition[1], clothesImages[5])    // 아우터
     ];
 
     // 새로고침 버튼
@@ -216,13 +236,13 @@ class _CharAndTempState extends State<CharAndTemp> {
       switch(count){
         case 1: //상의
           buttons = [
-            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF5e1e13))), //red
-            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFeec8c5))), //pink
-            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF588f54))), //green
-            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
-            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFa291b3))), //purple
-            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF3a2b22))),//brown
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFfa223b))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFfed9ce))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF3ec04e))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFFafca23))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF024355))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFac76ac))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF966f5b))), //brown
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
             clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
             clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
@@ -231,25 +251,25 @@ class _CharAndTempState extends State<CharAndTemp> {
         case 2: //하의
           buttons = [
             clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFebebeb))), //white
-            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa69879))), //beige
-            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF413c38))), //brown
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFd2c19b))), //beige
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF574e46))), //brown
             clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF7c6375))), //pink
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF414c41))), //khaki
-            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF96abb8))), //denim(연청)
-            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF566556))), //khaki
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFb0c3d0))), //denim(연청)
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF122b5a))), //navy
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF5e5e5e))), //gray
             clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF272727))) //black
           ];
           return buttons;
         case 3: //아우터
           buttons = [
-            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF5e1e13))), //red
-            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFeec8c5))), //pink
-            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF588f54))), //green
-            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFfa223b))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFfed9ce))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF3ec04e))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFFafca23))), //khaki
             clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
-            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFa291b3))), //purple
-            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF3a2b22))),//brown
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFac76ac))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF966f5b))), //brown
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
             clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
             clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
@@ -272,7 +292,7 @@ class _CharAndTempState extends State<CharAndTemp> {
             clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF79b4ad))), //mint
             clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF8aa0ce))), //blue
             clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF1e2a4a))), //navy
-            clothesPositionFromBottom(15, 200,colorOnPalette(const Color(0xFFa588ce))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFFa588ce))), //purple
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFb0b0b0))), //white
             clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF6d6d6d))), //gray
             clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF212121))), //black
@@ -280,15 +300,15 @@ class _CharAndTempState extends State<CharAndTemp> {
           return buttons;
         case 2: //하의
           buttons = [
-            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFc4c4c4))), //white
-            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa69879))), //beige
-            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF413c38))), //brown
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFd2c19b))), //beige
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF574e46))), //brown
             clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF7c6375))), //pink
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF414c41))), //khaki
-            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF96abb8))), //denim(연청)
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF566556))), //khaki
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFb0c3d0))), //denim(연청)
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF122b5a))), //navy
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF5e5e5e))), //gray
-            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF1a1a1a))) //black
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF272727))) //black
           ];
           return buttons;
         case 3: //아우터
@@ -299,7 +319,7 @@ class _CharAndTempState extends State<CharAndTemp> {
             clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF79b4ad))), //mint
             clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF8aa0ce))), //blue
             clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF1e2a4a))), //navy
-            clothesPositionFromBottom(15, 200,colorOnPalette(const Color(0xFFa588ce))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFFa588ce))), //purple
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFb0b0b0))), //white
             clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF6d6d6d))), //gray
             clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF212121))), //black
@@ -316,13 +336,13 @@ class _CharAndTempState extends State<CharAndTemp> {
       switch(count){
         case 1: //상의
           buttons = [
-            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF2e030a))), //red
-            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFF84657b))), //pink
-            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF17280e))), //green
-            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
-            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF260629))), //purple
-            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF272022))),//brown
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFcc4533))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa9819d))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF4b570b))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF65634c))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF272f5d))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF5a3f5e))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF6e4942))), //brown
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
             clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
             clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
@@ -330,26 +350,26 @@ class _CharAndTempState extends State<CharAndTemp> {
           return buttons;
         case 2: //하의
           buttons = [
-            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFc4c4c4))), //white
-            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa69879))), //beige
-            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF413c38))), //brown
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFd2c19b))), //beige
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF574e46))), //brown
             clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF7c6375))), //pink
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF414c41))), //khaki
-            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF96abb8))), //denim(연청)
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF566556))), //khaki
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFb0c3d0))), //denim(연청)
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF122b5a))), //navy
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF5e5e5e))), //gray
-            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF1a1a1a))) //black
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF272727))) //black
           ];
           return buttons;
         case 3: //아우터
           buttons = [
-            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFF2e030a))), //red
-            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFF84657b))), //pink
-            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF17280e))), //green
-            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF303e2f))), //khaki
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
-            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF260629))), //purple
-            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF272022))),//brown
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFcc4533))), //red
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa9819d))), //pink
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF4b570b))), //green
+            clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF65634c))), //khaki
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF272f5d))), //navy
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF5a3f5e))), //purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF6e4942))), //brown
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white
             clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF727272))), //gray
             clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF272727))), //black
@@ -372,7 +392,7 @@ class _CharAndTempState extends State<CharAndTemp> {
             clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF0b655a))), //mint
             clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF1810c8))), //blue
             clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF1e2a4a))), //navy
-            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF5d0dcd))),//purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF5d0dcd))), //purple
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFb0b0b0))), //white
             clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF3b3b3b))), //gray
             clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF212121))), //black
@@ -380,15 +400,15 @@ class _CharAndTempState extends State<CharAndTemp> {
           return buttons;
         case 2: //하의
           buttons = [
-            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFc4c4c4))), //white
-            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFa69879))), //beige
-            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF413c38))), //brown
+            clothesPositionFromBottom(15, 30,colorOnPalette(const Color(0xFFebebeb))), //white
+            clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFd2c19b))), //beige
+            clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF574e46))), //brown
             clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF7c6375))), //pink
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF414c41))), //khaki
-            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF96abb8))), //denim(연청)
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF566556))), //khaki
+            clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFb0c3d0))), //denim(연청)
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF122b5a))), //navy
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFF5e5e5e))), //gray
-            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF1a1a1a))) //black
+            clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF272727))) //black
           ];
           return buttons;
         case 3: //아우터
@@ -399,7 +419,7 @@ class _CharAndTempState extends State<CharAndTemp> {
             clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFF0b655a))), //mint
             clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF1810c8))), //blue
             clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFF1e2a4a))), //navy
-            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF5d0dcd))),//purple
+            clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF5d0dcd))), //purple
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFb0b0b0))), //white
             clothesPositionFromBottom(15, 270,colorOnPalette(const Color(0xFF3b3b3b))), //gray
             clothesPositionFromBottom(15, 300,colorOnPalette(const Color(0xFF212121))), //black

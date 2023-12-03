@@ -10,6 +10,8 @@ import 'main.dart';
 
 List<Object> UserInfo = [0, 0, 0];
 
+//성별 -> 카메라 -> 퍼스널컬러 -> 선호스타일
+
 //성별
 class genderpage extends StatelessWidget {
   const genderpage({Key? key}) : super(key: key);
@@ -51,42 +53,63 @@ class genderpage extends StatelessWidget {
                   child: Text('성별이 어떻게 되시나요?', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic')),
                 )
             ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Text('성별을 선택하면 아래의 캐릭터에 얼굴이 합성됩니다.', style: TextStyle(fontSize: 17, fontFamily: 'Dovemayo_gothic')),
+                )
+            ),
             Spacer(),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  child: const Text('남성', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffFFFAF3),
-                      surfaceTintColor: Color(0xffFFFAF3),
-                      foregroundColor: Colors.black,
-                      minimumSize: Size(280, 40),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)
-                      )
-                  ),
-                  onPressed: () {
-                    UserInfo[0] = 1;
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const percolpage()));
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/man.png'),
+                    SizedBox(width: 20,),
+                    Image.asset('assets/woman.png')
+                  ],
                 ),
-                SizedBox(height: 10,),
-                ElevatedButton(
-                  child: const Text('여성', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffFFFAF3),
-                      surfaceTintColor: Color(0xffFFFAF3),
-                      foregroundColor: Colors.black,
-                      minimumSize: Size(280, 40),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)
-                      )
-                  ),
-                  onPressed: () {
-                    UserInfo[0] = 0;
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const percolpage()));
-                  },
+                SizedBox(height: 20,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: const Text('남성', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xffFFFAF3),
+                          surfaceTintColor: Color(0xffFFFAF3),
+                          foregroundColor: Colors.black,
+                          minimumSize: Size(150, 40),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50)
+                          )
+                      ),
+                      onPressed: () {
+                        UserInfo[0] = 1;
+                        Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                      },
+                    ),
+                    SizedBox(width: 20,),
+                    ElevatedButton(
+                      child: const Text('여성', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xffFFFAF3),
+                          surfaceTintColor: Color(0xffFFFAF3),
+                          foregroundColor: Colors.black,
+                          minimumSize: Size(150, 40),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50)
+                          )
+                      ),
+                      onPressed: () {
+                        UserInfo[0] = 0;
+                        Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                      },
+                    ),
+                  ],
                 ),
                 SizedBox(height: 25,)
               ],
@@ -143,7 +166,7 @@ class percolpage extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Container(
                   margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Text('모름 버튼을 누르면 퍼스널컬러 진단 페이지로 이동합니다!', style: TextStyle(fontSize: 18, fontFamily: 'Dovemayo_gothic')),
+                  child: Text('모름 버튼을 누르면 퍼스널컬러 진단 페이지로 이동합니다.', style: TextStyle(fontSize: 17, fontFamily: 'Dovemayo_gothic')),
                 )
             ),
             Spacer(),
@@ -289,9 +312,6 @@ class _prefstylepage extends State<prefstylepage> {
       else if(index == 4){
         UserInfo[2] = 'GoffCore';
       }
-      else if(index == 5){
-        UserInfo[2] = 'Dandy';
-      }
       else{
         UserInfo[2] = 'Sports';
       }
@@ -335,6 +355,7 @@ class _prefstylepage extends State<prefstylepage> {
                   child: Text('선호 스타일이 무엇인가요?', style: TextStyle(fontSize: 25, fontFamily: 'Dovemayo_gothic')),
                 )
             ),
+            Spacer(),
             Container(
               margin: EdgeInsets.all(20),
               child: Column(
@@ -348,7 +369,7 @@ class _prefstylepage extends State<prefstylepage> {
                           style: ElevatedButton.styleFrom(
                               primary: selectedButtonIndex == 0? Colors.grey : Color(0xffFFFAF3),
                               foregroundColor: Colors.black,
-                              minimumSize: Size(250, 150),
+                              minimumSize: Size(150, 150),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(7)
                               )
@@ -366,19 +387,14 @@ class _prefstylepage extends State<prefstylepage> {
                           style: ElevatedButton.styleFrom(
                               primary: selectedButtonIndex == 1? Colors.grey : Color(0xffFFFAF3),
                               foregroundColor: Colors.black,
-                              minimumSize: Size(150, 150),
+                              minimumSize: Size(250, 150),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(7)
                               )
                           ),
                         ),
                       ),
-                              ]
-                              ),
-
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
+                      SizedBox(width: 10,height: 10,),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () => _handleButtonPress(2),
@@ -386,15 +402,20 @@ class _prefstylepage extends State<prefstylepage> {
                           style: ElevatedButton.styleFrom(
                               primary: selectedButtonIndex == 2? Colors.grey : Color(0xffFFFAF3),
                               foregroundColor: Colors.black,
-                              minimumSize: Size(150, 150),
+                              minimumSize: Size(250, 150),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(7)
                               )
                           ),
                         ),
                       ),
-                      SizedBox(width: 10,height: 10,),
 
+                    ]
+                  ),
+
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () => _handleButtonPress(3),
@@ -402,16 +423,14 @@ class _prefstylepage extends State<prefstylepage> {
                           style: ElevatedButton.styleFrom(
                               primary: selectedButtonIndex == 3? Colors.grey : Color(0xffFFFAF3),
                               foregroundColor: Colors.black,
-                              minimumSize: Size(150, 150),
+                              minimumSize: Size(250, 150),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(7)
                               )
                           ),
                         ),
                       ),
-
                       SizedBox(width: 10,height: 10,),
-
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () => _handleButtonPress(4),
@@ -419,26 +438,7 @@ class _prefstylepage extends State<prefstylepage> {
                           style: ElevatedButton.styleFrom(
                               primary: selectedButtonIndex == 4? Colors.grey : Color(0xffFFFAF3),
                               foregroundColor: Colors.black,
-                              minimumSize: Size(150, 150),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(7)
-                              )
-                          ),
-                        ),
-                      ),
-                  ]
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => _handleButtonPress(5),
-                          child: Text('댄디', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
-                          style: ElevatedButton.styleFrom(
-                              primary: selectedButtonIndex == 5? Colors.grey : Color(0xffFFFAF3),
-                              foregroundColor: Colors.black,
-                              minimumSize: Size(150, 150),
+                              minimumSize: Size(250, 150),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(7)
                               )
@@ -446,24 +446,23 @@ class _prefstylepage extends State<prefstylepage> {
                         ),
                       ),
                       SizedBox(width: 10,height: 10,),
-
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              primary: selectedButtonIndex == 6? Colors.grey : Color(0xffFFFAF3),
+                              primary: selectedButtonIndex == 5? Colors.grey : Color(0xffFFFAF3),
                               foregroundColor: Colors.black,
-                              minimumSize: Size(150, 150),
+                              minimumSize: Size(250, 150),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(7)
                               )
                           ),
-                          onPressed: () => _handleButtonPress(6),
+                          onPressed: () => _handleButtonPress(5),
                           child: Text('스포츠', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic')),
                         ),
                       ),
-                    ],
+                  ]
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(height: 20,),
                   ElevatedButton(
                     child: Text('제출하기', style: TextStyle(fontSize: 20, fontFamily: 'Dovemayo_gothic'),),
                     style: ElevatedButton.styleFrom(
@@ -487,7 +486,7 @@ class _prefstylepage extends State<prefstylepage> {
 
                         // //백엔드로 정보(userinfo) 넘겨주기
                         if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
-                          Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                          Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
                         }
                        //Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
                       }
@@ -513,7 +512,8 @@ class _prefstylepage extends State<prefstylepage> {
                         );
                       }
                     },
-                  )
+                  ),
+                  SizedBox(height: 25,)
                 ],
               ),
             )
@@ -752,7 +752,7 @@ class _prefstylepagewState extends State<prefstylepagew> {
 
                          //백엔드로 정보(userinfo) 넘겨주기
                         if (await sendUserData(userController.getUserId(), UserInfo[0], UserInfo[1], UserInfo[2])) {
-                          Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
+                          Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
                          }
 
                         //Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
