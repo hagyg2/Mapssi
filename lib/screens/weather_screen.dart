@@ -720,14 +720,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             ],
                           ),
 
-                          SizedBox(height: 17.0),
+                          SizedBox(height: 20.0),
                           Row(
                               children: [
                                 Text('미세\n먼지',
                                   style: myTextStyle(13.0, fontWeight: FontWeight.w700),),
                                 SizedBox(width: 18.0),
                                 airState,
-                                SizedBox(width: 7.0),
+                                SizedBox(width: 10.0),
                                 airIcon,
                               ]
 
