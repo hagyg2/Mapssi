@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
 import '../main.dart';
+import '../personal_info.dart';
 import 'character/fnc_for_character_screen.dart';
 
 String gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
@@ -311,7 +312,7 @@ class _ChkAndSendState extends State<ChkAndSend> {
                             // 에러 처리 로직
                             print(error);
                           });
-                          Navigator.pushNamedAndRemoveUntil(context,'/index', (route) => false);
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const percolpage()), (route) => false);
                         },
                         child: Text("스캔 시작",style: myTextStyle(25.0, fontWeight: FontWeight.w500)),
                       ),

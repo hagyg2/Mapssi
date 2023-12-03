@@ -672,7 +672,7 @@ getItem(int index) {
       break;
   }
 
-  print(coordi);
+  //print(coordi);
   var random = Random();
   String randomcoordi = "";
   randomcoordi = coordi[random.nextInt(coordi.length)];
