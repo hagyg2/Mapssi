@@ -261,7 +261,7 @@ class _CharAndTempState extends State<CharAndTemp> {
             clothesPositionFromBottom(15, 60,colorOnPalette(const Color(0xFFfed9ce))), //pink
             clothesPositionFromBottom(15, 90,colorOnPalette(const Color(0xFF3ec04e))), //green
             clothesPositionFromBottom(15, 120,colorOnPalette(const Color(0xFFafca23))), //khaki
-            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF024355))), //navy
+            clothesPositionFromBottom(15, 150,colorOnPalette(const Color(0xFF2c3755))), //navy
             clothesPositionFromBottom(15, 180,colorOnPalette(const Color(0xFFac76ac))), //purple
             clothesPositionFromBottom(15, 210,colorOnPalette(const Color(0xFF966f5b))), //brown
             clothesPositionFromBottom(15, 240,colorOnPalette(const Color(0xFFebebeb))), //white

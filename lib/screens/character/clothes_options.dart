@@ -42,7 +42,7 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
       recTypes.add('러블리');
     } else {
       botTypes.add('면바지');
-      recTypes.add('댄디');
+      //recTypes.add('댄디');
     }
     clothesTypeNum = [topTypes.length, botTypes.length, 8, 7, recTypes.length]; // 상 하 신 외 개수
     super.initState();
@@ -222,7 +222,6 @@ class _ClothesOptionsState extends State<ClothesOptions>  with TickerProviderSta
   // 의상 추천 함수
   Future<List<List>> recommendClothes(int style) async {
     var items;
-    //여자일 경우, 남자일 경우 나누기 if(gender == female or male)
     if(gender == "female"){
       items = getItemFemale(style);  // style_recommend.dart 파일
     }
