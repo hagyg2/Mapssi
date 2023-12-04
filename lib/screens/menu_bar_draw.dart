@@ -16,6 +16,7 @@ import 'package:mapssi/screens/login_screen.dart';
 //import 'package:mapssi/screens/search_area_screen2.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../main.dart';
 import '../personal_info.dart';
@@ -190,14 +191,15 @@ class _ProfileState extends State<Profile> {
   String? prefType;
   String? gender;
   String? name;
-
+  String? id;
 
   @override
   Widget build(BuildContext context) {
-
+    id = Get.find<UserDataFromServer>().getUserId();
     perCol = Get.find<UserDataFromServer>().getUserPerCol();
-    prefType =  Get.find<UserDataFromServer>().getUserPrefType();
-    gender = Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
+    prefType = Get.find<UserDataFromServer>().getUserPrefType();
+    gender =
+    Get.find<UserDataFromServer>().getUserGender() == 0 ? 'female' : 'male';
     name = Get.find<UserDataFromServer>().getUserName();
 
     String? userName = name;
@@ -209,6 +211,7 @@ class _ProfileState extends State<Profile> {
     print("사용자 성별 = $gender");
     print("사용자 스타일 = $prefType");
     print("사용자 퍼스널 = $perCol");
+    print("사용자 아이디 = $id");
 
     print("dddddddddddddddddddddddddddddddddddddddddddd");
     print("사용자 이름 = $userName");
@@ -227,151 +230,155 @@ class _ProfileState extends State<Profile> {
       body: Center(
 
 
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 30,),
-              CircleAvatar(    //나중에 사용자 이미지 추가
-                radius: 60,
-                backgroundColor: Color(0xFFECE7E0),
-                child: Icon(
-                  Icons.person,
-                  size: 80,
-                  color: Colors.white,
-                ),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 30,),
+            CircleAvatar( //나중에 사용자 이미지 추가
+              radius: 60,
+              backgroundColor: Color(0xFFECE7E0),
+              child: Icon(
+                Icons.person,
+                size: 80,
+                color: Colors.white,
               ),
-              SizedBox(height: 20,),
-              Text(
-                '$userName',
-                style: myTextStyle(30, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20,),
+            Text(
+              '$userName',
+              style: myTextStyle(30, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 30,),
+
+
+            //개인 정보
+            Container(
+              margin: EdgeInsets.all(16.0), // 여백 추가
+              padding: EdgeInsets.fromLTRB(5.0, 30.0, 15.0, 30.0,), //여백(왼위오아래)
+              //height: MediaQuery.of(context).size.height*0.3,
+              decoration: BoxDecoration(
+                color: Color(0xFFCCCCCC),
+                borderRadius: BorderRadius.circular(
+                    12.0), // 첫 번째 Container의 테두리 둥글게 설정
               ),
-              SizedBox(height: 30,),
 
 
-
-              //개인 정보
-              Container(
-                margin: EdgeInsets.all(16.0), // 여백 추가
-                padding: EdgeInsets.fromLTRB(5.0, 30.0, 15.0, 30.0,), //여백(왼위오아래)
-                //height: MediaQuery.of(context).size.height*0.3,
-                decoration: BoxDecoration(
-                  color: Color(0xFFCCCCCC),
-                  borderRadius: BorderRadius.circular(12.0), // 첫 번째 Container의 테두리 둥글게 설정
-                ) ,
-
-
-
-
-
-
-      child: Column(
-                  children: [
-                    ListTile(
-                      title: Row(
-                        children: <Widget>[
-                          Icon(Icons.wc, size: 30.0),
-                          SizedBox(width: 10.0,),
-                          Text('성별',  style: myTextStyle2(18.0),),
-                          Spacer(), // 빈 공간 추가
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Row(
+                      children: <Widget>[
+                        Icon(Icons.wc, size: 30.0),
+                        SizedBox(width: 10.0,),
+                        Text('성별', style: myTextStyle2(18.0),),
+                        Spacer(),
+                        // 빈 공간 추가
                         //  Text('여자', style: myTextStyle(22.0, fontWeight: FontWeight.w700),),
 
-                          ElevatedButton(
-                          onPressed: ()async {},
-                            child:
-                            Text('$userGender', style: myTextStyle(18.0, fontWeight: FontWeight.w700),),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFECE7E0),
-                                surfaceTintColor: Color(0xffFFFAF3),
-                                foregroundColor: Colors.black,
-                                minimumSize: Size(120, 50),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20), // 박스의 모서리 둥글게 설정
-                                )
-                            ),
+                        ElevatedButton(
+                          onPressed: () async {},
+                          child:
+                          Text('$userGender', style: myTextStyle(
+                              18.0, fontWeight: FontWeight.w700),),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFECE7E0),
+                              surfaceTintColor: Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(120, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20), // 박스의 모서리 둥글게 설정
+                              )
                           ),
-
-                        ],),
-                    ),
-
-                    SizedBox(height: 30,),
-                    ListTile(
-                      title: Row(
-                        children: <Widget>[
-                          Icon(Icons.favorite, size: 30.0),
-                          SizedBox(width: 10.0,),
-                          Text('선호 스타일',  style: myTextStyle2(18.0),),
-                          Spacer(), // 빈 공간 추가
-
-                          ElevatedButton(
-                            onPressed: ()async {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => prefstylepage()),
-                              // );
-                            },
-                            child:
-                                Row(
-                                  children: [
-                                  Text('$userStyle',  style: myTextStyle(18.0, fontWeight: FontWeight.w700),),
-                                    // SizedBox(width: 8.0,),
-                                    // Icon(Icons.arrow_forward, size: 25,),
-                                ],),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFECE7E0),
-                                surfaceTintColor: Color(0xffFFFAF3),
-                                foregroundColor: Colors.black,
-                                minimumSize: Size(120, 50),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20), // 박스의 모서리 둥글게 설정
-                                )
-                            ),
-                          ),
-                          ],
                         ),
-                    ),
-                    SizedBox(height: 30,),
 
-                    ListTile(
-                      title: Row(
-                        children: <Widget>[
-                          Icon(Icons.color_lens, size: 30.0),
-                          SizedBox(width: 10.0,),
-                          Text('퍼스널 컬러',  style: myTextStyle2(18.0),),
-                          Spacer(),
-                          ElevatedButton(
-                            onPressed: ()async {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => percolpage()),
-                              // );
-                            },
-                            child:
-                            Row(
-                              children: [
-                                Text('$userPerCol', style: myTextStyle(18.0, fontWeight: FontWeight.w700),),
-                                // SizedBox(width: 8.0,),
-                                // Icon(Icons.arrow_forward, size: 25,),
-                              ],),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFECE7E0),
-                                surfaceTintColor: Color(0xffFFFAF3),
-                                foregroundColor: Colors.black,
-                                minimumSize: Size(120, 50),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20), // 박스의 모서리 둥글게 설정
-                                )
-                            ),
+                      ],),
+                  ),
+
+                  SizedBox(height: 30,),
+                  ListTile(
+                    title: Row(
+                      children: <Widget>[
+                        Icon(Icons.favorite, size: 30.0),
+                        SizedBox(width: 10.0,),
+                        Text('선호 스타일', style: myTextStyle2(18.0),),
+                        Spacer(), // 빈 공간 추가
+
+                        ElevatedButton(
+                          onPressed: () async {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => prefstylepage()),
+                            // );
+                          },
+                          child:
+                          Row(
+                            children: [
+                              Text('$userStyle', style: myTextStyle(
+                                  18.0, fontWeight: FontWeight.w700),),
+                              // SizedBox(width: 8.0,),
+                              // Icon(Icons.arrow_forward, size: 25,),
+                            ],),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFECE7E0),
+                              surfaceTintColor: Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(120, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20), // 박스의 모서리 둥글게 설정
+                              )
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-      ),),
+                  ),
+                  SizedBox(height: 30,),
 
-              SizedBox(height: 30,),
+                  ListTile(
+                    title: Row(
+                      children: <Widget>[
+                        Icon(Icons.color_lens, size: 30.0),
+                        SizedBox(width: 10.0,),
+                        Text('퍼스널 컬러', style: myTextStyle2(18.0),),
+                        Spacer(),
+                        ElevatedButton(
+                          onPressed: () async {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => percolpage()),
+                            // );
+                          },
+                          child:
+                          Row(
+                            children: [
+                              Text('$userPerCol', style: myTextStyle(
+                                  18.0, fontWeight: FontWeight.w700),),
+                              // SizedBox(width: 8.0,),
+                              // Icon(Icons.arrow_forward, size: 25,),
+                            ],),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFECE7E0),
+                              surfaceTintColor: Color(0xffFFFAF3),
+                              foregroundColor: Colors.black,
+                              minimumSize: Size(120, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20), // 박스의 모서리 둥글게 설정
+                              )
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),),
+
+            SizedBox(height: 30,),
 
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 수평 방향으로 요소들을 공간을 균등하게 배치
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // 수평 방향으로 요소들을 공간을 균등하게 배치
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
@@ -382,7 +389,10 @@ class _ProfileState extends State<Profile> {
                       );
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.4,
                       height: 70,
                       padding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
                       decoration: BoxDecoration(
@@ -399,35 +409,46 @@ class _ProfileState extends State<Profile> {
                   ),
 
 
-
                   GestureDetector(
                     onTap: () {
                       showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Text("탈퇴 하시겠습니까?" , style: myTextStyle2(15),),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text("확인" , style: myTextStyle2(15),),
-                              onPressed: () async {
-                                //
-                              },
-                            ),
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text(
+                              "탈퇴 하시겠습니까?", style: myTextStyle2(15),),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text("확인", style: myTextStyle2(15),),
+                                onPressed: () async {
+                                  bool isDeleted = await sendUserDataToDelete(); // 사용자 정보 삭제 함수 호출
+                                  if (isDeleted) {
+                                    // 삭제 성공 시 작업
+                                    Navigator.of(context)
+                                        .pop(); // 다이얼로그 닫기 등의 작업 수행
+                                  } else {
+                                    // 삭제 실패 시 작업
+                                    // 실패 메시지 표시 등의 작업 수행
+                                  }
+                                },
+                              ),
 
-                            TextButton(
-                              child: Text("취소" , style: myTextStyle2(15),),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
+                              TextButton(
+                                child: Text("취소", style: myTextStyle2(15),),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.4,
                       height: 70,
                       padding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
                       decoration: BoxDecoration(
@@ -442,14 +463,33 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                   ),
-    ]
-),],),
+                ]
+            ),
+          ],),
       ),
-      );
+    );
   }
+
+  Future<bool> sendUserDataToDelete() async {
+    var url = 'http://13.209.46.142:50000/userdata/$id';
+
+    var response = await http.delete(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      // 삭제 성공
+      print("***회원 정보 삭제 성공!***");
+      return true;
+    } else {
+      // 삭제 실패
+      print('Failed to delete user data with status: ${response.statusCode}');
+      return false;
+    }
+  }
+
 }
-
-
 
 
 
