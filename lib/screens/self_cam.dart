@@ -139,7 +139,7 @@ class _SelfCamState extends State<SelfCam> {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height*0.7,
                   margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   // 그림자
                   decoration: BoxDecoration(
