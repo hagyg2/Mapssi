@@ -16,16 +16,16 @@ getItemMale(int index) {
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
-            coordi.add("sweatshirts_0xFF272727/cotton_0xFFebebeb/sports/coat_0xFF024355");
-            coordi.add("tshirts_0xFFebebeb/cotton_0xFF272727/sports/jumper_0xFF024355");
-            coordi.add("sweatshirts_0xFF024355/cotton_0xFFd2c19b/sports/coat_0xFF272727");
+            coordi.add("sweatshirts_0xFF272727/cotton_0xFFebebeb/sports/coat_0xFF2c3755");
+            coordi.add("tshirts_0xFFebebeb/cotton_0xFF272727/sports/jumper_0xFF2c3755");
+            coordi.add("sweatshirts_0xFF2c3755/cotton_0xFFd2c19b/sports/coat_0xFF272727");
             coordi.add("tshirts_0xFF272727/sports_0xFF5e5e5e/sports/jumper_0xFF272727");
             coordi.add("hoodie_0xFF3ec04e/cargo_0xFF272727/sports/jumper_0xFFebebeb");
           } else if (curTemp>4 && curTemp<=11) {
             coordi.add("hoodie_0xFF727272/denim_0xFFb0c3d0/sneakers/filed_0xFF566556");
             coordi.add("tshirts_0xFFebebeb/cotton_0xFF7c6375/sports/jacket_0xFF272727");
             coordi.add("tshirts_0xFFebebeb/cotton_0xFFebebeb/sneakers/cardigan_0xFF966f5b");
-            coordi.add("sweatshirts_0xFF024355/cotton_0xFF566556/sports");
+            coordi.add("sweatshirts_0xFF2c3755/cotton_0xFF566556/sports");
             coordi.add("hoodie_0xFF272727/cotton_0xFF5e5e5e/sports/jacket_0xFFebebeb");
           } else if (curTemp>11 && curTemp<=16) {
 
@@ -125,7 +125,7 @@ getItemMale(int index) {
           } else if (curTemp>4 && curTemp<=11) {
             coordi.add("tshirts_0xFFebebeb/denim_0xFF272727/sports/cardigan_0xFFebebeb");
             coordi.add("tshirts_0xFFebebeb/denim_0xFFebebeb/sports/jacket_0xFF727272");
-            coordi.add("sweatshirts_0xFF024355/cotton_0xFF7c6375/sneakers/jacket_0xFF272727");
+            coordi.add("sweatshirts_0xFF2c3755/cotton_0xFF7c6375/sneakers/jacket_0xFF272727");
             coordi.add("tshirts_0xFFebebeb/jogger_0xFF122b5a/sports/windshield_0xFFac76ac");
             coordi.add("tshirts_0xFF272727/cargo_0xFF566556/sports/jacket_0xFFfa223b");
 
@@ -225,10 +225,10 @@ getItemMale(int index) {
             coordi.add("tshirts_0xFFebebeb/cotton_0xFFd2c19b/dress/jumper_0xFF566556");
             coordi.add("hoodi_0xFFebebeb/cotton_0xFF122b5a/sports/field_0xFF566556");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("sweatshirts_0xFF024355/cotton_0xFFd2c19b/sports/jacket_0xFFebebeb");
+            coordi.add("sweatshirts_0xFF2c3755/cotton_0xFFd2c19b/sports/jacket_0xFFebebeb");
             coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sports/windshield_0xFFebebeb");
             coordi.add("tshirts_0xFFebebeb/cotton_0xFF272727/sneakers/jacket_0xFFd2c19b");
-            coordi.add("hoodie_0xFF024355/denim_0xFFebebeb/sports");
+            coordi.add("hoodie_0xFF2c3755/denim_0xFFebebeb/sports");
             coordi.add("shirts_0xFFebebeb/cotton_0xFFd2c19b/sneakers/cardigan_0xFFebebeb");
           } else if (curTemp>11 && curTemp<=16) {
 
@@ -408,7 +408,7 @@ getItemMale(int index) {
             coordi.add("shirts_0xFFebebeb/trouser_0xFF272727/dress/jacket_0xFF272727");
             coordi.add("tshirts_0xFFebebeb/denim_0xFFebebeb/dress/jacket_0xFF272727");
             coordi.add("tshirts_0xFF272727/trouser_0xFF272727/dress/coat_0xFFd2c19b");
-            coordi.add("shirts_0xFFebebeb/cotton_0xFFebebeb/dress/coat_0xFF024355");
+            coordi.add("shirts_0xFFebebeb/cotton_0xFFebebeb/dress/coat_0xFF2c3755");
           } else if (curTemp>27) {
 
           }
@@ -470,53 +470,7 @@ getItemMale(int index) {
       }
       break;
 
-
-    case 5: // 러블리 or 댄디
-      switch (perCol) {
-        case "Spring Warm": // 봄웜
-          if (curTemp<=4) {
-
-          } else if (curTemp>4 && curTemp<=11) {
-
-          } else if (curTemp>12) {
-
-          }
-          break;
-
-        case "Summer Cool": // 여쿨
-          if (curTemp<=4) {
-
-          } else if (curTemp>4 && curTemp<=11) {
-
-          }  else if (curTemp>12) {
-
-          }
-          break;
-
-        case "Autumn Warm": // 가웜
-          if (curTemp<=4) {
-
-          } else if (curTemp>4 && curTemp<=11) {
-
-          } else if (curTemp>12) {
-
-          }
-          break;
-
-        case "Winter Cool": // 겨쿨
-          if (curTemp<=4) {
-
-          } else if (curTemp>4 && curTemp<=11) {
-
-          } else if (curTemp>12) {
-
-          }
-          break;
-      }
-      break;
-
-
-    case 6: // 고프코어
+    case 5: // 고프코어
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
@@ -620,23 +574,23 @@ getItemFemale(int index) {
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
-            coordi.add("tshirts_0xFFb7b4a6/cargo_0xFF323b32/sneakers/jumper_0xFFbcb9b9");
-            coordi.add("tshirts_0xFFa5936c/denim_0xFF1d1d1e/sports/coat_0xFFb7b4a6");
-            coordi.add("tshirts_0xFFbcb9b9/sports_0xFF050d24/sports/jumper_0xFFb7b4a6");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d2a44/sneakers/jumper_0xFF866360");
-            coordi.add("sweatshirts_0xFFb7b4a6/trouser_0xFFbcb9b9/sports/coat_0xFF151514");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sneakers/jumper_0xFFebebeb");
+            coordi.add("tshirts_0xFFd2c19b/denim_0xFF1d1d1e/sports/coat_0xFFebebeb");
+            coordi.add("tshirts_0xFFebebeb/sports_0xFF122b5a/sports/jumper_0xFFebebeb");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d2a44/sneakers/jumper_0xFFfed9ce");
+            coordi.add("sweatshirts_0xFFebebeb/trouser_0xFFebebeb/sports/coat_0xFF272727");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF151514/boots/jacket_0xFF151514");
-            coordi.add("sweatshirts_0xFFb7b4a6/trouser_0xFFc4c4c4/sneakers/jacket_0xFF3a2b22");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/cardigan_0xFFa5936c");
-            coordi.add("hoodie_0xFFbcb9b9/skirt_0xFFc4c4c4/sneakers/jacket_0xFF050d24");
-            coordi.add("sweatshirts_0xFFb7b4a6/skirt_0xFF3a2b22/sports/jacket_0xFFa5936c");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF272727/boots/jacket_0xFF272727");
+            coordi.add("sweatshirts_0xFFebebeb/trouser_0xFFebebeb/sneakers/jacket_0xFF966f5b");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/cardigan_0xFFebebeb");
+            coordi.add("hoodie_0xFFebebeb/skirt_0xFFebebeb/sneakers/jacket_0xFF2c3755");
+            coordi.add("sweatshirts_0xFFebebeb/skirt_0xFF574e46/sports/jacket_0xFFebebeb");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFF151514/denim_0xFF4e5e70/sneakers/jacket_0xFF595959");
-            coordi.add("hoodie_0xFF595959/trouser_0xFF151514/sneakers");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF323b32/sports/windshield_0xFF050d24");
-            coordi.add("croptop_0xFFbcb9b9/denim_0xFF1d2a44/sneakers/jacket_0xFF3a2b22");
-            coordi.add("tshirts_0xFFbcb9b9/trouser_0xFFb7b4a6/sports/cardigan_0xFF050d24");
+            coordi.add("tshirts_0xFF272727/denim_0xFFb0c3d0/sneakers/jacket_0xFF727272");
+            coordi.add("hoodie_0xFF727272/trouser_0xFF272727/sneakers");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF566556/sports/windshield_0xFF2c3755");
+            coordi.add("croptop_0xFFebebeb/denim_0xFF1d2a44/sneakers/jacket_0xFF966f5b");
+            coordi.add("tshirts_0xFFebebeb/trouser_0xFFebebeb/sports/cardigan_0xFF2c3755");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -648,23 +602,23 @@ getItemFemale(int index) {
 
         case "Summer Cool": // 여쿨
           if (curTemp<=4) {
-            coordi.add("tshirts_0xFFb7b4a6/cargo_0xFF323b32/sneakers/jumper_0xFFbcb9b9");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/coat_0xFF383838");
-            coordi.add("tshirts_0xFFbcb9b9/sports_0xFF051a36/sports/jumper_0xFF06544a");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d2a44/sneakers/jumper_0xFF87b9c9");
-            coordi.add("sweatshirts_0xFFb7b4a6/trouser_0xFFbcb9b9/sports/coat_0xFF151514");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sneakers/jumper_0xFFebebeb");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/coat_0xFFcbcbcb");
+            coordi.add("tshirts_0xFFebebeb/sports_0xFF122b5a/sports/jumper_0xFF06544a");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d2a44/sneakers/jumper_0xFFa4b4cf");
+            coordi.add("sweatshirts_0xFFebebeb/trouser_0xFFebebeb/sports/coat_0xFF272727");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF151514/boots/jacket_0xFF151514");
-            coordi.add("sweatshirts_0xFFb7b4a6/trouser_0xFFc4c4c4/sneakers/jacket_0xFF051a36");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/cardigan_0xFF595959");
-            coordi.add("hoodie_0xFFbcb9b9/skirt_0xFFc4c4c4/sneakers/jacket_0xFF101421");
-            coordi.add("sweatshirts_0xFFb7b4a6/skirt_0xFF21191b/sports/jacket_0xFFa5936c");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF272727/boots/jacket_0xFF272727");
+            coordi.add("sweatshirts_0xFFebebeb/trouser_0xFFebebeb/sneakers/jacket_0xFF2c3346");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/cardigan_0xFFcbcbcb");
+            coordi.add("hoodie_0xFFebebeb/skirt_0xFFebebeb/sneakers/jacket_0xFF2c3346");
+            coordi.add("sweatshirts_0xFFebebeb/skirt_0xFF574e46/sports/jacket_0xFFebebeb");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFF151514/denim_0xFF4e5e70/sneakers/jacket_0xFF595959");
-            coordi.add("hoodie_0xFF595959/trouser_0xFF151514/sneakers");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF323b32/sports/windshield_0xFF051a36");
-            coordi.add("croptop_0xFFbcb9b9/denim_0xFF1d2a44/sneakers/jacket_0xFF21191b");
-            coordi.add("tshirts_0xFFbcb9b9/trouser_0xFFb7b4a6/sports/cardigan_0xFF051a36");
+            coordi.add("tshirts_0xFF272727/denim_0xFFb0c3d0/sneakers/jacket_0xFFcbcbcb");
+            coordi.add("hoodie_0xFFcbcbcb/trouser_0xFF272727/sneakers");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF566556/sports/windshield_0xFF2c3346");
+            coordi.add("croptop_0xFFebebeb/denim_0xFF1d2a44/sneakers/jacket_0xFF574e46");
+            coordi.add("tshirts_0xFFebebeb/trouser_0xFFebebeb/sports/cardigan_0xFF2c3346");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -676,23 +630,23 @@ getItemFemale(int index) {
 
         case "Autumn Warm": // 가웜
           if (curTemp<=4) {
-            coordi.add("tshirts_0xFFb7b4a6/cargo_0xFF323b32/sneakers/jumper_0xFFbcb9b9");
-            coordi.add("tshirts_0xFFb7b4a6/denim_0xFF1d1d1e/sports/coat_0xFF201716");
-            coordi.add("tshirts_0xFFbcb9b9/sports_0xFF051a36/sports/jumper_0xFFb7b4a6");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d2a44/sneakers/jumper_0xFFbc7baa");
-            coordi.add("sweatshirts_0xFFb7b4a6/trouser_0xFFbcb9b9/sports/coat_0xFF151514");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sneakers/jumper_0xFFebebeb");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/coat_0xFF6e4942");
+            coordi.add("tshirts_0xFFebebeb/sports_0xFF122b5a/sports/jumper_0xFFebebeb");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d2a44/sneakers/jumper_0xFFbc7baa");
+            coordi.add("sweatshirts_0xFFebebeb/trouser_0xFFebebeb/sports/coat_0xFF272727");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF151514/boots/jacket_0xFF151514");
-            coordi.add("sweatshirts_0xFFb7b4a6/trouser_0xFFc4c4c4/sneakers/jacket_0xFFa5936c");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/cardigan_0xFFa5936c");
-            coordi.add("hoodie_0xFFbcb9b9/skirt_0xFFc4c4c4/sneakers/jacket_0xFF000123");
-            coordi.add("sweatshirts_0xFFb7b4a6/skirt_0xFF201716/sports/jacket_0xFFa5936c");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF272727/boots/jacket_0xFF272727");
+            coordi.add("sweatshirts_0xFFebebeb/trouser_0xFFebebeb/sneakers/jacket_0xFFebebeb");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/cardigan_0xFFebebeb");
+            coordi.add("hoodie_0xFFebebeb/skirt_0xFFebebeb/sneakers/jacket_0xFF272f5d");
+            coordi.add("sweatshirts_0xFFebebeb/skirt_0xFF574e46/sports/jacket_0xFFebebeb");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFF151514/denim_0xFF4e5e70/sneakers/jacket_0xFF595959");
-            coordi.add("hoodie_0xFF595959/trouser_0xFF151514/sneakers");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF323b32/sports/windshield_0xFF000123");
-            coordi.add("croptop_0xFFbcb9b9/denim_0xFF1d2a44/sneakers/jacket_0xFF201716");
-            coordi.add("tshirts_0xFFbcb9b9/trouser_0xFFb7b4a6/sports/cardigan_0xFF101421");
+            coordi.add("tshirts_0xFF272727/denim_0xFFb0c3d0/sneakers/jacket_0xFF727272");
+            coordi.add("hoodie_0xFF727272/trouser_0xFF272727/sneakers");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF566556/sports/windshield_0xFF272f5d");
+            coordi.add("croptop_0xFFebebeb/denim_0xFF1d2a44/sneakers/jacket_0xFF6e4942");
+            coordi.add("tshirts_0xFFebebeb/trouser_0xFFebebeb/sports/cardigan_0xFF272f5d");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -704,23 +658,23 @@ getItemFemale(int index) {
 
         case "Winter Cool": // 겨쿨
           if (curTemp<=4) {
-            coordi.add("tshirts_0xFFb7b4a6/cargo_0xFF323b32/sneakers/jumper_0xFFbcb9b9");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/coat_0xFF383838");
-            coordi.add("tshirts_0xFFbcb9b9/sports_0xFF051a36/sports/jumper_0xFF01322b");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d2a44/sneakers/jumper_0xFF8ad8ea");
-            coordi.add("sweatshirts_0xFFb7b4a6/trouser_0xFFbcb9b9/sports/coat_0xFF151514");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sneakers/jumper_0xFFebebeb");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/coat_0xFFcbcbcb");
+            coordi.add("tshirts_0xFFebebeb/sports_0xFF122b5a/sports/jumper_0xFF01322b");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d2a44/sneakers/jumper_0xFF8ad8ea");
+            coordi.add("sweatshirts_0xFFebebeb/trouser_0xFFebebeb/sports/coat_0xFF272727");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF151514/boots/jacket_0xFF151514");
-            coordi.add("sweatshirts_0xFFb7b4a6/trouser_0xFFc4c4c4/sneakers/jacket_0xFF000123");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/cardigan_0xFF01322b");
-            coordi.add("hoodie_0xFFbcb9b9/skirt_0xFFc4c4c4/sneakers/jacket_0xFF101421");
-            coordi.add("sweatshirts_0xFFb7b4a6/skirt_0xFF261e23/sports/jacket_0xFFa5936c");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF272727/boots/jacket_0xFF272727");
+            coordi.add("sweatshirts_0xFFebebeb/trouser_0xFFebebeb/sneakers/jacket_0xFF1e2a4a");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/cardigan_0xFF01322b");
+            coordi.add("hoodie_0xFFebebeb/skirt_0xFFebebeb/sneakers/jacket_0xFF1e2a4a");
+            coordi.add("sweatshirts_0xFFebebeb/skirt_0xFF574e46/sports/jacket_0xFFebebeb");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFF151514/denim_0xFF4e5e70/sneakers/jacket_0xFF595959");
-            coordi.add("hoodie_0xFF595959/trouser_0xFF151514/sneakers");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF323b32/sports/windshield_0xFF051a36");
-            coordi.add("croptop_0xFFbcb9b9/denim_0xFF1d2a44/sneakers/jacket_0xFF261e23");
-            coordi.add("tshirts_0xFFbcb9b9/trouser_0xFFb7b4a6/sports/cardigan_0xFF000123");
+            coordi.add("tshirts_0xFF272727/denim_0xFFb0c3d0/sneakers/jacket_0xFFcbcbcb");
+            coordi.add("hoodie_0xFFcbcbcb/trouser_0xFF272727/sneakers");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF566556/sports/windshield_0xFF1e2a4a");
+            coordi.add("croptop_0xFFebebeb/denim_0xFF1d2a44/sneakers/jacket_0xFF413c38");
+            coordi.add("tshirts_0xFFebebeb/trouser_0xFFebebeb/sports/cardigan_0xFF1e2a4a");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -737,23 +691,23 @@ getItemFemale(int index) {
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
-            coordi.add("tshirts_0xFF151514/cargo_0xFF383838/sports/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFFab80c6/sports_0xFFab80c6/sports/jumper_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF1d1d1e/boots/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF0d4e08/trouser_0xFF383838/sneakers/jumper_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFFa5936c/sports/jumper_0xFF151514");
+            coordi.add("tshirts_0xFF272727/cargo_0xFF5e5e5e/sports/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFFac76ac/sports_0xFFac76ac/sports/jumper_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF1d1d1e/boots/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFF3ec04e/trouser_0xFF5e5e5e/sneakers/jumper_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFFd2c19b/sports/jumper_0xFF272727");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF383838/boots/jacket_0xFF3a2b22");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF151514/sports/cardigan_0xFF151514");
-            coordi.add("tshirts_0xFFb7b4a6/trouser_0xFFbcb9b9/sports/coat_0xFF050d24");
-            coordi.add("hoodie_0xFF6e6e6e/sports_0xFF6e6e6e/sports/field_0xFF323b32");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF1d1d1e/boots/jacket_0xFF151514");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF5e5e5e/boots/jacket_0xFF966f5b");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF272727/sports/cardigan_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/trouser_0xFFebebeb/sports/coat_0xFF2c3755");
+            coordi.add("hoodie_0xFF727272/sports_0xFF5e5e5e/sports/field_0xFF566556");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF1d1d1e/boots/jacket_0xFF272727");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF4e5e70/boots/jacket_0xFF413c38");
-            coordi.add("hoodie_0xFF595959/denim_0xFF1d2a44/sports/jacket_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF151514/sports/cardigan_0xFF151514");
-            coordi.add("sweatshirts_0xFFb7b4a6/shorts_0xFF383838/boots");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/jacket_0xFFb7b4a6");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFFb0c3d0/boots/jacket_0xFF413c38");
+            coordi.add("hoodie_0xFF727272/denim_0xFF1d2a44/sports/jacket_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF272727/sports/cardigan_0xFF272727");
+            coordi.add("sweatshirts_0xFFebebeb/shorts_0xFF5e5e5e/boots");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/jacket_0xFFebebeb");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -765,23 +719,23 @@ getItemFemale(int index) {
 
         case "Summer Cool": // 여쿨
           if (curTemp<=4) {
-            coordi.add("tshirts_0xFF151514/cargo_0xFF383838/sports/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF383838/sports_0xFF383838/sports/jumper_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF1d1d1e/boots/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF06544a/trouser_0xFF383838/sneakers/jumper_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF323b32/sports/jumper_0xFF151514");
+            coordi.add("tshirts_0xFF272727/cargo_0xFF5e5e5e/sports/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFFcbcbcb/sports_0xFF5e5e5e/sports/jumper_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF1d1d1e/boots/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFFa4cfbe/trouser_0xFF5e5e5e/sneakers/jumper_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sports/jumper_0xFF272727");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF383838/boots/jacket_0xFF21191b");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF151514/sports/cardigan_0xFF151514");
-            coordi.add("tshirts_0xFFb7b4a6/trouser_0xFFbcb9b9/sports/coat_0xFF051a36");
-            coordi.add("hoodie_0xFF6e6e6e/sports_0xFF6e6e6e/sports/field_0xFF323b32");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF1d1d1e/boots/jacket_0xFF151514");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF5e5e5e/boots/jacket_0xFFebebeb");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF272727/sports/cardigan_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/trouser_0xFFebebeb/sports/coat_0xFF2c3346");
+            coordi.add("hoodie_0xFFcbcbcb/sports_0xFF5e5e5e/sports/field_0xFF566556");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF1d1d1e/boots/jacket_0xFF272727");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF4e5e70/boots/jacket_0xFF383838");
-            coordi.add("hoodie_0xFF595959/denim_0xFF1d2a44/sports/jacket_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF151514/sports/cardigan_0xFF151514");
-            coordi.add("sweatshirts_0xFF87b9c9/shorts_0xFF383838/boots");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/jacket_0xFF294f79");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFFb0c3d0/boots/jacket_0xFFcbcbcb");
+            coordi.add("hoodie_0xFFcbcbcb/denim_0xFF1d2a44/sports/jacket_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF272727/sports/cardigan_0xFF272727");
+            coordi.add("sweatshirts_0xFFa4b4cf/shorts_0xFF5e5e5e/boots");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/jacket_0xFFa4b4cf");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -793,23 +747,23 @@ getItemFemale(int index) {
 
         case "Autumn Warm": // 가웜
           if (curTemp<=4) {
-            coordi.add("tshirts_0xFF151514/cargo_0xFF383838/sports/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF351b32/sports_0xFF351b32/sports/jumper_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF1d1d1e/boots/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF203513/trouser_0xFF383838/sneakers/jumper_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFFa5936c/sports/jumper_0xFF151514");
+            coordi.add("tshirts_0xFF272727/cargo_0xFF5e5e5e/sports/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFF5a3f5e/sports_0xFF5a3f5e/sports/jumper_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF1d1d1e/boots/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFF4b570b/trouser_0xFF5e5e5e/sneakers/jumper_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFFd2c19b/sports/jumper_0xFF272727");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF383838/boots/jacket_0xFF201716");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF151514/sports/cardigan_0xFF151514");
-            coordi.add("tshirts_0xFFb7b4a6/trouser_0xFFbcb9b9/sports/coat_0xFF101421");
-            coordi.add("hoodie_0xFF6e6e6e/sports_0xFF6e6e6e/sports/field_0xFF323b32");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF1d1d1e/boots/jacket_0xFF151514");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF5e5e5e/boots/jacket_0xFF6e4942");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF272727/sports/cardigan_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/trouser_0xFFebebeb/sports/coat_0xFF272f5d");
+            coordi.add("hoodie_0xFF727272/sports_0xFF5e5e5e/sports/field_0xFF566556");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF1d1d1e/boots/jacket_0xFF272727");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF4e5e70/boots/jacket_0xFF261e23");
-            coordi.add("hoodie_0xFF595959/denim_0xFF1d2a44/sports/jacket_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF151514/sports/cardigan_0xFF151514");
-            coordi.add("sweatshirts_0xFFb7b4a6/shorts_0xFF383838/boots");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/jacket_0xFFb7b4a6");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFFb0c3d0/boots/jacket_0xFF413c38");
+            coordi.add("hoodie_0xFF727272/denim_0xFF1d2a44/sports/jacket_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF272727/sports/cardigan_0xFF272727");
+            coordi.add("sweatshirts_0xFFebebeb/shorts_0xFF5e5e5e/boots");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF1d1d1e/sports/jacket_0xFFebebeb");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -821,23 +775,23 @@ getItemFemale(int index) {
 
         case "Winter Cool": // 겨쿨
           if (curTemp<=4) {
-            coordi.add("tshirts_0xFF151514/cargo_0xFF383838/sports/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF3a0a3e/sports_0xFF3a0a3e/sports/jumper_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF1d1d1e/boots/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF01322b/trouser_0xFF383838/sneakers/jumper_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF323b32/sports/jumper_0xFF151514");
+            coordi.add("tshirts_0xFF272727/cargo_0xFF5e5e5e/sports/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFF5d0dcd/sports_0xFF5d0dcd/sports/jumper_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF272727/boots/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFF0b655a/trouser_0xFF5e5e5e/sneakers/jumper_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sports/jumper_0xFF272727");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF383838/boots/jacket_0xFF261e23");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF151514/sports/cardigan_0xFF151514");
-            coordi.add("tshirts_0xFFb7b4a6/trouser_0xFFbcb9b9/sports/coat_0xFF000123");
-            coordi.add("hoodie_0xFF6e6e6e/sports_0xFF6e6e6e/sports/field_0xFF323b32");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF1d1d1e/boots/jacket_0xFF151514");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF5e5e5e/boots/jacket_0xFF413c38");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF272727/sports/cardigan_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/trouser_0xFFebebeb/sports/coat_0xFF1e2a4a");
+            coordi.add("hoodie_0xFFcbcbcb/sports_0xFF5e5e5e/sports/field_0xFF566556");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF272727/boots/jacket_0xFF272727");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF4e5e70/boots/jacket_0xFF2e2e2e");
-            coordi.add("hoodie_0xFF595959/denim_0xFF1d2a44/sports/jacket_0xFF151514");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF151514/sports/cardigan_0xFF151514");
-            coordi.add("sweatshirts_0xFF8ad8ea/shorts_0xFF383838/boots");
-            coordi.add("tshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/jacket_0xFF1d366d");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFFb0c3d0/boots/jacket_0xFF2e2e2e");
+            coordi.add("hoodie_0xFFcbcbcb/denim_0xFFb0c3d0/sports/jacket_0xFF272727");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF272727/sports/cardigan_0xFF272727");
+            coordi.add("sweatshirts_0xFF8ad8ea/shorts_0xFF5e5e5e/boots");
+            coordi.add("tshirts_0xFFebebeb/denim_0xFF272727/sports/jacket_0xFF1810c8");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -854,23 +808,23 @@ getItemFemale(int index) {
       switch (perCol) {
         case "Spring Warm": // 봄웜
           if (curTemp<=4) {
-            coordi.add("sweatshirts_0xFFbcb9b9/cargo_0xFFbeb6a9/sneakers/jacket_0xFF3a2b22");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF978868/sneakers/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFFb7b4a6/cargo_0xFF978868/sports/jumper_0xFF323b32");
-            coordi.add("sweatshirts_0xFF151514/skirt_0xFF3a2b22/boots/jumper_0xFFb7b4a6");
-            coordi.add("sweatshirts_0xFFb7b4a6/skirt_0xFF1d2a44/sneakers/field_0xFF323b32");
+            coordi.add("sweatshirts_0xFFebebeb/cargo_0xFFebebeb/sneakers/jacket_0xFF966f5b");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFFd2c19b/sneakers/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFFebebeb/cargo_0xFFd2c19b/sports/jumper_0xFF566556");
+            coordi.add("sweatshirts_0xFF272727/skirt_0xFF574e46/boots/jumper_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/skirt_0xFFb0c3d0/sneakers/field_0xFF566556");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("shirts_0xFFbcb9b9/skirt_0xFF151514/sneakers/jumper_0xFFa5936c");
-            coordi.add("sweatshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/field_0xFF323b32");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF413c38/sneakers/cardigan_0xFFb7b4a6");
-            coordi.add("sweatshirts_0xFFb7b4a6/denim_0xFF1d2a44/sports/jacket_0xFF3a2b22");
-            coordi.add("tshirts_0xFF323b32/skirt_0xFF1d1d1e/sports/jumper_0xFF151514");
+            coordi.add("shirts_0xFFebebeb/skirt_0xFF272727/sneakers/jumper_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/denim_0xFF272727/sports/field_0xFF566556");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF413c38/sneakers/cardigan_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/denim_0xFFb0c3d0/sports/jacket_0xFF966f5b");
+            coordi.add("tshirts_0xFF566556/skirt_0xFF272727/sports/jumper_0xFF272727");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF978868/sneakers/cardigan_0xFF050d24");
-            coordi.add("shirts_0xFFbcb9b9/cargo_0xFF978868/sports/vest_0xFF151514");
-            coordi.add("sweatshirts_0xFF0d4e08/skirt_0xFF978868/sneakers");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF323b32/sports/jacket_0xFF050d24");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF3a2b22/sports/jacket_0xFF050d24");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFFd2c19b/sneakers/cardigan_0xFF2c3755");
+            coordi.add("shirts_0xFFebebeb/cargo_0xFFd2c19b/sports/vest_0xFF272727");
+            coordi.add("sweatshirts_0xFF3ec04e/skirt_0xFFd2c19b/sneakers");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sports/jacket_0xFF2c3755");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF574e46/sports/jacket_0xFF2c3755");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -882,23 +836,23 @@ getItemFemale(int index) {
 
         case "Summer Cool": // 여쿨
           if (curTemp<=4) {
-            coordi.add("sweatshirts_0xFFbcb9b9/cargo_0xFFbeb6a9/sneakers/jacket_0xFF21191b");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF383838/sneakers/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF323b32/cargo_0xFF978868/sports/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF151514/skirt_0xFF21191b/boots/jumper_0xFF757575");
-            coordi.add("sweatshirts_0xFFb7b4a6/skirt_0xFF1d2a44/sneakers/field_0xFF323b32");
+            coordi.add("sweatshirts_0xFFebebeb/cargo_0xFFebebeb/sneakers/jacket_0xFF574e46");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF5e5e5e/sneakers/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFF566556/cargo_0xFFd2c19b/sports/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFF272727/skirt_0xFF574e46/boots/jumper_0xFFcbcbcb");
+            coordi.add("sweatshirts_0xFFebebeb/skirt_0xFFb0c3d0/sneakers/field_0xFF566556");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("shirts_0xFFbcb9b9/skirt_0xFF151514/sneakers/jumper_0xFFa5936c");
-            coordi.add("sweatshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/field_0xFF323b32");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF383838/sneakers/cardigan_0xFFb7b4a6");
-            coordi.add("sweatshirts_0xFFb7b4a6/denim_0xFF1d2a44/sports/jacket_0xFF21191b");
-            coordi.add("tshirts_0xFF323b32/skirt_0xFF1d1d1e/sports/jumper_0xFF151514");
+            coordi.add("shirts_0xFFebebeb/skirt_0xFF272727/sneakers/jumper_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/denim_0xFF272727/sports/field_0xFF566556");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF5e5e5e/sneakers/cardigan_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/denim_0xFFb0c3d0/sports/jacket_0xFF574e46");
+            coordi.add("tshirts_0xFF566556/skirt_0xFF272727/sports/jumper_0xFF272727");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF978868/sneakers/cardigan_0xFF051a36");
-            coordi.add("shirts_0xFFbcb9b9/cargo_0xFF978868/sports/vest_0xFF151514");
-            coordi.add("sweatshirts_0xFF06544a/skirt_0xFF978868/sneakers");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF323b32/sports/jacket_0xFF051a36");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF21191b/sports/jacket_0xFF050d24");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFFd2c19b/sneakers/cardigan_0xFF2c3346");
+            coordi.add("shirts_0xFFebebeb/cargo_0xFFd2c19b/sports/vest_0xFF272727");
+            coordi.add("sweatshirts_0xFFa4cfbe/skirt_0xFFd2c19b/sneakers");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sports/jacket_0xFF2c3346");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF574e46/sports/jacket_0xFF050d24");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -910,23 +864,23 @@ getItemFemale(int index) {
 
         case "Autumn Warm": // 가웜
           if (curTemp<=4) {
-            coordi.add("sweatshirts_0xFFbcb9b9/cargo_0xFFbeb6a9/sneakers/jacket_0xFF201716");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF413c38/sneakers/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFFb7b4a6/cargo_0xFF978868/sports/jumper_0xFF323b32");
-            coordi.add("sweatshirts_0xFF151514/skirt_0xFF201716/boots/jumper_0xFFb7b4a6");
-            coordi.add("sweatshirts_0xFFb7b4a6/skirt_0xFF1d2a44/sneakers/field_0xFF323b32");
+            coordi.add("sweatshirts_0xFFebebeb/cargo_0xFFebebeb/sneakers/jacket_0xFF6e4942");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF413c38/sneakers/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFFebebeb/cargo_0xFFd2c19b/sports/jumper_0xFF566556");
+            coordi.add("sweatshirts_0xFF272727/skirt_0xFF574e46/boots/jumper_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/skirt_0xFFb0c3d0/sneakers/field_0xFF566556");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("shirts_0xFFbcb9b9/skirt_0xFF151514/sneakers/jumper_0xFFa5936c");
-            coordi.add("sweatshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/field_0xFF323b32");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF201716/sneakers/cardigan_0xFFb7b4a6");
-            coordi.add("sweatshirts_0xFFb7b4a6/denim_0xFF1d2a44/sports/jacket_0xFF201716");
-            coordi.add("tshirts_0xFF323b32/skirt_0xFF1d1d1e/sports/jumper_0xFF151514");
+            coordi.add("shirts_0xFFebebeb/skirt_0xFF272727/sneakers/jumper_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/denim_0xFF272727/sports/field_0xFF566556");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF574e46/sneakers/cardigan_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/denim_0xFFb0c3d0/sports/jacket_0xFF6e4942");
+            coordi.add("tshirts_0xFF566556/skirt_0xFF272727/sports/jumper_0xFF272727");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF978868/sneakers/cardigan_0xFF101421");
-            coordi.add("shirts_0xFFbcb9b9/cargo_0xFF978868/sports/vest_0xFF151514");
-            coordi.add("sweatshirts_0xFF203513/skirt_0xFF978868/sneakers");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF323b32/sports/jacket_0xFF101421");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF201716/sports/jacket_0xFF050d24");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFFd2c19b/sneakers/cardigan_0xFF272f5d");
+            coordi.add("shirts_0xFFebebeb/cargo_0xFFd2c19b/sports/vest_0xFF272727");
+            coordi.add("sweatshirts_0xFF4b570b/skirt_0xFFd2c19b/sneakers");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sports/jacket_0xFF272f5d");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF574e46/sports/jacket_0xFF050d24");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
@@ -938,23 +892,23 @@ getItemFemale(int index) {
 
         case "Winter Cool": // 겨쿨
           if (curTemp<=4) {
-            coordi.add("sweatshirts_0xFFbcb9b9/cargo_0xFFbeb6a9/sneakers/jacket_0xFF261e23");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF383838/sneakers/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF323b32/cargo_0xFF978868/sports/jumper_0xFF151514");
-            coordi.add("sweatshirts_0xFF151514/skirt_0xFF261e23/boots/jumper_0xFF757575");
-            coordi.add("sweatshirts_0xFFb7b4a6/skirt_0xFF1d2a44/sneakers/field_0xFF323b32");
+            coordi.add("sweatshirts_0xFFebebeb/cargo_0xFFebebeb/sneakers/jacket_0xFF413c38");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF5e5e5e/sneakers/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFF566556/cargo_0xFFd2c19b/sports/jumper_0xFF272727");
+            coordi.add("sweatshirts_0xFF272727/skirt_0xFF574e46/boots/jumper_0xFFcbcbcb");
+            coordi.add("sweatshirts_0xFFebebeb/skirt_0xFFb0c3d0/sneakers/field_0xFF566556");
           } else if (curTemp>4 && curTemp<=11) {
-            coordi.add("shirts_0xFFbcb9b9/skirt_0xFF151514/sneakers/jumper_0xFFa5936c");
-            coordi.add("sweatshirts_0xFFbcb9b9/denim_0xFF1d1d1e/sports/field_0xFF323b32");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF383838/sneakers/cardigan_0xFFb7b4a6");
-            coordi.add("sweatshirts_0xFFb7b4a6/denim_0xFF1d2a44/sports/jacket_0xFF21191b");
-            coordi.add(" tshirts_0xFF323b32/skirt_0xFF1d1d1e/sports/jumper_0xFF151514");
+            coordi.add("shirts_0xFFebebeb/skirt_0xFF272727/sneakers/jumper_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/denim_0xFF272727/sports/field_0xFF566556");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF5e5e5e/sneakers/cardigan_0xFFebebeb");
+            coordi.add("sweatshirts_0xFFebebeb/denim_0xFFb0c3d0/sports/jacket_0xFF574e46");
+            coordi.add(" tshirts_0xFF566556/skirt_0xFF272727/sports/jumper_0xFF272727");
           } else if (curTemp>11 && curTemp<=16) {
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF978868/sneakers/cardigan_0xFF000123");
-            coordi.add("shirts_0xFFbcb9b9/cargo_0xFF978868/sports/vest_0xFF151514");
-            coordi.add("sweatshirts_0xFF01322b/skirt_0xFF978868/sneakers");
-            coordi.add("tshirts_0xFFbcb9b9/cargo_0xFF323b32/sports/jacket_0xFF000123");
-            coordi.add("tshirts_0xFFbcb9b9/skirt_0xFF261e23/sports/jacket_0xFF050d24");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFFd2c19b/sneakers/cardigan_0xFF1e2a4a");
+            coordi.add("shirts_0xFFebebeb/cargo_0xFFd2c19b/sports/vest_0xFF272727");
+            coordi.add("sweatshirts_0xFF0b655a/skirt_0xFFd2c19b/sneakers");
+            coordi.add("tshirts_0xFFebebeb/cargo_0xFF566556/sports/jacket_0xFF1e2a4a");
+            coordi.add("tshirts_0xFFebebeb/skirt_0xFF574e46/sports/jacket_0xFF050d24");
           } else if (curTemp>16 && curTemp<=22) {
 
           } else if (curTemp>22 && curTemp<=27) {
