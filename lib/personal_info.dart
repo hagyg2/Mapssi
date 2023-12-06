@@ -18,6 +18,7 @@ class genderpage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserDataFromServer userController = Get.find<UserDataFromServer>();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -89,6 +90,7 @@ class genderpage extends StatelessWidget {
                       ),
                       onPressed: () {
                         UserInfo[0] = 1;
+                        userController.setUserGender(UserInfo[0] as int?);
                         Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
                       },
                     ),
@@ -106,6 +108,7 @@ class genderpage extends StatelessWidget {
                       ),
                       onPressed: () {
                         UserInfo[0] = 0;
+                        userController.setUserGender(UserInfo[0] as int?);
                         Navigator.pushNamedAndRemoveUntil(context, '/selfcam', (route) => false);
                       },
                     ),
